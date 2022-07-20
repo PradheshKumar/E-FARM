@@ -2,11 +2,11 @@ class APIFeatures {
   constructor(query, queryStr) {
     this.query = query;
     this.queryStr = queryStr;
-    // console.log(this);
+    console.log(this);
   }
   filter() {
     const queryObj = { ...this.queryStr };
-    const exclude = ['page', 'sort', 'limit', 'fields'];
+    const exclude = ["page", "sort", "limit", "fields"];
 
     exclude.forEach((el) => delete queryObj[el]);
 
@@ -19,16 +19,16 @@ class APIFeatures {
   }
   sort() {
     if (this.queryStr.sort) {
-      const sortBy = this.queryStr.sort.split(',').join(' ');
+      const sortBy = this.queryStr.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
-    } else this.query = this.query.sort('-createdAt');
+    } else this.query = this.query.sort("-createdAt");
     return this;
   }
   limitFields() {
     if (this.queryStr.fields) {
-      const field = this.queryStr.fields.split(',').join(' ');
+      const field = this.queryStr.fields.split(",").join(" ");
       this.query = this.query.select(field);
-    } else this.query = this.query.select('-__v');
+    } else this.query = this.query.select("-__v");
     return this;
   }
   paginate() {

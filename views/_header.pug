@@ -73,20 +73,7 @@ header.main-header
           li.nav-item
             a.nav-link(href='about.html') About Us
           li.dropdown
-            a.nav-link.dropdown-toggle.arrow(href='#' data-toggle='dropdown') SHOP
-            ul.dropdown-menu
-              li
-                a(href='shop.html') Sidebar Shop
-              li
-                a(href='shop-detail.html') Shop Detail
-              li
-                a(href='cart.html') Cart
-              li
-                a(href='checkout.html') Checkout
-              li
-                a(href='my-account.html') My Account
-              li
-                a(href='wishlist.html') Wishlist
+            a.nav-link(href='/overview') SHOP
           li.nav-item
             a.nav-link(href='gallery.html') Gallery
           li.nav-item
@@ -105,46 +92,46 @@ header.main-header
               p My Cart
       // End Atribute Navigation
 
-.side
-      a.close-side(href='#')
-        i.fa.fa-times
-      li.cart-box
-        ul.cart-list
-          li
-            a.photo(href='#')
-              img.cart-thumb(src='images/img-pro-01.jpg' alt='')
-            h6
-              a(href='#') Delica omtantur 
-            p
-              | 1x - 
-              span.price $80.00
-          li
-            a.photo(href='#')
-              img.cart-thumb(src='images/img-pro-02.jpg' alt='')
-            h6
-              a(href='#') Omnes ocurreret
-            p
-              | 1x - 
-              span.price $60.00
-          li
-            a.photo(href='#')
-              img.cart-thumb(src='images/img-pro-03.jpg' alt='')
-            h6
-              a(href='#') Agam facilisis
-            p
-              | 1x - 
-              span.price $40.00
-          li.total
-            a.btn.btn-default.hvr-hover.btn-cart(href='#') VIEW CART
-            span.float-right
-              strong Total
-              | : $180.00
+    .side
+          a.close-side(href='#')
+            i.fa.fa-times
+          li.cart-box
+            ul.cart-list
+              li
+                a.photo(href='#')
+                  img.cart-thumb(src='images/img-pro-01.jpg' alt='')
+                h6
+                  a(href='#') Delica omtantur 
+                p
+                  | 1x - 
+                  span.price $80.00
+              li
+                a.photo(href='#')
+                  img.cart-thumb(src='images/img-pro-02.jpg' alt='')
+                h6
+                  a(href='#') Omnes ocurreret
+                p
+                  | 1x - 
+                  span.price $60.00
+              li
+                a.photo(href='#')
+                  img.cart-thumb(src='images/img-pro-03.jpg' alt='')
+                h6
+                  a(href='#') Agam facilisis
+                p
+                  | 1x - 
+                  span.price $40.00
+              li.total
+                a.btn.btn-default.hvr-hover.btn-cart(href='#') VIEW CART
+                span.float-right
+                  strong Total
+                  | : $180.00
    
 .top-search
   .container
     .input-group
       span.input-group-addon
         i.fa.fa-search
-      input.form-control(type='text' placeholder='Search')
+      input.searchInput.form-control(type='text' placeholder='Search')
       span.input-group-addon.close-search
         i.fa.fa-times

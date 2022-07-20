@@ -2082,6 +2082,12 @@ ul.cart-list > li.total > .btn:hover {
   color: #ffffff;
   border: none;
 }
+.why-text.full-width h6 {
+  padding: 10px 20px;
+  font-weight: 700;
+  color: #111111;
+  border: none;
+}
 .list-view-box {
   margin-bottom: 30px;
 }

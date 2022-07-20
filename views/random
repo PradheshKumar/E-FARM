@@ -1,8 +1,0 @@
- .product-rating
-          - var n = 0;
-          while n++<Math.floor(product.ratingsAverage)
-            i.fas.fa-star
-          if((product.ratingsAverage - Math.floor(product.ratingsAverage)) != 0 )
-            i.fas.fa-star-half-alt
-           
-          span= `${product.ratingsAverage}(${product.ratingsQuantity})`

@@ -22,10 +22,12 @@ block content
               .col-12.col-sm-8.text-center.text-sm-left
                 .toolbar-sorter-right
                   span Sort by 
-                  select#basic.selectpicker.show-tick.form-control(data-placeholder='$ USD')
-                    option(data-display='Select') Popularity
-                    option(value='1') High Price &rarr; Low Price
-                    option(value='2') Low Price &rarr; High Price
+                  select#basic.selectpicker.show-tick.form-control.sortDropDown(data-placeholder='$ USD')
+                    option(data-display='Select' value ="1") Default
+                    option(value='2') High Price &rarr; Low Price
+                    option(value='3') Low Price &rarr; High Price
+                    option(value='4') Alphabetical Order
+                    option(value='5') Avg Review
                 p= `Showing all ${products.length} results`
               .col-12.col-sm-4.text-center.text-sm-right
                 ul.nav.nav-tabs.ml-auto
@@ -69,26 +71,23 @@ block content
                               .mask-icon
                                 ul
                                   li
-                                    a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                                    a(href=`/product/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
                                       i.fas.fa-eye
-                                  li
-                                    a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
-                                      i.fas.fa-sync-alt
-                                  li
-                                    a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
-                                      i.far.fa-heart
+                                  
                         .col-sm-6.col-md-6.col-lg-8.col-xl-8
-                          .why-text.full-width
-                            h4= prod.name
-                            h5= `₹ ${prod.price} per ${prod.costPer}`
-                            p= prod.summary
-                            a.btn.hvr-hover(href='#') Add to Cart
+                          a(href=`/product/${prod.id}`)
+                            .why-text.full-width
+                            
+                              h4= prod.name
+                              h5= `₹ ${prod.price} per ${prod.costPer}`
+                              h6= prod.summary
+                              a.btn.hvr-hover(href='#') Add to Cart
 
         .col-xl-3.col-lg-3.col-sm-12.col-xs-12.sidebar-shop-left
           .product-categori
             .search-product
-              form(action='#')
-                input.form-control(placeholder='Search here...' type='text')
+              
+                input.searchInput.form-control(placeholder='Search here...' type='text')
                 button(type='submit')
                   i.fa.fa-search
             .filter-sidebar-left
@@ -96,11 +95,13 @@ block content
                 h3 Categories
               #list-group-men.list-group.list-group-collapse.list-group-sm.list-group-tree(data-children='.sub-men')
                                                     
-                a.list-group-item.list-group-item-action(href='#')
+                a.list-group-item.list-group-item-action(href='/overview')
+                  | All  
+                a.list-group-item.list-group-item-action(href='?type=veg')
                   | Vegetables  
-                a.list-group-item.list-group-item-action(href='#')
+                a.list-group-item.list-group-item-action(href='?type=fruit')
                   | Fruits 
-                a.list-group-item.list-group-item-action(href='#')
+                a.list-group-item.list-group-item-action(href='?type=leaf')
                   | Leafs 
            
   // End Shop Page
