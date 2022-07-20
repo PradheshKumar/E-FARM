@@ -1,50 +1,6 @@
 extends base
 
 block content 
-  .side
-      a.close-side(href='#')
-        i.fa.fa-times
-      li.cart-box
-        ul.cart-list
-          li
-            a.photo(href='#')
-              img.cart-thumb(src='images/img-pro-01.jpg' alt='')
-            h6
-              a(href='#') Delica omtantur 
-            p
-              | 1x - 
-              span.price $80.00
-          li
-            a.photo(href='#')
-              img.cart-thumb(src='images/img-pro-02.jpg' alt='')
-            h6
-              a(href='#') Omnes ocurreret
-            p
-              | 1x - 
-              span.price $60.00
-          li
-            a.photo(href='#')
-              img.cart-thumb(src='images/img-pro-03.jpg' alt='')
-            h6
-              a(href='#') Agam facilisis
-            p
-              | 1x - 
-              span.price $40.00
-          li.total
-            a.btn.btn-default.hvr-hover.btn-cart(href='#') VIEW CART
-            span.float-right
-              strong Total
-              | : $180.00
-   
-  .top-search
-    .container
-      .input-group
-        span.input-group-addon
-          i.fa.fa-search
-        input.form-control(type='text' placeholder='Search')
-        span.input-group-addon.close-search
-          i.fa.fa-times
-  // End Top Search
   // Start All Title Box
   .all-title-box
     .container
@@ -92,18 +48,14 @@ block content
                             .mask-icon
                               ul
                                 li
-                                  a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                                  a(href=`/product/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
                                     i.fas.fa-eye
-                                li
-                                  a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
-                                    i.fas.fa-sync-alt
-                                li
-                                  a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
-                                    i.far.fa-heart
+                                
                               a.cart(href='#') Add to Cart
                           .why-text
-                            h4= prod.name
-                            h5= `₹ ${prod.price} per ${prod.costPer}`
+                            a(href=`/product/${prod.id}`)
+                              h4= prod.name
+                              h5= `₹ ${prod.price} per ${prod.costPer}`
                     
                 #list-view.tab-pane.fade(role='tabpanel')
                   each prod in products

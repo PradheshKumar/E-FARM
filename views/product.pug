@@ -1,65 +1,289 @@
 extends base
 
 block content 
-  meta(charset='utf-8')
-  meta(http-equiv='X-UA-Compatible' content='IE=edge')
-  title Product Card/Page
-  meta(name='viewport' content='width=device-width, initial-scale=1')
-  link(rel='stylesheet' href='./../css/product/style.css')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css' integrity='sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==' crossorigin='anonymous')
-  .card-wrapper
-    .card
-      // card left
-      .product-imgs
-        .img-display
-          .img-showcase
-            each img in product.images
-              img(src=`./../img/${img}` alt='Image')
-            
-        .img-select
-          each img,i in product.images
-            .img-item
-              a(href='#' data-id= i+1)
-                img(src=`./../img/${product.images[i]}` alt='image')
-          
-      // card right
-      .product-content
-        h2.product-title= product.name
-        .product-rating
-          - var n = 0;
-          while n++<Math.floor(product.ratingsAverage)
-            i.fas.fa-star
-          if((product.ratingsAverage - Math.floor(product.ratingsAverage)) != 0 )
-            i.fas.fa-star-half-alt
-           
-          span= `${product.ratingsAverage}(${product.ratingsQuantity})`
-        .product-price
-          
-          p.new-price
-            | Price: 
-            span= `₹ ${product.price} per ${product.costPer}`
-        .product-detail
-          h2 about this item: 
-          p= product.summary
-            
-          ul
-            li
-              | Available: 
-              span in stock
-            li
-              | Category: 
-              if(product.type === "veg")
-                span= "VEGETABLE"
-              else
-                span= `${product.type.toUpperCase()}`
-            
-            li
-              | Shipping Fee: 
-              span Free
-        .purchase-info
-          input(type='number' min='0' value='1')
-          button.btn(type='button')
-            | Add to Cart 
-            i.fas.fa-shopping-cart
+
+  .all-title-box
+    .container
+      .row
+        .col-lg-12
+          h2 Product Detail
+          ul.breadcrumb
+            li.breadcrumb-item
+              a(href='/overview') Shop
+            li.breadcrumb-item.active Product Detail 
+  .shop-detail-box-main
+    .container
+      .row
+        .col-xl-5.col-lg-5.col-md-6
+          #carousel-example-1.single-product-slider.carousel.slide(data-ride='carousel')
+            .carousel-inner(role='listbox')
+              .carousel-item.active
+                img.d-block.w-100(src=`./../img/${product.images[0]}` alt='First slide')
+              each img,i in product.images
+                if(i!=0)
+                  .carousel-item
+                    img.d-block.w-100(src=`./../img/${img}` alt=`${product.name} Image`)
+            a.carousel-control-prev(href='#carousel-example-1' role='button' data-slide='prev')
+              i.fa.fa-angle-left(aria-hidden='true')
+              span.sr-only Previous
+            a.carousel-control-next(href='#carousel-example-1' role='button' data-slide='next')
+              i.fa.fa-angle-right(aria-hidden='true')
+              span.sr-only Next
+            ol.carousel-indicators
+              li.active(data-target='#carousel-example-1' data-slide-to='0')
+                img.d-block.w-100.img-fluid(src=`./../img/${product.images[0]}` alt='')
+              each img,i in product.images
+                if(i!=0)
+                  li(data-target='#carousel-example-1' data-slide-to= i)
+                    img.d-block.w-100.img-fluid(src=`./../img/${img}` alt='')
          
-  script(src='./../js/script.js')
+        .col-xl-7.col-lg-7.col-md-6
+          .single-product-details
+            h2= product.name
+            h5= `₹ ${product.price} per ${product.costPer}`
+            p.available-stock
+              span= `${product.stockLeft} ${product.costPer}s available`
+            p
+            h4 Short Description:
+            p= product.summary
+            ul
+              li
+                .form-group.quantity-box
+                  label.control-label Quantity
+                  input.form-control(value='0' min='0' max=product.stockLeft type='number')
+            .price-box-bar
+              .cart-and-bay-btn
+                a.btn.hvr-hover(data-fancybox-close='' href='#') Buy Now
+                a.btn.hvr-hover(data-fancybox-close='' href='#') Add to cart
+            .product-rating
+              - var n = 0;
+              while n++<Math.floor(product.ratingsAverage)
+                i.fas.fa-star
+              if((product.ratingsAverage - Math.floor(product.ratingsAverage)) != 0 )
+                i.fas.fa-star-half-alt
+              
+              span= `${product.ratingsAverage}(${product.ratingsQuantity})`
+      
+      .row.my-5
+        .col-lg-12
+          .title-all.text-center
+            h1 Featured Products
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.
+          .featured-products-box.owl-carousel.owl-theme
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-01.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-02.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-03.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-04.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-01.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-02.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-03.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+            .item
+              .products-single.fix
+                .box-img-hover
+                  img.img-fluid(src='./../images/img-pro-04.jpg' alt='Image')
+                  .mask-icon
+                    ul
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                          i.fas.fa-eye
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                          i.fas.fa-sync-alt
+                      li
+                        a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                          i.far.fa-heart
+                    a.cart(href='#') Add to Cart
+                .why-text
+                  h4 Lorem ipsum dolor sit amet
+                  h5  $9.79
+  // End Cart
+  // Start Instagram Feed
+  .instagram-box
+    .main-instagram.owl-carousel.owl-theme
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-01.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-02.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-03.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-04.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-05.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-06.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-07.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-08.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-09.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='./../images/instagram-img-05.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
