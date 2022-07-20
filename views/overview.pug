@@ -1,29 +1,218 @@
 extends base
 
 block content 
-  .products-box
+  .side
+      a.close-side(href='#')
+        i.fa.fa-times
+      li.cart-box
+        ul.cart-list
+          li
+            a.photo(href='#')
+              img.cart-thumb(src='images/img-pro-01.jpg' alt='')
+            h6
+              a(href='#') Delica omtantur 
+            p
+              | 1x - 
+              span.price $80.00
+          li
+            a.photo(href='#')
+              img.cart-thumb(src='images/img-pro-02.jpg' alt='')
+            h6
+              a(href='#') Omnes ocurreret
+            p
+              | 1x - 
+              span.price $60.00
+          li
+            a.photo(href='#')
+              img.cart-thumb(src='images/img-pro-03.jpg' alt='')
+            h6
+              a(href='#') Agam facilisis
+            p
+              | 1x - 
+              span.price $40.00
+          li.total
+            a.btn.btn-default.hvr-hover.btn-cart(href='#') VIEW CART
+            span.float-right
+              strong Total
+              | : $180.00
+   
+  .top-search
     .container
-      .row.special-list
-        each product in products
-          .col-lg-3.col-md-6.special-grid.top-featured
-            .products-single.fix
-              .box-img-hover
-                .type-lb
-                  p.sale Sale
-                img.img-fluid(src=`img/${product.images[0]}` alt='Image')
-                .mask-icon
-                  ul
-                    li
-                      a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
-                        i.fas.fa-eye
-                    li
-                      a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
-                        i.fas.fa-sync-alt
-                    li
-                      a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
-                        i.far.fa-heart
-                  a.cart(href='#') Add to Cart
-              .why-text
-                h4= product.name
-                h5=`₹ ${product.price} per ${product.costPer} `
+      .input-group
+        span.input-group-addon
+          i.fa.fa-search
+        input.form-control(type='text' placeholder='Search')
+        span.input-group-addon.close-search
+          i.fa.fa-times
+  // End Top Search
+  // Start All Title Box
+  .all-title-box
+    .container
+      .row
+        .col-lg-12
+          h2 Shop
+          ul.breadcrumb
+            li.breadcrumb-item
+              a(href='/') Home
+            li.breadcrumb-item.active Shop
+  // End All Title Box
+  // Start Shop Page
+  .shop-box-inner
+    .container
+      .row
+        .col-xl-9.col-lg-9.col-sm-12.col-xs-12.shop-content-right
+          .right-product-box
+            .product-item-filter.row
+              .col-12.col-sm-8.text-center.text-sm-left
+                .toolbar-sorter-right
+                  span Sort by 
+                  select#basic.selectpicker.show-tick.form-control(data-placeholder='$ USD')
+                    option(data-display='Select') Popularity
+                    option(value='1') High Price &rarr; Low Price
+                    option(value='2') Low Price &rarr; High Price
+                p= `Showing all ${products.length} results`
+              .col-12.col-sm-4.text-center.text-sm-right
+                ul.nav.nav-tabs.ml-auto
+                  li
+                    a.nav-link.active(href='#grid-view' data-toggle='tab')
+                      i.fa.fa-th
+                  li
+                    a.nav-link(href='#list-view' data-toggle='tab')
+                      i.fa.fa-list-ul
+            .product-categorie-box
+              .tab-content
+                #grid-view.tab-pane.fade.show.active(role='tabpanel')
+                  .row
+                    each prod in products
+                      .col-sm-6.col-md-6.col-lg-4.col-xl-4
+                        .products-single.fix
+                          .box-img-hover
+                            .type-lb
+                            img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo`)
+                            .mask-icon
+                              ul
+                                li
+                                  a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                                    i.fas.fa-eye
+                                li
+                                  a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                                    i.fas.fa-sync-alt
+                                li
+                                  a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                                    i.far.fa-heart
+                              a.cart(href='#') Add to Cart
+                          .why-text
+                            h4= prod.name
+                            h5= `₹ ${prod.price} per ${prod.costPer}`
+                    
+                #list-view.tab-pane.fade(role='tabpanel')
+                  each prod in products
+                    .list-view-box
+                      .row
+                        .col-sm-6.col-md-6.col-lg-4.col-xl-4
+                          .products-single.fix
+                            .box-img-hover
+                              .type-lb
+                              img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo`)
+                              .mask-icon
+                                ul
+                                  li
+                                    a(href='#' data-toggle='tooltip' data-placement='right' title='View')
+                                      i.fas.fa-eye
+                                  li
+                                    a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                                      i.fas.fa-sync-alt
+                                  li
+                                    a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                                      i.far.fa-heart
+                        .col-sm-6.col-md-6.col-lg-8.col-xl-8
+                          .why-text.full-width
+                            h4= prod.name
+                            h5= `₹ ${prod.price} per ${prod.costPer}`
+                            p= prod.summary
+                            a.btn.hvr-hover(href='#') Add to Cart
+
+        .col-xl-3.col-lg-3.col-sm-12.col-xs-12.sidebar-shop-left
+          .product-categori
+            .search-product
+              form(action='#')
+                input.form-control(placeholder='Search here...' type='text')
+                button(type='submit')
+                  i.fa.fa-search
+            .filter-sidebar-left
+              .title-left
+                h3 Categories
+              #list-group-men.list-group.list-group-collapse.list-group-sm.list-group-tree(data-children='.sub-men')
+                                                    
+                a.list-group-item.list-group-item-action(href='#')
+                  | Vegetables  
+                a.list-group-item.list-group-item-action(href='#')
+                  | Fruits 
+                a.list-group-item.list-group-item-action(href='#')
+                  | Leafs 
+           
+  // End Shop Page
+  // Start Instagram Feed
+  .instagram-box
+    .main-instagram.owl-carousel.owl-theme
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-01.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-02.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-03.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-04.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-05.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-06.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-07.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-08.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-09.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-05.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
   
