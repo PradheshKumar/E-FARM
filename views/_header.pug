@@ -1,0 +1,106 @@
+doctype html
+// Basic
+
+// Start Main Top
+.main-top
+  .container-fluid
+    .row
+      .col-lg-6.col-md-6.col-sm-12.col-xs-12
+        .custom-select-box
+          select#basic.selectpicker.show-tick.form-control(data-placeholder='$ USD')
+            option &yen; JPY
+            option $ USD
+            option &euro; EUR
+        .right-phone-box
+          p
+            | Call US :- 
+            a(href='#')  +91 9830482323
+        .our-link
+          ul
+            li
+              a(href='#')
+                i.fa.fa-user.s_color
+                |  My Account
+            li
+              a(href='#')
+                i.fas.fa-location-arrow
+                |  Our location
+            li
+              a(href='#')
+                i.fas.fa-headset
+                |  Contact Us
+      .col-lg-6.col-md-6.col-sm-12.col-xs-12
+        .login-box
+          select#basic.selectpicker.show-tick.form-control(data-placeholder='Sign In')
+            option Register Here
+            option Sign In
+        .text-slid-box
+          #offer-box.carouselTicker
+            ul.offer-box
+              li
+                i.fab.fa-opencart
+                |  20% off Entire Purchase Promo code: offT80
+              li
+                i.fab.fa-opencart
+                |  50% - 80% off on Vegetables
+              li
+                i.fab.fa-opencart
+                |  Off 10%! Shop Vegetables
+              li
+                i.fab.fa-opencart
+                |  Off 10%! Shop Vegetables
+              li
+                i.fab.fa-opencart
+                |  Off 50%! Shop Now
+// End Main Top
+// Start Main Top
+header.main-header
+  // Start Navigation
+  nav.navbar.navbar-expand-lg.navbar-light.bg-light.navbar-default.bootsnav
+    .container
+      // Start Header Navigation
+      .navbar-header
+        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar-menu' aria-controls='navbars-rs-food' aria-expanded='false' aria-label='Toggle navigation')
+          i.fa.fa-bars
+        a.navbar-brand(href='/')
+          img.logo(src='./../images/logo.png' alt='')
+      // End Header Navigation
+      // Collect the nav links, forms, and other content for toggling
+      #navbar-menu.collapse.navbar-collapse
+        ul.nav.navbar-nav.ml-auto(data-in='fadeInDown' data-out='fadeOutUp')
+          li.nav-item.active
+            a.nav-link(href='/') Home
+          li.nav-item
+            a.nav-link(href='about.html') About Us
+          li.dropdown
+            a.nav-link.dropdown-toggle.arrow(href='#' data-toggle='dropdown') SHOP
+            ul.dropdown-menu
+              li
+                a(href='shop.html') Sidebar Shop
+              li
+                a(href='shop-detail.html') Shop Detail
+              li
+                a(href='cart.html') Cart
+              li
+                a(href='checkout.html') Checkout
+              li
+                a(href='my-account.html') My Account
+              li
+                a(href='wishlist.html') Wishlist
+          li.nav-item
+            a.nav-link(href='gallery.html') Gallery
+          li.nav-item
+            a.nav-link(href='contact-us.html') Contact Us
+      // /.navbar-collapse
+      // Start Atribute Navigation
+      .attr-nav
+        ul
+          li.search
+            a(href='#')
+              i.fa.fa-search
+          li.side-menu
+            a(href='#')
+              i.fa.fa-shopping-bag
+              span.badge 3
+              p My Cart
+      // End Atribute Navigation

@@ -1,0 +1,65 @@
+extends base
+
+block content 
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  title Product Card/Page
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  link(rel='stylesheet' href='./../css/product/style.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css' integrity='sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==' crossorigin='anonymous')
+  .card-wrapper
+    .card
+      // card left
+      .product-imgs
+        .img-display
+          .img-showcase
+            each img in product.images
+              img(src=`./../img/${img}` alt='Image')
+            
+        .img-select
+          each img,i in product.images
+            .img-item
+              a(href='#' data-id= i+1)
+                img(src=`./../img/${product.images[i]}` alt='image')
+          
+      // card right
+      .product-content
+        h2.product-title= product.name
+        .product-rating
+          - var n = 0;
+          while n++<Math.floor(product.ratingsAverage)
+            i.fas.fa-star
+          if((product.ratingsAverage - Math.floor(product.ratingsAverage)) != 0 )
+            i.fas.fa-star-half-alt
+           
+          span= `${product.ratingsAverage}(${product.ratingsQuantity})`
+        .product-price
+          
+          p.new-price
+            | Price: 
+            span= `₹ ${product.price} per ${product.costPer}`
+        .product-detail
+          h2 about this item: 
+          p= product.summary
+            
+          ul
+            li
+              | Available: 
+              span in stock
+            li
+              | Category: 
+              if(product.type === "veg")
+                span= "VEGETABLE"
+              else
+                span= `${product.type.toUpperCase()}`
+            
+            li
+              | Shipping Fee: 
+              span Free
+        .purchase-info
+          input(type='number' min='0' value='1')
+          button.btn(type='button')
+            | Add to Cart 
+            i.fas.fa-shopping-cart
+         
+  script(src='./../js/script.js')

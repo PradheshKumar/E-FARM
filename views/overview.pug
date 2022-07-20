@@ -1,0 +1,29 @@
+extends base
+
+block content 
+  .products-box
+    .container
+      .row.special-list
+        each product in products
+          .col-lg-3.col-md-6.special-grid.top-featured
+            .products-single.fix
+              .box-img-hover
+                .type-lb
+                  p.sale Sale
+                img.img-fluid(src=`img/${product.images[0]}` alt='Image')
+                .mask-icon
+                  ul
+                    li
+                      a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
+                        i.fas.fa-eye
+                    li
+                      a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
+                        i.fas.fa-sync-alt
+                    li
+                      a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
+                        i.far.fa-heart
+                  a.cart(href='#') Add to Cart
+              .why-text
+                h4= product.name
+                h5=`₹ ${product.price} per ${product.costPer} `
+  
