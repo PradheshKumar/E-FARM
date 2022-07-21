@@ -1,13 +1,21 @@
 "use strict";
 
 import { login, logout } from "./login.js";
+import { signUpForm } from "./loginForm.js";
 const input = document.querySelectorAll(".validate-input .input100");
 const form = document.querySelector(".validate-form");
+const loginBtn = document.querySelector(".loginBtn");
 const logoutBtn = document.querySelector(".logoutBtn");
-console.log(logoutBtn);
+const signUpFormBtn = document.querySelector(".signupForm");
 if (form) {
   form.addEventListener("submit", function (e) {
     e.preventDefault();
+
+    // return check;
+  });
+}
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
     let check = true;
     input.forEach((i) => {
       if (validate(i) == false) {
@@ -22,12 +30,13 @@ if (form) {
     } else {
       return false;
     }
-
-    // return check;
   });
 }
 if (logoutBtn) {
   logoutBtn.addEventListener("click", logout);
+}
+if (signUpFormBtn) {
+  signUpFormBtn.addEventListener("click", signUpForm);
 }
 $(".validate-form .input100").each(function () {
   $(this).focus(function () {
@@ -55,7 +64,6 @@ function validate(input) {
 }
 
 function showValidate(input) {
-  console.log($(input).parent());
   var thisAlert = $(input).parent();
   $(thisAlert).addClass("alert-validate");
 }

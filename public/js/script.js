@@ -24,7 +24,9 @@ imgBtns.forEach((imgItem) => {
 search.forEach((e) => {
   e.addEventListener("change", searchFn);
 });
-sort.addEventListener("change", sortFn);
+if (sort) {
+  sort.addEventListener("change", sortFn);
+}
 function sortFn() {
   url.searchParams.set("sort", "3");
   if (sort.value == 1) {
@@ -52,7 +54,6 @@ function slideImage() {
 }
 function searchFn(e) {
   window.location.href = `/search/${e.target.value}`;
-  console.log(e.target.value);
 }
 
 window.addEventListener("resize", slideImage);

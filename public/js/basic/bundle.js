@@ -4575,7 +4575,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logout = exports.login = void 0;
+exports.signUp = exports.logout = exports.login = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -4652,8 +4652,71 @@ function () {
 
 exports.login = login;
 
+var signUp =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee2(email, password, passwordConfirm) {
+    var input, res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            input = document.querySelectorAll(".validate-input");
+            _context2.prev = 1;
+            _context2.next = 4;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "/api/v1/user/signup",
+              data: {
+                name: "name",
+                email: email,
+                password: password,
+                passwordConfirm: passwordConfirm
+              }
+            });
+
+          case 4:
+            res = _context2.sent;
+
+            if (res.data.status === "success") {
+              (0, _alerts.showAlert)("success", "SignedUp successfully!");
+              window.setTimeout(function () {
+                location.assign("/");
+              }, 200);
+            }
+
+            _context2.next = 14;
+            break;
+
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](1);
+            console.log("Sdsdsdsdsdsd");
+            showValidate(input[0]);
+            input[0].dataset.validate = _context2.t0.response.data.message;
+            return _context2.abrupt("return", false);
+
+          case 14:
+            return _context2.abrupt("return", true);
+
+          case 15:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[1, 8]]);
+  }));
+
+  return function signUp(_x3, _x4, _x5) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.signUp = signUp;
+
 function showValidate(input) {
-  console.log($(input));
   var thisAlert = $(input);
   $(thisAlert).addClass("alert-validate");
 }
@@ -4661,60 +4724,146 @@ function showValidate(input) {
 var logout =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(
+  var _ref3 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee2() {
+  _regeneratorRuntime().mark(function _callee3() {
     var res;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
+            _context3.prev = 0;
+            _context3.next = 3;
             return (0, _axios.default)({
               method: "GET",
               url: "/api/v1/user/logout"
             });
 
           case 3:
-            res = _context2.sent;
+            res = _context3.sent;
             if (res.data.status = "success") location.reload(true);
-            _context2.next = 11;
+            _context3.next = 11;
             break;
 
           case 7:
-            _context2.prev = 7;
-            _context2.t0 = _context2["catch"](0);
-            console.log(_context2.t0.response);
+            _context3.prev = 7;
+            _context3.t0 = _context3["catch"](0);
+            console.log(_context3.t0.response);
             (0, _alerts.showAlert)("error", "Error logging out! Try again.");
 
           case 11:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, null, [[0, 7]]);
+    }, _callee3, null, [[0, 7]]);
   }));
 
   return function logout() {
-    return _ref2.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }();
 
 exports.logout = logout;
-},{"axios":"../../../node_modules/axios/index.js","./alerts":"alerts.js"}],"index.js":[function(require,module,exports) {
+},{"axios":"../../../node_modules/axios/index.js","./alerts":"alerts.js"}],"loginForm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.signUpForm = void 0;
+
+var _login = require("./login.js");
+
+var loginForm = document.querySelector(".login100-form");
+var input;
+var markup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
+
+var signUpForm = function signUpForm(e) {
+  e.preventDefault();
+  loginForm.innerHTML = markup;
+  input = document.querySelectorAll(".validate-input .input100");
+  console.log(document.querySelector(".signupBtn"));
+  document.querySelector(".signupBtn").addEventListener("click", signUpFn);
+  input.forEach(function (el) {
+    el.addEventListener("focus", function () {
+      hideValidate(el);
+    });
+  });
+};
+
+exports.signUpForm = signUpForm;
+
+var signUpFn = function signUpFn(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  var check = true;
+  input.forEach(function (i) {
+    if (validate(i) == false) {
+      showValidate(i);
+      check = false;
+    }
+  });
+
+  if (check) {
+    var email = input[0].value;
+    var password = input[1].value;
+    var Cpassword = input[2].value;
+    console.log(2);
+    (0, _login.signUp)(email, password, Cpassword);
+  } else {
+    return false;
+  }
+};
+
+function validate(input) {
+  if ($(input).attr("type") == "email" || $(input).attr("name") == "email") {
+    if ($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+      return false;
+    }
+  } else {
+    if ($(input).val().trim() == "") {
+      return false;
+    }
+  }
+}
+
+$(".validate-form .input100").each(function () {
+  $(this).focus(function () {
+    hideValidate(this);
+  });
+});
+
+function showValidate(input) {
+  var thisAlert = $(input).parent();
+  $(thisAlert).addClass("alert-validate");
+}
+
+function hideValidate(input) {
+  var thisAlert = $(input).parent();
+  $(thisAlert).removeClass("alert-validate");
+}
+},{"./login.js":"login.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _login = require("./login.js");
 
+var _loginForm = require("./loginForm.js");
+
 var input = document.querySelectorAll(".validate-input .input100");
 var form = document.querySelector(".validate-form");
+var loginBtn = document.querySelector(".loginBtn");
 var logoutBtn = document.querySelector(".logoutBtn");
-console.log(logoutBtn);
+var signUpFormBtn = document.querySelector(".signupForm");
 
 if (form) {
   form.addEventListener("submit", function (e) {
-    e.preventDefault();
+    e.preventDefault(); // return check;
+  });
+}
+
+if (loginBtn) {
+  loginBtn.addEventListener("click", function () {
     var check = true;
     input.forEach(function (i) {
       if (validate(i) == false) {
@@ -4729,13 +4878,16 @@ if (form) {
       (0, _login.login)(email, password);
     } else {
       return false;
-    } // return check;
-
+    }
   });
 }
 
 if (logoutBtn) {
   logoutBtn.addEventListener("click", _login.logout);
+}
+
+if (signUpFormBtn) {
+  signUpFormBtn.addEventListener("click", _loginForm.signUpForm);
 }
 
 $(".validate-form .input100").each(function () {
@@ -4757,7 +4909,6 @@ function validate(input) {
 }
 
 function showValidate(input) {
-  console.log($(input).parent());
   var thisAlert = $(input).parent();
   $(thisAlert).addClass("alert-validate");
 }
@@ -4766,7 +4917,7 @@ function hideValidate(input) {
   var thisAlert = $(input).parent();
   $(thisAlert).removeClass("alert-validate");
 }
-},{"./login.js":"login.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./login.js":"login.js","./loginForm.js":"loginForm.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -4794,7 +4945,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55731" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65063" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
