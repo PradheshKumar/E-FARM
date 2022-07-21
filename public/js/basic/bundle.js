@@ -4607,7 +4607,7 @@ function () {
             _context.next = 4;
             return (0, _axios.default)({
               method: "POST",
-              url: "/api/v1/buyer/login",
+              url: "/api/v1/user/login",
               data: {
                 email: email,
                 password: password
@@ -4621,7 +4621,7 @@ function () {
               (0, _alerts.showAlert)("success", "Logged in successfully!");
               window.setTimeout(function () {
                 location.assign("/");
-              }, 1500);
+              }, 200);
             }
 
             _context.next = 13;
@@ -4673,7 +4673,7 @@ function () {
             _context2.next = 3;
             return (0, _axios.default)({
               method: "GET",
-              url: "/api/v1/users/logout"
+              url: "/api/v1/user/logout"
             });
 
           case 3:
@@ -4709,25 +4709,35 @@ var _login = require("./login.js");
 
 var input = document.querySelectorAll(".validate-input .input100");
 var form = document.querySelector(".validate-form");
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-  var check = true;
-  input.forEach(function (i) {
-    if (validate(i) == false) {
-      showValidate(i);
-      check = false;
-    }
+var logoutBtn = document.querySelector(".logoutBtn");
+console.log(logoutBtn);
+
+if (form) {
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var check = true;
+    input.forEach(function (i) {
+      if (validate(i) == false) {
+        showValidate(i);
+        check = false;
+      }
+    });
+
+    if (check) {
+      var email = input[0].value;
+      var password = input[1].value;
+      (0, _login.login)(email, password);
+    } else {
+      return false;
+    } // return check;
+
   });
+}
 
-  if (check) {
-    var email = input[0].value;
-    var password = input[1].value;
-    (0, _login.login)(email, password);
-  } else {
-    return false;
-  } // return check;
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", _login.logout);
+}
 
-});
 $(".validate-form .input100").each(function () {
   $(this).focus(function () {
     hideValidate(this);
@@ -4784,7 +4794,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61842" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55731" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

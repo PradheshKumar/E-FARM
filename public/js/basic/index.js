@@ -3,26 +3,32 @@
 import { login, logout } from "./login.js";
 const input = document.querySelectorAll(".validate-input .input100");
 const form = document.querySelector(".validate-form");
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-  let check = true;
-  input.forEach((i) => {
-    if (validate(i) == false) {
-      showValidate(i);
-      check = false;
+const logoutBtn = document.querySelector(".logoutBtn");
+console.log(logoutBtn);
+if (form) {
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let check = true;
+    input.forEach((i) => {
+      if (validate(i) == false) {
+        showValidate(i);
+        check = false;
+      }
+    });
+    if (check) {
+      const email = input[0].value;
+      const password = input[1].value;
+      login(email, password);
+    } else {
+      return false;
     }
+
+    // return check;
   });
-  if (check) {
-    const email = input[0].value;
-    const password = input[1].value;
-    login(email, password);
-  } else {
-    return false;
-  }
-
-  // return check;
-});
-
+}
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", logout);
+}
 $(".validate-form .input100").each(function () {
   $(this).focus(function () {
     hideValidate(this);

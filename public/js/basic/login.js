@@ -8,7 +8,7 @@ export const login = async (email, password) => {
   try {
     const res = await axios({
       method: "POST",
-      url: "/api/v1/buyer/login",
+      url: "/api/v1/user/login",
       data: {
         email,
         password,
@@ -18,7 +18,7 @@ export const login = async (email, password) => {
       showAlert("success", "Logged in successfully!");
       window.setTimeout(() => {
         location.assign("/");
-      }, 1500);
+      }, 200);
     }
   } catch (err) {
     showValidate(input[0]);
@@ -38,7 +38,7 @@ export const logout = async () => {
   try {
     const res = await axios({
       method: "GET",
-      url: "/api/v1/users/logout",
+      url: "/api/v1/user/logout",
     });
     if ((res.data.status = "success")) location.reload(true);
   } catch (err) {

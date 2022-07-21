@@ -103,6 +103,7 @@ app.use((req, res, next) => {
 // 3) ROUTES
 app.use("/", viewRouter);
 app.use("/api/v1/buyer", buyerRouter);
+app.use("/api/v1/user", buyerRouter);
 app.use("/api/v1/seller", sellerRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/product", productRouter);

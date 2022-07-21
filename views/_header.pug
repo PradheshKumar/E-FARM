@@ -30,10 +30,21 @@ doctype html
                 i.fas.fa-headset
                 |  Contact Us
       .col-lg-6.col-md-6.col-sm-12.col-xs-12
-        .login-box
-          select#basic.selectpicker.show-tick.form-control(data-placeholder='Sign In')
-            option Register Here
-            option Sign In
+        .login-box#basic.selectpicker.show-tick.form-control
+          ul
+            li
+              if(user)
+                a(href="#").logoutBtn
+                  i.fa.fa-user.s_color
+                    |  Logout
+              else 
+                a(href='/login')
+                  i.fa.fa-user.s_color
+                      |  Login
+          
+          //- select#basic.selectpicker.show-tick.form-control(data-placeholder='Sign In')
+          //-   option Register Here
+          //-   option Sign In
         .text-slid-box
           #offer-box.carouselTicker
             ul.offer-box
