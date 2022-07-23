@@ -21,6 +21,7 @@ router.use(setUser, authController.protect);
 
 router.post("/addCart/:id/:qty", setUser, userController.addToCart);
 router.patch("/updateCart/:id/:qty", setUser, userController.updateCart);
+router.patch("/rmCart/:id", setUser, userController.rmCart);
 router.patch("/updateMyPassword", setUser, authController.updatePassword);
 router.get("/me", setUser, userController.getMe, userController.getUser);
 router.patch("/updateMe", setUser, userController.updateMe);

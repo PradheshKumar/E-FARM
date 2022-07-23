@@ -42,8 +42,8 @@ block content
             h2= products[0].name
             h5= `₹ ${products[0].price} per ${products[0].costPer}`
             p.available-stock
-              if(products[0].costPer ="1/4kg")
-               span= `${products[0].stockLeft/4} kg available in stock`
+              if(products[0].costPer =="1/4kg")
+                span= `${products[0].stockLeft/4} kg available in stock`
               else
                 span= `${products[0].stockLeft} ${products[0].costPer} available in stock`
             p

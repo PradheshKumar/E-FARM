@@ -1,7 +1,8 @@
 "use strict";
 
-import { login, logout, addToCart, updateCart } from "./ApiCalls.js";
+import { login, logout, addToCart, updateCart, rmCart } from "./ApiCalls.js";
 import { signUpForm } from "./loginForm.js";
+import { addListener } from "./checkOut.js";
 const input = document.querySelectorAll(".validate-input .input100");
 const form = document.querySelector(".validate-form");
 const loginBtn = document.querySelector(".loginBtn");
@@ -10,6 +11,11 @@ const signUpFormBtn = document.querySelector(".signupForm");
 const addCartBtn = document.querySelector(".cartBtn");
 const qtyInput = document.querySelectorAll(".qtyInput");
 const prodPrice = document.querySelectorAll(".prodPrice");
+const rmBtn = document.querySelectorAll(".rmBtn");
+const subTotal = document.querySelector(".subTotal");
+const tax = document.querySelector(".tax");
+const grandTotal = document.querySelector(".grandTotal");
+addListener();
 if (form) {
   form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -18,6 +24,7 @@ if (form) {
   });
 }
 if (loginBtn) {
+  console.log("DSdssdsdsdadsbdis");
   loginBtn.addEventListener("click", () => {
     let check = true;
     input.forEach((i) => {
@@ -51,10 +58,26 @@ if (qtyInput) {
     e.addEventListener("change", () => {
       const id = e.dataset.id;
       prodPrice[id].innerHTML = `₹ ${e.value * e.dataset.price}`;
+      let sum = 0;
+      qtyInput.forEach((e) => {
+        sum += Number(e.value * e.dataset.price);
+      });
+      subTotal.innerHTML = `₹ ${sum}`;
+      tax.innerHTML = `₹ ${Math.floor(sum * 0.05)}`;
+      grandTotal.innerHTML = `₹ ${sum + Math.floor(sum * 0.05)}`;
       updateCart(e.dataset.prodid, e.value);
     });
   });
 }
+if (rmBtn) {
+  rmBtn.forEach((e, i) => {
+    e.addEventListener("click", () => {
+      e.parentElement.remove();
+      rmCart(i);
+    });
+  });
+}
+
 $(".validate-form .input100").each(function () {
   $(this).focus(function () {
     hideValidate(this);

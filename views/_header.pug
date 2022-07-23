@@ -99,13 +99,14 @@ header.main-header
             a(href='#')
               i.fa.fa-search
           if(user)
-            li.side-menu
-              a(href='#') 
-                i.fa.fa-shopping-bag
-                span.badge= Object.keys(user.cart).length
-                p My Cart
+            if(user.cart!=null && Object.keys(user.cart).length!=0  )
+              li.side-menu
+                a(href='#') 
+                  i.fa.fa-shopping-bag
+                  span.badge= Object.keys(user.cart).length
+                  p My Cart
       // End Atribute Navigation
-    if(user)
+    if(user && user.cart!=null)
       .side
             a.close-side(href='#')
               i.fa.fa-times
@@ -125,6 +126,7 @@ header.main-header
                     span= `₹ ${user.cartQty[i]*prod.price}`
                     - a = a + user.cartQty[i]*prod.price
                 li.total
+
                   a.btn.btn-default.hvr-hover.btn-cart(href='/myCart') VIEW CART
                   span.float-right
                     strong= `Total: ₹ ${a}`

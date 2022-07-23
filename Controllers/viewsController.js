@@ -53,6 +53,28 @@ exports.getCart = catchAsync(async (req, res, next) => {
     User,
   });
 });
+exports.getCheckOut = catchAsync(async (req, res, next) => {
+  // 1) Get product data from collections
+
+  // const doc = await features.query.explain();
+  const User = await Buyer.findById(req.params.id); // 2) Build template
+  // 3) Render that template using product data from 1)
+  res.status(200).render("checkout", {
+    title: "CheckOut",
+    User,
+  });
+});
+exports.getOrders = catchAsync(async (req, res, next) => {
+  // 1) Get product data from collections
+
+  // const doc = await features.query.explain();
+  const User = await Buyer.findById(req.params.id); // 2) Build template
+  // 3) Render that template using product data from 1)
+  res.status(200).render("myorder", {
+    title: "My Orders",
+    User,
+  });
+});
 exports.getProduct = catchAsync(async (req, res, next) => {
   const product = await Product.findById(req.params.id).populate({
     path: "seller",

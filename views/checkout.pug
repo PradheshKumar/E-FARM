@@ -1,0 +1,157 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+            .row
+                .col-lg-12
+                    h2 Checkout
+                    ul.breadcrumb
+                        li.breadcrumb-item
+                            a(href='#') Shop
+                        li.breadcrumb-item.active Checkout
+    // End All Title Box
+    // Start Cart
+    .cart-box-main
+        .container
+            .row
+                .col-sm-6.col-lg-6.mb-3
+                    .checkout-address
+                    .title-left
+                        h3 Billing address
+                    form.needs-validation(novalidate='')
+                        .row
+                            .col-md-6.mb-3
+                                label(for='fullName') Full name *
+                                input#firstName.form-control(type='text' placeholder='' value=user.name required='')
+                                .invalid-feedback  Valid name is required. 
+                        .mb-3
+                            label(for='username') Username *
+                            .input-group
+                                a#username.form-control(type='text' placeholder='' required='')= user.name
+                                .invalid-feedback(style='width: 100%;')  Your username is required. 
+                        .mb-3
+                            label(for='email') Email Address *
+                            a#email.form-control(type='email' placeholder='')= user.email
+                            .invalid-feedback  Please enter a valid email address for shipping updates. 
+                        
+                        .row
+                             
+                            .col-md-3.mb-3
+                                label(for='pincode') PinCode *
+                                input#zip.form-control(type='text' placeholder='' required='')
+                                .invalid-feedback  Pin code required. 
+                        
+                    hr.mb-4
+                    .title
+                        span Payment
+                    .d-block.my-3
+                        .custom-control.custom-radio
+                            input#credit.custom-control-input(name='paymentMethod' type='radio' checked='' required='')
+                            label.custom-control-label(for='credit') Credit card
+                        .custom-control.custom-radio
+                            input#debit.custom-control-input(name='paymentMethod' type='radio' required='')
+                            label.custom-control-label(for='debit') Debit card
+                        .custom-control.custom-radio
+                            input#cod.custom-control-input(name='paymentMethod' type='radio' required='')
+                            label.custom-control-label(for='cod') Cash On Delivery
+                    .row
+                        .col-md-6.mb-3
+                            label(for='cc-name') Name on card
+                            input#cc-name.form-control(type='text' placeholder='' required='')
+                            small.text-muted Full name as displayed on card
+                            .invalid-feedback  Name on card is required 
+                        .col-md-6.mb-3
+                            label(for='cc-number') Credit card number
+                            input#cc-number.form-control(type='text' placeholder='' required='')
+                            .invalid-feedback  Credit card number is required 
+                    .row
+                        .col-md-3.mb-3
+                            label(for='cc-expiration') Expiration
+                            input#cc-expiration.form-control(type='text' placeholder='' required='')
+                            .invalid-feedback  Expiration date required 
+                        .col-md-3.mb-3
+                            label(for='cc-expiration') CVV
+                            input#cc-cvv.form-control(type='text' placeholder='' required='')
+                            .invalid-feedback  Security code required 
+                        .col-md-6.mb-3
+                            .payment-icon
+                                ul
+                                    li
+                                        img.img-fluid(src='images/payment-icon/1.png' alt='')
+                                    li
+                                        img.img-fluid(src='images/payment-icon/2.png' alt='')
+                                    li
+                                        img.img-fluid(src='images/payment-icon/3.png' alt='')
+                                    li
+                                        img.img-fluid(src='images/payment-icon/5.png' alt='')
+                                    li
+                                        img.img-fluid(src='images/payment-icon/7.png' alt='')
+                    hr.mb-1
+                .col-sm-6.col-lg-6.mb-3
+                    .row
+                        .col-md-12.col-lg-12
+                            .shipping-method-box
+                                .title-left
+                                    h3 Shipping Method
+                                .mb-4
+                                .custom-control.custom-radio
+                                    input#shippingOption1.custom-control-input.delToggle(name='shipping-option' checked='checked' type='radio' data-id="1")
+                                    label.custom-control-label(for='shippingOption1') Standard Delivery
+                                    span.float-right.font-weight-bold FREE
+                                .ml-4.mb-2.small (3-7 business days)
+                                .custom-control.custom-radio
+                                    input#shippingOption2.custom-control-input.delToggle(name='shipping-option' type='radio' data-id="2")
+                                    label.custom-control-label(for='shippingOption2') Express Delivery
+                                    span.float-right.font-weight-bold ₹50.00
+                                .ml-4.mb-2.small (2-4 business days)
+                                .custom-control.custom-radio
+                                    input#shippingOption3.custom-control-input.delToggle(name='shipping-option' type='radio' data-id="3")
+                                    label.custom-control-label(for='shippingOption3') Next Business day
+                                    span.float-right.font-weight-bold ₹100.00
+                        .col-md-12.col-lg-12
+                            .odr-box
+                                .title-left
+                                    h3 Shopping cart
+                                .rounded.p-2.bg-light
+                                    -a=0
+                                    each prod,i in user.cart
+                                        .media.mb-2.border-bottom
+                                            .media-body
+                                                a(href=`/product/${prod.id}` data-id=prod.id data-qty=user.cartQty[i] data-buyer=user.id).prodName= prod.name
+                                                .small.text-muted
+                                                    | Price: ₹#{prod.price}.00` 
+                                                    span.mx-2 |
+                                                    |  Qty: #{user.cartQty[i]} 
+                                                    span.mx-2 |
+                                                    |  Subtotal: ₹ #{user.cartQty[i]*prod.price}.00
+                                                    - a +=user.cartQty[i]*prod.price
+                                    
+                        .col-md-12.col-lg-12
+                            .order-box
+                                .title-left
+                                    h3 Your order
+                                .d-flex
+                                    .font-weight-bold Product
+                                    .ml-auto.font-weight-bold Total
+                                hr.my-1
+                                .d-flex
+                                    h4 Sub Total
+                                    .ml-auto.font-weight-bold=  `₹ ${a}`
+                                
+                                hr.my-1
+                                
+                                .d-flex
+                                    h4 Tax(5%)
+                                    .ml-auto.font-weight-bold= ` ₹ ${Math.floor(a*0.05)}` 
+                                .d-flex
+                                    h4 Shipping Cost
+                                    .ml-auto.font-weight-bold()  Free 
+                                hr
+                                .d-flex.gr-total
+                                    h5 Grand Total
+                                    .ml-auto.h5.finalPrice= `₹ ${Math.floor(a*0.05)+a}` 
+                                hr
+                        .col-12.d-flex.shopping-box
+                            a.ml-auto.btn.hvr-hover.plOrder(href='#') Place Order
+                    

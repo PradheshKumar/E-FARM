@@ -69,6 +69,24 @@ export const addToCart = async (prodId) => {
     }
   return true;
 };
+export const rmCart = async (id) => {
+  try {
+    const res = await axios({
+      method: "PATCH",
+      url: `/api/v1/buyer/rmCart/${id}`,
+    });
+    if (res.data.status === "success") {
+      console.log("REMOVED");
+      const cart = document.querySelector(".cartProducts");
+      if (cart) location.reload();
+      else window.location.href = "/overview";
+    }
+  } catch (err) {
+    console.log("ERRRRORR", err);
+    // showAlert("error", err.response.data.message);
+  }
+  return true;
+};
 function showValidate(input) {
   var thisAlert = $(input);
   $(thisAlert).addClass("alert-validate");
@@ -97,7 +115,13 @@ export const logout = async () => {
       url: "/api/v1/user/logout",
     });
     if ((res.data.status = "success")) {
-      if (window.location.href.includes("account")) window.location.href = "/";
+      const url = ["account", "myCart", "checkOut"];
+
+      const hasUrl = url.map((e) => {
+        console.log(e);
+        return window.location.href.includes(e);
+      });
+      if (hasUrl.includes(true)) window.location.href = "/";
       else location.reload(true);
     }
   } catch (err) {
