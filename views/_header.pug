@@ -18,9 +18,10 @@ doctype html
         .our-link
           ul
             li
-              a(href='#')
-                i.fa.fa-user.s_color
-                |  My Account
+              if user
+                a(href=`/account/${user.id}`)
+                  i.fa.fa-user.s_color
+                  |  My Account
             li
               a(href='#')
                 i.fas.fa-location-arrow
@@ -91,52 +92,42 @@ header.main-header
             a.nav-link(href='contact-us.html') Contact Us
       // /.navbar-collapse
       // Start Atribute Navigation
+      
       .attr-nav
         ul
           li.search
             a(href='#')
               i.fa.fa-search
-          li.side-menu
-            a(href='#')
-              i.fa.fa-shopping-bag
-              span.badge 3
-              p My Cart
+          if(user)
+            li.side-menu
+              a(href='#') 
+                i.fa.fa-shopping-bag
+                span.badge= Object.keys(user.cart).length
+                p My Cart
       // End Atribute Navigation
-
-    .side
-          a.close-side(href='#')
-            i.fa.fa-times
-          li.cart-box
-            ul.cart-list
-              li
-                a.photo(href='#')
-                  img.cart-thumb(src='images/img-pro-01.jpg' alt='')
-                h6
-                  a(href='#') Delica omtantur 
-                p
-                  | 1x - 
-                  span.price $80.00
-              li
-                a.photo(href='#')
-                  img.cart-thumb(src='images/img-pro-02.jpg' alt='')
-                h6
-                  a(href='#') Omnes ocurreret
-                p
-                  | 1x - 
-                  span.price $60.00
-              li
-                a.photo(href='#')
-                  img.cart-thumb(src='images/img-pro-03.jpg' alt='')
-                h6
-                  a(href='#') Agam facilisis
-                p
-                  | 1x - 
-                  span.price $40.00
-              li.total
-                a.btn.btn-default.hvr-hover.btn-cart(href='#') VIEW CART
-                span.float-right
-                  strong Total
-                  | : $180.00
+    if(user)
+      .side
+            a.close-side(href='#')
+              i.fa.fa-times
+            li.cart-box
+              ul.cart-list
+                -a = 0
+                each prod,i in user.cart
+                  li
+                    a.photo(href='#')
+                      img.cart-thumb(src=`./../img/${prod.images[0]}` alt='')
+                    h6
+                      a(href='#')= prod.name
+                    if prod.costPer == "1/4kg"
+                      p= `${user.cartQty[i]/4} kg` 
+                    else
+                      p= `${user.cartQty[i]}  ${prod.costPer}`
+                    span= `₹ ${user.cartQty[i]*prod.price}`
+                    - a = a + user.cartQty[i]*prod.price
+                li.total
+                  a.btn.btn-default.hvr-hover.btn-cart(href='/myCart') VIEW CART
+                  span.float-right
+                    strong= `Total: ₹ ${a}`
    
 .top-search
   .container

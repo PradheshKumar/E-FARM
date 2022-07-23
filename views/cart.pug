@@ -1,0 +1,74 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+         .row
+             .col-lg-12
+                h2 Cart
+                ul.breadcrumb
+                    li.breadcrumb-item
+                        a(href='#') Shop
+                    li.breadcrumb-item.active Cart
+
+    .cart-box-main
+        .container
+            .row
+                .col-lg-12
+                    .table-main.table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th Images
+                                    th Product Name
+                                    th Price
+                                    th Quantity
+                                    th Total
+                                    th Remove
+                            tbody
+                                each prod,i in user.cart
+                                    tr
+                                        td.thumbnail-img
+                                            a(href='#')
+                                                img.img-fluid(src=`./../img/${prod.images[0]}` alt='')
+                                        td.name-pr
+                                            a(href=`/product/${prod.id}`)= prod.name
+                                        td.price-pr
+                                            p= `₹ ${prod.price}`
+                                        td.quantity-box
+                                            input.qtyInput.c-input-text.qty.text(type='number' size='4' value=user.cartQty[i] min='1' max=prod.stockLeft step='1' data-price=prod.price data-id=i data-prodid=prod.id)
+                                        td.total-pr
+                                            p.prodPrice= `₹ ${prod.price*user.cartQty[i]} `
+                                        td.remove-pr
+                                            a(href='#')
+                                            i.fas.fa-times
+                                
+            
+            .row.my-5
+                .col-lg-8.col-sm-12
+                .col-lg-4.col-sm-12
+                    .order-box
+                    h3 Order summary
+                    .d-flex
+                        h4 Sub Total
+                        .ml-auto.font-weight-bold $ 130
+                    .d-flex
+                        h4 Discount
+                        .ml-auto.font-weight-bold $ 40
+                    hr.my-1
+                    .d-flex
+                        h4 Coupon Discount
+                        .ml-auto.font-weight-bold $ 10
+                    .d-flex
+                        h4 Tax
+                        .ml-auto.font-weight-bold $ 2
+                    .d-flex
+                        h4 Shipping Cost
+                        .ml-auto.font-weight-bold Free
+                    hr
+                    .d-flex.gr-total
+                        h5 Grand Total
+                        .ml-auto.h5 $ 388
+                    hr
+                .col-12.d-flex.shopping-box
+                    a.ml-auto.btn.hvr-hover(href='checkout.html') Checkout

@@ -2291,7 +2291,7 @@ ul.cart-list > li.total > .btn:hover {
 .account-box {
   text-align: center;
   background: #ffffff;
-  padding: 30px;
+  padding: 30px 30px 30px 30px;
   border: 1px solid #000000;
 }
 .bottom-box {
@@ -2676,4 +2676,7 @@ ul.cart-list > li.total > .btn:hover {
   font-weight: 700;
   padding: 12px 25px;
   border: none;
+}
+.col-md-12 {
+  padding-bottom: 20px;
 }

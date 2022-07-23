@@ -9,9 +9,23 @@ const router = express.Router();
 
 router.get("/", authController.isLoggedIn, viewsController.getIndex);
 router.get("/overview", authController.isLoggedIn, viewsController.getOverview);
+router.get("/myCart", authController.isLoggedIn, viewsController.getCart);
+router.get(
+  "/account/:id",
+  authController.isLoggedIn,
+  viewsController.getAccount
+);
 
-router.get("/product/:id", viewsController.getProduct);
+router.get(
+  "/product/:id",
+  authController.isLoggedIn,
+  viewsController.getProduct
+);
 router.get("/login", viewsController.getLoginForm);
-router.get("/search/:key", viewsController.searchProduct);
+router.get(
+  "/search/:key",
+  authController.isLoggedIn,
+  viewsController.searchProduct
+);
 
 module.exports = router;

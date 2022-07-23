@@ -42,7 +42,10 @@ block content
             h2= products[0].name
             h5= `₹ ${products[0].price} per ${products[0].costPer}`
             p.available-stock
-              span= `${products[0].stockLeft} ${products[0].costPer}s available`
+              if(products[0].costPer ="1/4kg")
+               span= `${products[0].stockLeft/4} kg available in stock`
+              else
+                span= `${products[0].stockLeft} ${products[0].costPer} available in stock`
             p
             h4 Short Description:
             p= products[0].summary
@@ -50,11 +53,10 @@ block content
               li
                 .form-group.quantity-box
                   label.control-label Quantity
-                  input.form-control(value='0' min='0' max=products[0].stockLeft type='number')
+                  input.form-control#qtyBox(value='0' min='0' max=products[0].stockLeft type='number')
             .price-box-bar
               .cart-and-bay-btn
-                a.btn.hvr-hover(data-fancybox-close='' href='#') Buy Now
-                a.btn.hvr-hover(data-fancybox-close='' href='#') Add to cart
+                button.btn.hvr-hover.cartBtn(data-fancybox-close='') Add to cart
             .product-rating
               - var n = 0;
               while n++<Math.floor(products[0].ratingsAverage)
@@ -82,7 +84,7 @@ block content
                           a(href=`/product/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
                             i.fas.fa-eye
                         
-                      a.cart(href='#') Add to Cart
+                      a.cart(href=`/product/${prod.id}`) Add to Cart
                   .why-text
                     a(href=`/product/${prod.id}`)
                       h4= prod.name
@@ -96,59 +98,49 @@ block content
         .ins-inner-box
           img(src='./../images/instagram-img-01.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-02.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-03.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-04.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-05.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-06.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-07.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-08.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-09.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram
       .item
         .ins-inner-box
           img(src='./../images/instagram-img-05.jpg' alt='')
           .hov-in
-            a(href='#')
-              i.fab.fa-instagram
+            i.fab.fa-instagram

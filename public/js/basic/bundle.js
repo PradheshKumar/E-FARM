@@ -4569,13 +4569,13 @@ var showAlert = function showAlert(type, msg) {
 };
 
 exports.showAlert = showAlert;
-},{}],"login.js":[function(require,module,exports) {
+},{}],"ApiCalls.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.signUp = exports.logout = exports.login = void 0;
+exports.updateCart = exports.signUp = exports.logout = exports.login = exports.addToCart = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -4590,6 +4590,8 @@ function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyri
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var addCartBtn = document.querySelector(".cartBtn");
 
 var login =
 /*#__PURE__*/
@@ -4657,7 +4659,7 @@ var signUp =
 function () {
   var _ref2 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee2(email, password, passwordConfirm) {
+  _regeneratorRuntime().mark(function _callee2(name, email, password, passwordConfirm) {
     var input, res;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) {
@@ -4670,7 +4672,7 @@ function () {
               method: "POST",
               url: "/api/v1/user/signup",
               data: {
-                name: "name",
+                name: name,
                 email: email,
                 password: password,
                 passwordConfirm: passwordConfirm
@@ -4687,21 +4689,20 @@ function () {
               }, 200);
             }
 
-            _context2.next = 14;
+            _context2.next = 13;
             break;
 
           case 8:
             _context2.prev = 8;
             _context2.t0 = _context2["catch"](1);
-            console.log("Sdsdsdsdsdsd");
             showValidate(input[0]);
             input[0].dataset.validate = _context2.t0.response.data.message;
             return _context2.abrupt("return", false);
 
-          case 14:
+          case 13:
             return _context2.abrupt("return", true);
 
-          case 15:
+          case 14:
           case "end":
             return _context2.stop();
         }
@@ -4709,58 +4710,172 @@ function () {
     }, _callee2, null, [[1, 8]]);
   }));
 
-  return function signUp(_x3, _x4, _x5) {
+  return function signUp(_x3, _x4, _x5, _x6) {
     return _ref2.apply(this, arguments);
   };
 }();
 
 exports.signUp = signUp;
 
+var addToCart =
+/*#__PURE__*/
+function () {
+  var _ref3 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee3(prodId) {
+    var qty, res;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            qty = document.getElementById("qtyBox").value;
+
+            if (!(qty != 0)) {
+              _context3.next = 12;
+              break;
+            }
+
+            _context3.prev = 2;
+            _context3.next = 5;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "/api/v1/buyer/addCart/".concat(prodId, "/").concat(qty)
+            });
+
+          case 5:
+            res = _context3.sent;
+
+            if (res.data.status === "success") {
+              addCartBtn.parentElement.innerHTML = "ADDED";
+              location.reload();
+            }
+
+            _context3.next = 12;
+            break;
+
+          case 9:
+            _context3.prev = 9;
+            _context3.t0 = _context3["catch"](2);
+            console.log("ERRRRORR", _context3.t0); // showAlert("error", err.response.data.message);
+
+          case 12:
+            return _context3.abrupt("return", true);
+
+          case 13:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[2, 9]]);
+  }));
+
+  return function addToCart(_x7) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+exports.addToCart = addToCart;
+
 function showValidate(input) {
   var thisAlert = $(input);
   $(thisAlert).addClass("alert-validate");
 }
 
+var updateCart =
+/*#__PURE__*/
+function () {
+  var _ref4 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee4(prodId, qty) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            _context4.next = 3;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
+            });
+
+          case 3:
+            res = _context4.sent;
+
+            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
+              // location.reload();
+            }
+
+            _context4.next = 10;
+            break;
+
+          case 7:
+            _context4.prev = 7;
+            _context4.t0 = _context4["catch"](0);
+            console.log("ERRRRORR", _context4.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context4.abrupt("return", true);
+
+          case 11:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[0, 7]]);
+  }));
+
+  return function updateCart(_x8, _x9) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+exports.updateCart = updateCart;
+
 var logout =
 /*#__PURE__*/
 function () {
-  var _ref3 = _asyncToGenerator(
+  var _ref5 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee3() {
+  _regeneratorRuntime().mark(function _callee5() {
     var res;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
-            _context3.prev = 0;
-            _context3.next = 3;
+            _context5.prev = 0;
+            _context5.next = 3;
             return (0, _axios.default)({
               method: "GET",
               url: "/api/v1/user/logout"
             });
 
           case 3:
-            res = _context3.sent;
-            if (res.data.status = "success") location.reload(true);
-            _context3.next = 11;
+            res = _context5.sent;
+
+            if (res.data.status = "success") {
+              if (window.location.href.includes("account")) window.location.href = "/";else location.reload(true);
+            }
+
+            _context5.next = 11;
             break;
 
           case 7:
-            _context3.prev = 7;
-            _context3.t0 = _context3["catch"](0);
-            console.log(_context3.t0.response);
+            _context5.prev = 7;
+            _context5.t0 = _context5["catch"](0);
+            console.log(_context5.t0.response);
             (0, _alerts.showAlert)("error", "Error logging out! Try again.");
 
           case 11:
           case "end":
-            return _context3.stop();
+            return _context5.stop();
         }
       }
-    }, _callee3, null, [[0, 7]]);
+    }, _callee5, null, [[0, 7]]);
   }));
 
   return function logout() {
-    return _ref3.apply(this, arguments);
+    return _ref5.apply(this, arguments);
   };
 }();
 
@@ -4773,11 +4888,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.signUpForm = void 0;
 
-var _login = require("./login.js");
+var _ApiCalls = require("./ApiCalls.js");
 
 var loginForm = document.querySelector(".login100-form");
 var input;
-var markup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
+var markup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
 
 var signUpForm = function signUpForm(e) {
   e.preventDefault();
@@ -4806,11 +4921,11 @@ var signUpFn = function signUpFn(e) {
   });
 
   if (check) {
-    var email = input[0].value;
-    var password = input[1].value;
-    var Cpassword = input[2].value;
-    console.log(2);
-    (0, _login.signUp)(email, password, Cpassword);
+    var name = input[0].value;
+    var email = input[1].value;
+    var password = input[2].value;
+    var Cpassword = input[3].value;
+    (0, _ApiCalls.signUp)(name, email, password, Cpassword);
   } else {
     return false;
   }
@@ -4843,10 +4958,10 @@ function hideValidate(input) {
   var thisAlert = $(input).parent();
   $(thisAlert).removeClass("alert-validate");
 }
-},{"./login.js":"login.js"}],"index.js":[function(require,module,exports) {
+},{"./ApiCalls.js":"ApiCalls.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
-var _login = require("./login.js");
+var _ApiCalls = require("./ApiCalls.js");
 
 var _loginForm = require("./loginForm.js");
 
@@ -4855,6 +4970,9 @@ var form = document.querySelector(".validate-form");
 var loginBtn = document.querySelector(".loginBtn");
 var logoutBtn = document.querySelector(".logoutBtn");
 var signUpFormBtn = document.querySelector(".signupForm");
+var addCartBtn = document.querySelector(".cartBtn");
+var qtyInput = document.querySelectorAll(".qtyInput");
+var prodPrice = document.querySelectorAll(".prodPrice");
 
 if (form) {
   form.addEventListener("submit", function (e) {
@@ -4875,7 +4993,7 @@ if (loginBtn) {
     if (check) {
       var email = input[0].value;
       var password = input[1].value;
-      (0, _login.login)(email, password);
+      (0, _ApiCalls.login)(email, password);
     } else {
       return false;
     }
@@ -4883,11 +5001,27 @@ if (loginBtn) {
 }
 
 if (logoutBtn) {
-  logoutBtn.addEventListener("click", _login.logout);
+  logoutBtn.addEventListener("click", _ApiCalls.logout);
 }
 
 if (signUpFormBtn) {
   signUpFormBtn.addEventListener("click", _loginForm.signUpForm);
+}
+
+if (addCartBtn) {
+  addCartBtn.addEventListener("click", function () {
+    (0, _ApiCalls.addToCart)(window.location.pathname.split("/")[2]);
+  });
+}
+
+if (qtyInput) {
+  qtyInput.forEach(function (e) {
+    e.addEventListener("change", function () {
+      var id = e.dataset.id;
+      prodPrice[id].innerHTML = "\u20B9 ".concat(e.value * e.dataset.price);
+      (0, _ApiCalls.updateCart)(e.dataset.prodid, e.value);
+    });
+  });
 }
 
 $(".validate-form .input100").each(function () {
@@ -4917,7 +5051,7 @@ function hideValidate(input) {
   var thisAlert = $(input).parent();
   $(thisAlert).removeClass("alert-validate");
 }
-},{"./login.js":"login.js","./loginForm.js":"loginForm.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./ApiCalls.js":"ApiCalls.js","./loginForm.js":"loginForm.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -4945,7 +5079,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65063" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62493" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

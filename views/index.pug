@@ -149,13 +149,8 @@ block content
                     li
                       a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
                         i.fas.fa-eye
-                    li
-                      a(href='#' data-toggle='tooltip' data-placement='right' title='Compare')
-                        i.fas.fa-sync-alt
-                    li
-                      a(href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist')
-                        i.far.fa-heart
-                  a.cart(href='#') Add to Cart
+                    
+                  a.cart(href=`/product/${product.id}`) Add to Cart
               .why-text
                 a(href=`/product/${product.id}` )
                   h4= product.name

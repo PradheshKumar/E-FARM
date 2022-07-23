@@ -16,14 +16,15 @@ router.post("/forgotPassword", setUser, authController.forgotPassword);
 router.patch("/resetPassword/:token", setUser, authController.resetPassword);
 
 // Protect all routes after this middleware
-// router.use(authController.protect);
+router.use(setUser, authController.protect);
+// router.use(authController.restrictTo("buyer"));
 
+router.post("/addCart/:id/:qty", setUser, userController.addToCart);
+router.patch("/updateCart/:id/:qty", setUser, userController.updateCart);
 router.patch("/updateMyPassword", setUser, authController.updatePassword);
 router.get("/me", setUser, userController.getMe, userController.getUser);
 router.patch("/updateMe", setUser, userController.updateMe);
 router.delete("/deleteMe", setUser, userController.deleteMe);
-
-// router.use(authController.restrictTo('admin'));
 
 // .post(userController.createUser);
 
