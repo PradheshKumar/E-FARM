@@ -9,6 +9,7 @@ import {
   addNego,
   acceptNego,
   cancelNego,
+  replyNego,
 } from "./ApiCalls.js";
 import { signUpForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
@@ -28,6 +29,7 @@ const negoBtn = document.querySelectorAll(".negoBtn");
 const negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 const negoPgreply = document.querySelectorAll(".replyNegoBtn");
 const negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
+const negoReplyPrice = document.querySelector(".replyValue");
 addListener();
 if (form) {
   form.addEventListener("submit", function (e) {
@@ -116,6 +118,7 @@ if (negoPgaccept) {
 if (negoPgreply) {
   negoPgreply.forEach((el) => {
     el.addEventListener("click", () => {
+      replyNego(el.dataset.id, negoReplyPrice.value);
       console.log(el.dataset.id, "REPLY");
     });
   });

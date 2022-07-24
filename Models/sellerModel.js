@@ -30,6 +30,12 @@ const sellerSchema = new mongoose.Schema({
     minlength: 8,
     select: false,
   },
+  currentOrders: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Order",
+    },
+  ],
   passwordConfirm: {
     type: String,
     required: [true, "Please confirm your password"],

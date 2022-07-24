@@ -153,7 +153,7 @@ exports.isLoggedIn = async (req, res, next) => {
           .populate({
             path: "negotiations",
             select:
-              "startingPrice qty product seller createdAt -buyer currentBid",
+              "startingPrice qty product seller createdAt -buyer currentBid negoStage",
           });
         if (!currentUser) return next();
       }

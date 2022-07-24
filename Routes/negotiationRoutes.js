@@ -10,6 +10,7 @@ router.patch(
 );
 router.post("/placeBid", negotiationController.placeBid);
 router.post("/cancelBid/:id", negotiationController.cancelBid);
+router.post("/replyBid/:id", negotiationController.replyBid);
 router.post(
   "/acceptBid/:id",
   negotiationController.acceptBid,

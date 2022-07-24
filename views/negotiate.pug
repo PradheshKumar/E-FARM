@@ -8,8 +8,8 @@ block content
                 h2 Cart
                 ul.breadcrumb
                     li.breadcrumb-item
-                        a(href='#')= user.negotiations
-                    li.breadcrumb-item.active Cart
+                        a(href=`/account`) My Account
+                    li.breadcrumb-item.active Negotiations
 
     .cart-box-main
         .container
@@ -25,9 +25,9 @@ block content
                                     th Product Name
                                     th Orginal Price
                                     th Quantity
-                                    th Your Bid ( in ₹ )
                                     th Current Bid
-                                    th Bid Again
+                                    th Your Bid ( in ₹ )
+                                    th Bid 
                                     th Accept
                                     th Cancel
                             tbody
@@ -42,16 +42,25 @@ block content
                                                 p= `₹ ${nego.startingPrice}`
                                             td.total-pr
                                                 p.prodPrice= `${nego.qty} ${nego.product.costPer}`
+                                            td.remove-pr
+                                                if(nego.negoStage==0)
+                                                    strong  START BIDDING
+                                                else
+                                                    p= `₹ ${nego.currentBid}`
                                             td.quantity-box
-                                                input.qtyInput.c-input-text(type='number' size='4' value=nego.currentBid min='1'  step='1' data-price=nego.product.price data-id=i data-prodid=nego.product.id)
-                                            td.remove-pr
-                                                p= `₹ ${nego.currentBid}`
-                                            td.remove-pr
-                                                a(href='#')
-                                                i.fas.negoPgBtn.fa-reply(data-id=nego.id).replyNegoBtn
-                                            td.remove-pr
-                                                a(href='#')
-                                                i.fas.negoPgBtn.fa-check(data-id=nego.id).acceptNegoBtn
+                                                input.qtyInput.c-input-text.replyValue(type='number' size='4' value=nego.currentBid min='1'  step='1' data-id=i data-prodid=nego.product.id)
+                                            if( Number(nego.negoStage)%2 ==0)
+                                                td.remove-pr
+                                                    a(href='#')
+                                                    i.fas.negoPgBtn.fa-reply(data-id=nego.id).replyNegoBtn
+                                                td.remove-pr
+                                                    a(href='#')
+                                                    i.fas.negoPgBtn.fa-check(data-id=nego.id).acceptNegoBtn
+                                            else
+                                                 td.remove-pr
+                                                    p WAIT FOR 
+                                                 td.remove-pr
+                                                    p SELLER'S REPLY
                                             td.remove-pr
                                                 a(href='#')
                                                 i.fas.fa-times.negoPgBtn.cancelNegoBtn(data-id=nego.id)

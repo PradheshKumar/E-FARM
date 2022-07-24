@@ -4575,7 +4575,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateCart = exports.signUp = exports.rmCart = exports.logout = exports.login = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
+exports.updateCart = exports.signUp = exports.rmCart = exports.replyNego = exports.logout = exports.login = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -4997,17 +4997,12 @@ function () {
 
 exports.cancelNego = cancelNego;
 
-function showValidate(input) {
-  var thisAlert = $(input);
-  $(thisAlert).addClass("alert-validate");
-}
-
-var updateCart =
+var replyNego =
 /*#__PURE__*/
 function () {
   var _ref8 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee8(prodId, qty) {
+  _regeneratorRuntime().mark(function _callee8(negoId, replyPrice) {
     var res;
     return _regeneratorRuntime().wrap(function _callee8$(_context8) {
       while (1) {
@@ -5016,15 +5011,22 @@ function () {
             _context8.prev = 0;
             _context8.next = 3;
             return (0, _axios.default)({
-              method: "PATCH",
-              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
+              method: "POST",
+              url: "/api/v1/negotiation/replyBid/".concat(negoId),
+              data: {
+                replyPrice: replyPrice
+              }
             });
 
           case 3:
             res = _context8.sent;
 
-            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
-              // location.reload();
+            if (res.data.status === "success") {
+              console.log("Replied");
+              location.reload(); // const nego = document.querySelector(".negoRow");
+              // console.log(nego);
+              // if (nego) location.reload();
+              // else window.location.href = "/";
             }
 
             _context8.next = 10;
@@ -5046,20 +5048,25 @@ function () {
     }, _callee8, null, [[0, 7]]);
   }));
 
-  return function updateCart(_x15, _x16) {
+  return function replyNego(_x15, _x16) {
     return _ref8.apply(this, arguments);
   };
 }();
 
-exports.updateCart = updateCart;
+exports.replyNego = replyNego;
 
-var logout =
+function showValidate(input) {
+  var thisAlert = $(input);
+  $(thisAlert).addClass("alert-validate");
+}
+
+var updateCart =
 /*#__PURE__*/
 function () {
   var _ref9 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee9() {
-    var res, url, hasUrl;
+  _regeneratorRuntime().mark(function _callee9(prodId, qty) {
+    var res;
     return _regeneratorRuntime().wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
@@ -5067,30 +5074,27 @@ function () {
             _context9.prev = 0;
             _context9.next = 3;
             return (0, _axios.default)({
-              method: "GET",
-              url: "/api/v1/user/logout"
+              method: "PATCH",
+              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
             });
 
           case 3:
             res = _context9.sent;
 
-            if (res.data.status = "success") {
-              url = ["account", "myCart", "checkOut"];
-              hasUrl = url.map(function (e) {
-                console.log(e);
-                return window.location.href.includes(e);
-              });
-              if (hasUrl.includes(true)) window.location.href = "/";else location.reload(true);
+            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
+              // location.reload();
             }
 
-            _context9.next = 11;
+            _context9.next = 10;
             break;
 
           case 7:
             _context9.prev = 7;
             _context9.t0 = _context9["catch"](0);
-            console.log(_context9.t0.response);
-            (0, _alerts.showAlert)("error", "Error logging out! Try again.");
+            console.log("ERRRRORR", _context9.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context9.abrupt("return", true);
 
           case 11:
           case "end":
@@ -5100,8 +5104,62 @@ function () {
     }, _callee9, null, [[0, 7]]);
   }));
 
-  return function logout() {
+  return function updateCart(_x17, _x18) {
     return _ref9.apply(this, arguments);
+  };
+}();
+
+exports.updateCart = updateCart;
+
+var logout =
+/*#__PURE__*/
+function () {
+  var _ref10 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee10() {
+    var res, url, hasUrl;
+    return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            _context10.prev = 0;
+            _context10.next = 3;
+            return (0, _axios.default)({
+              method: "GET",
+              url: "/api/v1/user/logout"
+            });
+
+          case 3:
+            res = _context10.sent;
+
+            if (res.data.status = "success") {
+              url = ["account", "myCart", "checkOut", "myOrders", "negotiate"];
+              hasUrl = url.map(function (e) {
+                console.log(e);
+                return window.location.href.includes(e);
+              });
+              if (hasUrl.includes(true)) window.location.href = "/";else location.reload(true);
+            }
+
+            _context10.next = 11;
+            break;
+
+          case 7:
+            _context10.prev = 7;
+            _context10.t0 = _context10["catch"](0);
+            console.log(_context10.t0.response);
+            (0, _alerts.showAlert)("error", "Error logging out! Try again.");
+
+          case 11:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10, null, [[0, 7]]);
+  }));
+
+  return function logout() {
+    return _ref10.apply(this, arguments);
   };
 }();
 
@@ -5336,6 +5394,7 @@ var negoBtn = document.querySelectorAll(".negoBtn");
 var negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 var negoPgreply = document.querySelectorAll(".replyNegoBtn");
 var negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
+var negoReplyPrice = document.querySelector(".replyValue");
 (0, _checkOut.addListener)();
 
 if (form) {
@@ -5428,6 +5487,7 @@ if (negoPgaccept) {
 if (negoPgreply) {
   negoPgreply.forEach(function (el) {
     el.addEventListener("click", function () {
+      (0, _ApiCalls.replyNego)(el.dataset.id, negoReplyPrice.value);
       console.log(el.dataset.id, "REPLY");
     });
   });
@@ -5498,7 +5558,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53861" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60732" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -159,7 +159,20 @@ exports.cancelBid = catchAsync(async (req, res, next) => {
     data: {},
   });
 });
-
+exports.replyBid = catchAsync(async (req, res, next) => {
+  try {
+    const nego = await Negotiation.findByIdAndUpdate(req.params.id, {
+      $inc: { negoStage: 1 },
+      currentBid: req.body.replyPrice,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  res.status(201).json({
+    status: "success",
+    data: {},
+  });
+});
 exports.addBuyerSeller = catchAsync(async (req, res, next) => {
   const bid = await Negotiation.findById(req.params.id);
   if (!bid) {

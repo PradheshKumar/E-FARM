@@ -149,6 +149,27 @@ export const cancelNego = async (negoId) => {
   }
   return true;
 };
+export const replyNego = async (negoId, replyPrice) => {
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `/api/v1/negotiation/replyBid/${negoId}`,
+      data: { replyPrice },
+    });
+    if (res.data.status === "success") {
+      console.log("Replied");
+      location.reload();
+      // const nego = document.querySelector(".negoRow");
+      // console.log(nego);
+      // if (nego) location.reload();
+      // else window.location.href = "/";
+    }
+  } catch (err) {
+    console.log("ERRRRORR", err);
+    // showAlert("error", err.response.data.message);
+  }
+  return true;
+};
 
 function showValidate(input) {
   var thisAlert = $(input);
@@ -178,7 +199,7 @@ export const logout = async () => {
       url: "/api/v1/user/logout",
     });
     if ((res.data.status = "success")) {
-      const url = ["account", "myCart", "checkOut"];
+      const url = ["account", "myCart", "checkOut", "myOrders", "negotiate"];
 
       const hasUrl = url.map((e) => {
         console.log(e);

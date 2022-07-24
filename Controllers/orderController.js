@@ -27,6 +27,7 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
     cart: [],
     cartQty: [],
   });
+
   // // //Reduce Stock of Product
 
   products.forEach(async (el, i) => {
@@ -34,6 +35,12 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
     stockLeft -= req.body.productsQty[i];
     await Product.findByIdAndUpdate(el.id, {
       stockLeft,
+    });
+    const seller = await Seller.findById(el.seller.id);
+    const sellerOrders = [...seller.currentOrders, doc.id];
+
+    await Seller.findByIdAndUpdate(el.seller.id, {
+      currentOrders: sellerOrders,
     });
   });
 
