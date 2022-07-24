@@ -1,6 +1,15 @@
 "use strict";
 
-import { login, logout, addToCart, updateCart, rmCart } from "./ApiCalls.js";
+import {
+  login,
+  logout,
+  addToCart,
+  updateCart,
+  rmCart,
+  addNego,
+  acceptNego,
+  cancelNego,
+} from "./ApiCalls.js";
 import { signUpForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
 const input = document.querySelectorAll(".validate-input .input100");
@@ -15,6 +24,10 @@ const rmBtn = document.querySelectorAll(".rmBtn");
 const subTotal = document.querySelector(".subTotal");
 const tax = document.querySelector(".tax");
 const grandTotal = document.querySelector(".grandTotal");
+const negoBtn = document.querySelectorAll(".negoBtn");
+const negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
+const negoPgreply = document.querySelectorAll(".replyNegoBtn");
+const negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 addListener();
 if (form) {
   form.addEventListener("submit", function (e) {
@@ -70,10 +83,49 @@ if (qtyInput) {
   });
 }
 if (rmBtn) {
-  rmBtn.forEach((e, i) => {
-    e.addEventListener("click", () => {
-      e.parentElement.remove();
+  rmBtn.forEach((el, i) => {
+    el.addEventListener("click", () => {
+      el.parentElement.remove();
       rmCart(i);
+    });
+  });
+}
+if (negoBtn) {
+  negoBtn.forEach((el, i) => {
+    el.addEventListener("click", () => {
+      el.parentElement.parentElement.remove();
+      addNego(
+        el.dataset.id,
+        el.dataset.buyer,
+        el.dataset.price * el.dataset.qty,
+        el.dataset.qty
+      );
+      rmCart(i);
+    });
+  });
+}
+if (negoPgaccept) {
+  negoPgaccept.forEach((el) => {
+    el.addEventListener("click", () => {
+      el.parentElement.parentElement.remove();
+      acceptNego(el.dataset.id);
+      console.log(el.dataset.id, "ACCEPT");
+    });
+  });
+}
+if (negoPgreply) {
+  negoPgreply.forEach((el) => {
+    el.addEventListener("click", () => {
+      console.log(el.dataset.id, "REPLY");
+    });
+  });
+}
+if (negoPgcancel) {
+  negoPgcancel.forEach((el) => {
+    el.addEventListener("click", () => {
+      el.parentElement.parentElement.remove();
+      cancelNego(el.dataset.id);
+      console.log(el.dataset.id, "CANCEL");
     });
   });
 }

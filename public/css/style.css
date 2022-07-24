@@ -2680,3 +2680,37 @@ ul.cart-list > li.total > .btn:hover {
 .col-md-12 {
   padding-bottom: 20px;
 }
+.fas.negoPg.cancelNegoBtn:hover {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  background: #ff4000;
+  -webkit-transition-property: color;
+  transition-property: color;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  box-shadow: none;
+  padding: 15px;
+  border-radius: 12px;
+  color: black;
+}
+.fas.negoPgBtn:hover {
+  color: black;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  background: #35b440;
+  -webkit-transition-property: color;
+  transition-property: color;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  box-shadow: none;
+  padding: 15px;
+  border-radius: 12px;
+}

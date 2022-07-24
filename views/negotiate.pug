@@ -1,0 +1,61 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+         .row
+             .col-lg-12
+                h2 Cart
+                ul.breadcrumb
+                    li.breadcrumb-item
+                        a(href='#')= user.negotiations
+                    li.breadcrumb-item.active Cart
+
+    .cart-box-main
+        .container
+            -negos = user.negotiations
+            -sum=0
+            .row
+                .col-lg-12
+                    .table-main.table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th Image
+                                    th Product Name
+                                    th Orginal Price
+                                    th Quantity
+                                    th Your Bid ( in ₹ )
+                                    th Current Bid
+                                    th Bid Again
+                                    th Accept
+                                    th Cancel
+                            tbody
+                                if(negos.length !=0)
+                                    each nego in negos
+                                        tr.negoRow
+                                            td.thumbnail-img
+                                                img.img-fluid(src=`./../img/${nego.product.images[0]}` alt='')
+                                            td.name-pr
+                                                a(href=`/product/${nego.product.id}`)= nego.product.name
+                                            td.price-pr
+                                                p= `₹ ${nego.startingPrice}`
+                                            td.total-pr
+                                                p.prodPrice= `${nego.qty} ${nego.product.costPer}`
+                                            td.quantity-box
+                                                input.qtyInput.c-input-text(type='number' size='4' value=nego.currentBid min='1'  step='1' data-price=nego.product.price data-id=i data-prodid=nego.product.id)
+                                            td.remove-pr
+                                                p= `₹ ${nego.currentBid}`
+                                            td.remove-pr
+                                                a(href='#')
+                                                i.fas.negoPgBtn.fa-reply(data-id=nego.id).replyNegoBtn
+                                            td.remove-pr
+                                                a(href='#')
+                                                i.fas.negoPgBtn.fa-check(data-id=nego.id).acceptNegoBtn
+                                            td.remove-pr
+                                                a(href='#')
+                                                i.fas.fa-times.negoPgBtn.cancelNegoBtn(data-id=nego.id)
+                                                
+                                    
+                
+            

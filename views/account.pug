@@ -15,11 +15,18 @@ block content
           .account-box
             .service-box
               .service-icon
-                a(href='#')
-                  i.fa.fa-gift
+                if(user.currentOrders.length != 0)
+                  a(href='/myOrders')
+                    i.fa.fa-gift
+                else 
+                  a(href='#')
+                    i.fa.fa-gift
               .service-desc
-                h4 Your Orders
-                p Track, return, or buy things again
+                if(user.currentOrders.length != 0)
+                  h4 Your Orders
+                  p Track, return, or buy things again
+                else 
+                  h4 You Dont Have Any Order
         .col-lg-4.col-md-12
           .account-box
             .service-box
@@ -33,10 +40,17 @@ block content
           .account-box
             .service-box
               .service-icon
-                a(href='#')
-                  i.fa.fa-location-arrow
+                if(user.negotiations.length != 0)
+                  a(href='/negotiate')
+                    i.fa.fa-location-arrow
+                else
+                  a(href='#')
+                    i.fa.fa-location-arrow 
               .service-desc
-                h4 Your Addresses
-                p Edit addresses for orders and gifts
+                if(user.negotiations.length != 0)
+                  h4 Your Pending Negotiations
+                  p Accept,reply,cancel your negotiations
+                else
+                  h4 You Dont Have Pending Negotiations
       
     

@@ -87,6 +87,69 @@ export const rmCart = async (id) => {
   }
   return true;
 };
+export const addNego = async (id, buyer, price, qty) => {
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `/api/v1/negotiation/placeBid/`,
+      data: {
+        product: id,
+        buyer: buyer,
+        startingPrice: price,
+        currentBid: price,
+        qty,
+      },
+    });
+    if (res.data.status === "success") {
+      console.log("PLACED");
+      // const cart = document.querySelector(".cartProducts");
+      // if (cart) location.reload();
+      // else window.location.href = "/overview";
+    }
+  } catch (err) {
+    console.log("ERRRRORR", err);
+    // showAlert("error", err.response.data.message);
+  }
+  return true;
+};
+export const acceptNego = async (negoId) => {
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `/api/v1/negotiation/acceptBid/${negoId}`,
+    });
+    if (res.data.status === "success") {
+      console.log("PLACED");
+      // const cart = document.querySelector(".cartProducts");
+      // if (cart) location.reload();
+      window.location.href = "/myOrders";
+    }
+  } catch (err) {
+    console.log("ERRRRORR", err);
+    // showAlert("error", err.response.data.message);
+  }
+  return true;
+};
+export const cancelNego = async (negoId) => {
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `/api/v1/negotiation/cancelBid/${negoId}`,
+    });
+    if (res.data.status === "success") {
+      console.log("REMOVED");
+      const nego = document.querySelector(".negoRow");
+      console.log(nego);
+      if (nego) location.reload();
+      else window.location.href = "/";
+    }
+  } catch (err) {
+    console.log("ERRRRORR", err);
+    // showAlert("error", err.response.data.message);
+  }
+  return true;
+};
+
 function showValidate(input) {
   var thisAlert = $(input);
   $(thisAlert).addClass("alert-validate");

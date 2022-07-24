@@ -66,6 +66,12 @@ const buyerSchema = new mongoose.Schema({
       ref: "Order",
     },
   ],
+  negotiations: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Negotiation",
+    },
+  ],
 });
 
 buyerSchema.pre("save", async function (next) {

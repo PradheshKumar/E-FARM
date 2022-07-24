@@ -4575,7 +4575,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateCart = exports.signUp = exports.rmCart = exports.logout = exports.login = exports.addToCart = void 0;
+exports.updateCart = exports.signUp = exports.rmCart = exports.logout = exports.login = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -4829,17 +4829,12 @@ function () {
 
 exports.rmCart = rmCart;
 
-function showValidate(input) {
-  var thisAlert = $(input);
-  $(thisAlert).addClass("alert-validate");
-}
-
-var updateCart =
+var addNego =
 /*#__PURE__*/
 function () {
   var _ref5 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee5(prodId, qty) {
+  _regeneratorRuntime().mark(function _callee5(id, buyer, price, qty) {
     var res;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) {
@@ -4848,15 +4843,24 @@ function () {
             _context5.prev = 0;
             _context5.next = 3;
             return (0, _axios.default)({
-              method: "PATCH",
-              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
+              method: "POST",
+              url: "/api/v1/negotiation/placeBid/",
+              data: {
+                product: id,
+                buyer: buyer,
+                startingPrice: price,
+                currentBid: price,
+                qty: qty
+              }
             });
 
           case 3:
             res = _context5.sent;
 
-            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
-              // location.reload();
+            if (res.data.status === "success") {
+              console.log("PLACED"); // const cart = document.querySelector(".cartProducts");
+              // if (cart) location.reload();
+              // else window.location.href = "/overview";
             }
 
             _context5.next = 10;
@@ -4878,8 +4882,172 @@ function () {
     }, _callee5, null, [[0, 7]]);
   }));
 
-  return function updateCart(_x9, _x10) {
+  return function addNego(_x9, _x10, _x11, _x12) {
     return _ref5.apply(this, arguments);
+  };
+}();
+
+exports.addNego = addNego;
+
+var acceptNego =
+/*#__PURE__*/
+function () {
+  var _ref6 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee6(negoId) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            _context6.next = 3;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "/api/v1/negotiation/acceptBid/".concat(negoId)
+            });
+
+          case 3:
+            res = _context6.sent;
+
+            if (res.data.status === "success") {
+              console.log("PLACED"); // const cart = document.querySelector(".cartProducts");
+              // if (cart) location.reload();
+
+              window.location.href = "/myOrders";
+            }
+
+            _context6.next = 10;
+            break;
+
+          case 7:
+            _context6.prev = 7;
+            _context6.t0 = _context6["catch"](0);
+            console.log("ERRRRORR", _context6.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context6.abrupt("return", true);
+
+          case 11:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6, null, [[0, 7]]);
+  }));
+
+  return function acceptNego(_x13) {
+    return _ref6.apply(this, arguments);
+  };
+}();
+
+exports.acceptNego = acceptNego;
+
+var cancelNego =
+/*#__PURE__*/
+function () {
+  var _ref7 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee7(negoId) {
+    var res, nego;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.prev = 0;
+            _context7.next = 3;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "/api/v1/negotiation/cancelBid/".concat(negoId)
+            });
+
+          case 3:
+            res = _context7.sent;
+
+            if (res.data.status === "success") {
+              console.log("REMOVED");
+              nego = document.querySelector(".negoRow");
+              console.log(nego);
+              if (nego) location.reload();else window.location.href = "/";
+            }
+
+            _context7.next = 10;
+            break;
+
+          case 7:
+            _context7.prev = 7;
+            _context7.t0 = _context7["catch"](0);
+            console.log("ERRRRORR", _context7.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context7.abrupt("return", true);
+
+          case 11:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    }, _callee7, null, [[0, 7]]);
+  }));
+
+  return function cancelNego(_x14) {
+    return _ref7.apply(this, arguments);
+  };
+}();
+
+exports.cancelNego = cancelNego;
+
+function showValidate(input) {
+  var thisAlert = $(input);
+  $(thisAlert).addClass("alert-validate");
+}
+
+var updateCart =
+/*#__PURE__*/
+function () {
+  var _ref8 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee8(prodId, qty) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            _context8.prev = 0;
+            _context8.next = 3;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
+            });
+
+          case 3:
+            res = _context8.sent;
+
+            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
+              // location.reload();
+            }
+
+            _context8.next = 10;
+            break;
+
+          case 7:
+            _context8.prev = 7;
+            _context8.t0 = _context8["catch"](0);
+            console.log("ERRRRORR", _context8.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context8.abrupt("return", true);
+
+          case 11:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8, null, [[0, 7]]);
+  }));
+
+  return function updateCart(_x15, _x16) {
+    return _ref8.apply(this, arguments);
   };
 }();
 
@@ -4888,23 +5056,23 @@ exports.updateCart = updateCart;
 var logout =
 /*#__PURE__*/
 function () {
-  var _ref6 = _asyncToGenerator(
+  var _ref9 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee6() {
+  _regeneratorRuntime().mark(function _callee9() {
     var res, url, hasUrl;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
-            _context6.prev = 0;
-            _context6.next = 3;
+            _context9.prev = 0;
+            _context9.next = 3;
             return (0, _axios.default)({
               method: "GET",
               url: "/api/v1/user/logout"
             });
 
           case 3:
-            res = _context6.sent;
+            res = _context9.sent;
 
             if (res.data.status = "success") {
               url = ["account", "myCart", "checkOut"];
@@ -4915,25 +5083,25 @@ function () {
               if (hasUrl.includes(true)) window.location.href = "/";else location.reload(true);
             }
 
-            _context6.next = 11;
+            _context9.next = 11;
             break;
 
           case 7:
-            _context6.prev = 7;
-            _context6.t0 = _context6["catch"](0);
-            console.log(_context6.t0.response);
+            _context9.prev = 7;
+            _context9.t0 = _context9["catch"](0);
+            console.log(_context9.t0.response);
             (0, _alerts.showAlert)("error", "Error logging out! Try again.");
 
           case 11:
           case "end":
-            return _context6.stop();
+            return _context9.stop();
         }
       }
-    }, _callee6, null, [[0, 7]]);
+    }, _callee9, null, [[0, 7]]);
   }));
 
   return function logout() {
-    return _ref6.apply(this, arguments);
+    return _ref9.apply(this, arguments);
   };
 }();
 
@@ -5045,7 +5213,8 @@ var products = document.querySelectorAll(".prodName");
 var finalPrice = price;
 var prodId = [],
     prodQty = [],
-    buyer;
+    buyer,
+    delTime = 600000000;
 
 if (products.length != 0) {
   products.forEach(function (e) {
@@ -5061,7 +5230,17 @@ var addListener = function addListener() {
   if (delToggle) {
     delToggle.forEach(function (e) {
       e.addEventListener("click", function () {
-        if (e.dataset.id == 1) priceTxt.innerHTML = "\u20B9 ".concat(price);else if (e.dataset.id == 2) priceTxt.innerHTML = "\u20B9 ".concat(price + 50);else if (e.dataset.id == 3) priceTxt.innerHTML = "\u20B9 ".concat(price + 100);
+        if (e.dataset.id == 1) {
+          delTime = 600000000;
+          priceTxt.innerHTML = "\u20B9 ".concat(price);
+        } else if (e.dataset.id == 2) {
+          delTime = 300000000;
+          priceTxt.innerHTML = "\u20B9 ".concat(price + 50);
+        } else if (e.dataset.id == 3) {
+          delTime = 100000000;
+          priceTxt.innerHTML = "\u20B9 ".concat(price + 100);
+        }
+
         finalPrice = Number(document.querySelector(".finalPrice").innerHTML.replace("₹", ""));
       });
     });
@@ -5069,7 +5248,7 @@ var addListener = function addListener() {
 
   if (placeOrderBtn) {
     placeOrderBtn.addEventListener("click", function () {
-      placeOrder();
+      placeOrder(delTime);
     });
   }
 };
@@ -5081,7 +5260,7 @@ var placeOrder =
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee() {
+  _regeneratorRuntime().mark(function _callee(delTime) {
     var res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
@@ -5096,7 +5275,8 @@ function () {
                 products: prodId,
                 buyer: buyer,
                 totalPrice: finalPrice,
-                productsQty: prodQty
+                productsQty: prodQty,
+                estimateDelivery: Date.now() + delTime
               }
             });
 
@@ -5127,7 +5307,7 @@ function () {
     }, _callee, null, [[0, 7]]);
   }));
 
-  return function placeOrder() {
+  return function placeOrder(_x) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -5152,6 +5332,10 @@ var rmBtn = document.querySelectorAll(".rmBtn");
 var subTotal = document.querySelector(".subTotal");
 var tax = document.querySelector(".tax");
 var grandTotal = document.querySelector(".grandTotal");
+var negoBtn = document.querySelectorAll(".negoBtn");
+var negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
+var negoPgreply = document.querySelectorAll(".replyNegoBtn");
+var negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 (0, _checkOut.addListener)();
 
 if (form) {
@@ -5213,10 +5397,48 @@ if (qtyInput) {
 }
 
 if (rmBtn) {
-  rmBtn.forEach(function (e, i) {
-    e.addEventListener("click", function () {
-      e.parentElement.remove();
+  rmBtn.forEach(function (el, i) {
+    el.addEventListener("click", function () {
+      el.parentElement.remove();
       (0, _ApiCalls.rmCart)(i);
+    });
+  });
+}
+
+if (negoBtn) {
+  negoBtn.forEach(function (el, i) {
+    el.addEventListener("click", function () {
+      el.parentElement.parentElement.remove();
+      (0, _ApiCalls.addNego)(el.dataset.id, el.dataset.buyer, el.dataset.price * el.dataset.qty, el.dataset.qty);
+      (0, _ApiCalls.rmCart)(i);
+    });
+  });
+}
+
+if (negoPgaccept) {
+  negoPgaccept.forEach(function (el) {
+    el.addEventListener("click", function () {
+      el.parentElement.parentElement.remove();
+      (0, _ApiCalls.acceptNego)(el.dataset.id);
+      console.log(el.dataset.id, "ACCEPT");
+    });
+  });
+}
+
+if (negoPgreply) {
+  negoPgreply.forEach(function (el) {
+    el.addEventListener("click", function () {
+      console.log(el.dataset.id, "REPLY");
+    });
+  });
+}
+
+if (negoPgcancel) {
+  negoPgcancel.forEach(function (el) {
+    el.addEventListener("click", function () {
+      el.parentElement.parentElement.remove();
+      (0, _ApiCalls.cancelNego)(el.dataset.id);
+      console.log(el.dataset.id, "CANCEL");
     });
   });
 }
@@ -5276,7 +5498,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51903" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53861" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

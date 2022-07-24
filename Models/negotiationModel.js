@@ -1,25 +1,26 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const negotiationSchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Product',
-    required: [true, 'Negotiations must have a Product'],
+    ref: "Product",
+    required: [true, "Negotiations must have a Product"],
   },
   buyer: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Buyer',
-    required: [true, 'Negotiations must have a Buyer'],
+    ref: "Buyer",
+    required: [true, "Negotiations must have a Buyer"],
   },
   seller: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Seller',
-    required: [true, 'Negotiations must have a Seller'],
+    ref: "Seller",
   },
-  startingPrice: {
+  startingPrice: Number,
+  negoStage: {
     type: Number,
+    default: 0,
   },
   createdAt: {
     type: Date,
@@ -27,31 +28,31 @@ const negotiationSchema = new mongoose.Schema({
   },
   lastBidBy: {
     type: String,
-    enum: ['buyer', 'seller'],
-    required: [true, 'Enter Last Bidder Role'],
+    enum: ["buyer", "seller"],
   },
-  lastBid: { type: Number, required: [true, 'Enter Last Bid'] },
+  qty: Number,
+  currentBid: Number,
   negoToken: String,
 });
 negotiationSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'buyer',
-    select: 'name _id',
+    path: "buyer",
+    select: "name _id",
   });
   this.populate({
-    path: 'seller',
-    select: 'name _id',
+    path: "seller",
+    select: "name _id",
   });
   this.populate({
-    path: 'product',
-    select: 'name _id',
+    path: "product",
+    select: "name  -seller images costPer",
   });
   next();
 });
 negotiationSchema.methods.createNegoToken = function () {
-  const resetToken = crypto.randomBytes(16).toString('hex');
+  const resetToken = crypto.randomBytes(16).toString("hex");
 
-  this.negoToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  this.negoToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
   // console.log({ resetToken }, this.passwordResetToken);
 
@@ -61,4 +62,4 @@ negotiationSchema.methods.createNegoToken = function () {
 };
 module.exports =
   mongoose.models.Negotiation ||
-  mongoose.model('Negotiation', negotiationSchema);
+  mongoose.model("Negotiation", negotiationSchema);

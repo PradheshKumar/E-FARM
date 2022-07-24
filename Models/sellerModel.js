@@ -50,6 +50,12 @@ const sellerSchema = new mongoose.Schema({
     select: false,
   },
   productSold: Number,
+  negotiations: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Negotiation",
+    },
+  ],
 });
 sellerSchema.pre("save", async function (next) {
   // Only run this function if password was actually modified

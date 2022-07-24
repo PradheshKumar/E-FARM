@@ -5,11 +5,11 @@ block content
         .container
          .row
              .col-lg-12
-                h2 Cart
+                h2 My Orders
                 ul.breadcrumb
                     li.breadcrumb-item
-                        a(href='#') Shop
-                    li.breadcrumb-item.active Cart
+                        a(href='/') Home
+                    li.breadcrumb-item.active Orders
 
     .cart-box-main
         .container
@@ -20,55 +20,21 @@ block content
                         table.table
                             thead
                                 tr
-                                    th Images
-                                    th Product Name
-                                    th Price
-                                    th Quantity
-                                    th Total
-                                    th Negotiate
-                                    th Remove
+                                    th Order No
+                                    th Order Placed On
+                                    th Total Products
+                                    th Total Price
+                                    th Estimated Delivery Date                             
                             tbody
-                                each prod,i in user.cart
+                                each order,i in user.currentOrders
                                     tr.cartProducts
                                         td.thumbnail-img
-                                            a(href='#')
-                                                img.img-fluid(src=`./../img/${prod.images[0]}` alt='')
+                                            p= i+1
+                                        td.thumbnail-img
+                                            p= (order.createdAt).toString().slice(4,16)
                                         td.name-pr
-                                            a(href=`/product/${prod.id}`)= prod.name
+                                            p= order.products.length
                                         td.price-pr
-                                            p= `₹ ${prod.price}`
-                                        td.quantity-box
-                                            input.qtyInput.c-input-text.qty.text(type='number' size='4' value=user.cartQty[i] min='1' max=prod.stockLeft step='1' data-price=prod.price data-id=i data-prodid=prod.id)
-                                        td.total-pr
-                                            p.prodPrice= `₹ ${prod.price*user.cartQty[i]} `
-                                            - sum += prod.price*user.cartQty[i]
-                                        td.remove-pr
-                                            a(href='#') Negotiate?
-                                        td.remove-pr.rmBtn
-                                            a(href='#')
-                                            i.fas.fa-times
-                                            
-                                
-            
-            .row.my-5
-                .col-lg-8.col-sm-12
-                .col-lg-4.col-sm-12
-                    .order-box
-                    h3 Order summary
-                    .d-flex
-                        h4 Sub Total
-                        .ml-auto.font-weight-bold.subTotal=`₹ ${sum}`
-                    
-                    .d-flex
-                        h4 Tax(5%)
-                        .ml-auto.font-weight-bold.tax=`₹ ${Math.floor(sum*0.05)}`
-                    .d-flex
-                        h4 Shipping Cost
-                        .ml-auto.font-weight-bold Free
-                    hr
-                    .d-flex.gr-total
-                        h5 Grand Total
-                        .ml-auto.h5.grandTotal= `₹ ${Math.floor(sum*0.05) + sum}`
-                    hr
-                .col-12.d-flex.shopping-box
-                    a.ml-auto.btn.hvr-hover(href='/checkOut') Checkout
+                                            p= `₹ ${order.totalPrice}`
+                                        td.thumbnail-img
+                                            p= order.estimateDelivery.toString().slice(4,16)

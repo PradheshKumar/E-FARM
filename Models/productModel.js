@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
+const mongoose = require("mongoose");
+const slugify = require("slugify");
 // const User = require('./userModel');
 // const validator = require('validator');
 
@@ -7,23 +7,23 @@ const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'A Product must have a name'],
+      required: [true, "A Product must have a name"],
       trim: true,
       maxlength: [
         20,
-        'A Product name must have less or equal then 20 characters',
+        "A Product name must have less or equal then 20 characters",
       ],
       minlength: [
         3,
-        'A Product name must have more or equal then 3 characters',
+        "A Product name must have more or equal then 3 characters",
       ],
       // validate: [validator.isAlpha, 'Tour name must only contain characters']
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
-      min: [1, 'Rating must be above 1.0'],
-      max: [5, 'Rating must be below 5.0'],
+      min: [1, "Rating must be above 1.0"],
+      max: [5, "Rating must be below 5.0"],
       set: (val) => Math.round(val * 10) / 10, // 4.666666, 46.6666, 47, 4.7
     },
     ratingsQuantity: {
@@ -32,7 +32,7 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, 'A Product must have a price'],
+      required: [true, "A Product must have a price"],
     },
     costPer: String,
     // priceDiscount: {
@@ -57,10 +57,10 @@ const productSchema = new mongoose.Schema(
     },
     seller: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Seller',
+      ref: "Seller",
     },
     type: String,
-    stockLeft: { type: Number, required: [true, 'Enter Remaining Stock'] },
+    stockLeft: { type: Number, required: [true, "Enter Remaining Stock"] },
   },
   {
     toJSON: { virtuals: true },
@@ -80,7 +80,7 @@ productSchema.index({ slug: 1 });
 // });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
-productSchema.pre('save', function (next) {
+productSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
@@ -89,8 +89,8 @@ productSchema.pre('save', function (next) {
 
 productSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'seller',
-    select: '-__v -passwordChangedAt -role -photo -email',
+    path: "seller",
+    select: "-__v -passwordChangedAt -role -photo -email",
   });
 
   next();
@@ -110,4 +110,4 @@ productSchema.pre(/^find/, function (next) {
 // });
 
 module.exports =
-  mongoose.models.Product || mongoose.model('Product', productSchema);
+  mongoose.models.Product || mongoose.model("Product", productSchema);

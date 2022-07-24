@@ -140,10 +140,21 @@ exports.isLoggedIn = async (req, res, next) => {
       // 2) Check if user still exists
       let currentUser = await Seller.findById(decoded.id);
       if (!currentUser) {
-        currentUser = await Buyer.findById(decoded.id).populate({
-          path: "cart",
-          select: "name -seller price images costPer stockLeft",
-        });
+        currentUser = await Buyer.findById(decoded.id)
+          .populate({
+            path: "cart",
+            select: "name -seller price images costPer stockLeft",
+          })
+          .populate({
+            path: "currentOrders",
+            select:
+              "id products productsQty totalPrice -buyer createdAt estimateDelivery",
+          })
+          .populate({
+            path: "negotiations",
+            select:
+              "startingPrice qty product seller createdAt -buyer currentBid",
+          });
         if (!currentUser) return next();
       }
       // 3) Check if user changed password after the token was issued

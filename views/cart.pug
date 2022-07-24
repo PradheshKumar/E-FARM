@@ -43,7 +43,7 @@ block content
                                             p.prodPrice= `₹ ${prod.price*user.cartQty[i]} `
                                             - sum += prod.price*user.cartQty[i]
                                         td.remove-pr
-                                            a(href='#') Negotiate?
+                                            a(href='#' data-id=prod.id data-buyer=user.id data-price=prod.price data-qty = user.cartQty[i]).negoBtn Negotiate?
                                         td.remove-pr.rmBtn
                                             a(href='#')
                                             i.fas.fa-times
