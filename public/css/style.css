@@ -2714,3 +2714,6 @@ ul.cart-list > li.total > .btn:hover {
   padding: 15px;
   border-radius: 12px;
 }
+input[type="number"] {
+  width: 50%;
+}

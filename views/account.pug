@@ -41,8 +41,12 @@ block content
             .service-box
               .service-icon
                 if(user.negotiations.length != 0)
-                  a(href='/negotiate')
-                    i.fa.fa-location-arrow
+                  if(user.role!="seller")
+                    a(href='/negotiate')
+                      i.fa.fa-location-arrow
+                  else 
+                    a(href='/seller_negotiate')
+                      i.fa.fa-location-arrow
                 else
                   a(href='#')
                     i.fa.fa-location-arrow 

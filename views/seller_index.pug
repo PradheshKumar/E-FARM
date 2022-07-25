@@ -1,0 +1,289 @@
+extends base
+
+block content 
+  .side
+    a.close-side(href='#')
+      i.fa.fa-times
+    li.cart-box
+      ul.cart-list
+        li
+          a.photo(href='#')
+            img.cart-thumb(src='images/img-pro-01.jpg' alt='')
+          h6
+            a(href='#') Delica omtantur 
+          p
+            | 1x - 
+            span.price $80.00
+        li
+          a.photo(href='#')
+            img.cart-thumb(src='images/img-pro-02.jpg' alt='')
+          h6
+            a(href='#') Omnes ocurreret
+          p
+            | 1x - 
+            span.price $60.00
+        li
+          a.photo(href='#')
+            img.cart-thumb(src='images/img-pro-03.jpg' alt='')
+          h6
+            a(href='#') Agam facilisis
+          p
+            | 1x - 
+            span.price $40.00
+        li.total
+          a.btn.btn-default.hvr-hover.btn-cart(href='#') VIEW CART
+          span.float-right
+            strong Total
+            | : $180.00
+ 
+  .top-search
+    .container
+      .input-group
+        span.input-group-addon
+          i.fa.fa-search
+        input.form-control(type='text' placeholder='Search')
+        span.input-group-addon.close-search
+          i.fa.fa-times
+  // End Top Search
+  // Start Slider
+  #slides-shop.cover-slides
+    ul.slides-container
+      li.text-center
+        img(src='images/banner-01.jpg' alt='')
+        .container
+          .row
+            .col-md-12
+              h1.m-b-20
+                strong
+                  | Welcome To 
+                  br
+                  |  E-FARM
+              p.m-b-40
+                | See how your users experience your website in realtime or view 
+                br
+                |  trends to see any changes in performance over time.
+              p
+                a.btn.hvr-hover(href='/overview') Shop Now
+      li.text-center
+        img(src='images/banner-02.jpg' alt='')
+        .container
+          .row
+            .col-md-12
+              h1.m-b-20
+                strong
+                  | Welcome To 
+                  br
+                  |  E-FARM
+              p.m-b-40
+                | See how your users experience your website in realtime or view 
+                br
+                |  trends to see any changes in performance over time.
+              p
+                a.btn.hvr-hover(href='/overview') Shop Now
+      li.text-center
+        img(src='images/banner-03.jpg' alt='')
+        .container
+          .row
+            .col-md-12
+              h1.m-b-20
+                strong
+                  | Welcome To 
+                  br
+                  |  E-FARM
+              p.m-b-40
+                | See how your users experience your website in realtime or view 
+                br
+                |  trends to see any changes in performance over time.
+              p
+                a.btn.hvr-hover(href='/overview') Shop Now
+    .slides-navigation
+      a.next(href='#')
+        i.fa.fa-angle-right(aria-hidden='true')
+      a.prev(href='#')
+        i.fa.fa-angle-left(aria-hidden='true')
+  // End Slider
+  // Start Categories
+  .categories-shop
+    .container
+      .row
+        .col-lg-4.col-md-4.col-sm-12.col-xs-12
+          .shop-cat-box
+            img.img-fluid(src='images/categories_img_01.jpg' alt='')
+            a.btn.hvr-hover(href='/overview/?type=veg') Fresh Vegetables
+        .col-lg-4.col-md-4.col-sm-12.col-xs-12
+          .shop-cat-box
+            img.img-fluid(src='images/categories_img_02.jpg' alt='')
+            a.btn.hvr-hover(href='/overview/?type=fruit') Fresh Fruits
+        .col-lg-4.col-md-4.col-sm-12.col-xs-12
+          .shop-cat-box
+            img.img-fluid(src='images/categories_img_03.jpg' alt='')
+            a.btn.hvr-hover(href='/overview/?type=leaf') Fresh Leafs
+  // End Categories
+  
+  // Start Products
+  .products-box
+    .container
+      .row
+        .col-lg-12
+          .title-all.text-center
+            h1 Fruits &amp; Vegetables
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.
+      .row
+        .col-lg-12
+          .special-menu.text-center
+            .button-group.filter-button-group
+              button.active(data-filter='*') All
+              button(data-filter='.top-featured') Top featured
+              button(data-filter='.best-seller') Best seller
+      .row.special-list
+        each product in products
+          .col-lg-3.col-md-6.special-grid.top-featured
+            .products-single.fix
+              .box-img-hover
+                .type-lb
+                  p.sale Sale
+                img.img-fluid(src=`img/${product.images[0]}` alt='Image')
+                .mask-icon
+                  ul
+                    li
+                      a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
+                        i.fas.fa-eye
+                    
+                  a.cart(href=`/product/${product.id}`) Add to Cart
+              .why-text
+                a(href=`/product/${product.id}` )
+                  h4= product.name
+                  h5=`₹ ${product.price} per ${product.costPer} `
+  .latest-blog
+    .container
+      .row
+        .col-lg-12
+          .title-all.text-center
+            h1 latest blog
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.
+      .row
+        .col-md-6.col-lg-4.col-xl-4
+          .blog-box
+            .blog-img
+              img.img-fluid(src='images/blog-img.jpg' alt='')
+            .blog-content
+              .title-blog
+                h3 Fusce in augue non nisi fringilla
+                p
+                  | Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.
+              ul.option-blog
+                li
+                  a(href='#')
+                    i.far.fa-heart
+                li
+                  a(href='#')
+                    i.fas.fa-eye
+                li
+                  a(href='#')
+                    i.far.fa-comments
+        .col-md-6.col-lg-4.col-xl-4
+          .blog-box
+            .blog-img
+              img.img-fluid(src='images/blog-img-01.jpg' alt='')
+            .blog-content
+              .title-blog
+                h3 Fusce in augue non nisi fringilla
+                p
+                  | Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.
+              ul.option-blog
+                li
+                  a(href='#')
+                    i.far.fa-heart
+                li
+                  a(href='#')
+                    i.fas.fa-eye
+                li
+                  a(href='#')
+                    i.far.fa-comments
+        .col-md-6.col-lg-4.col-xl-4
+          .blog-box
+            .blog-img
+              img.img-fluid(src='images/blog-img-02.jpg' alt='')
+            .blog-content
+              .title-blog
+                h3 Fusce in augue non nisi fringilla
+                p
+                  | Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.
+              ul.option-blog
+                li
+                  a(href='#')
+                    i.far.fa-heart
+                li
+                  a(href='#')
+                    i.fas.fa-eye
+                li
+                  a(href='#')
+                    i.far.fa-comments
+  // End Blog
+  // Start Instagram Feed
+  .instagram-box
+    .main-instagram.owl-carousel.owl-theme
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-01.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-02.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-03.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-04.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-05.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-06.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-07.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-08.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-09.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+      .item
+        .ins-inner-box
+          img(src='images/instagram-img-05.jpg' alt='')
+          .hov-in
+            a(href='#')
+              i.fab.fa-instagram
+  
+  

@@ -26,10 +26,11 @@ doctype html
               a(href='#')
                 i.fas.fa-location-arrow
                 |  Our location
-            li
-              a(href='#')
-                i.fas.fa-headset
-                |  Contact Us
+            if(!user)
+              li
+                a(href='/seller-login')
+                  i.fa.fa-cart-plus
+                  |  Start Selling
       .col-lg-6.col-md-6.col-sm-12.col-xs-12
         .login-box#basic.selectpicker.show-tick.form-control
           ul

@@ -3,6 +3,7 @@ const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 const Buyer = require("../Models/buyerModel");
 const Seller = require("../Models/sellerModel");
+const Product = require("../Models/productModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Email = require("../utils/email");
@@ -18,8 +19,10 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
-
-  res.cookie("jwt", token, {
+  let jwt = "jwt";
+  if (res.locals.user == "seller") jwt = "jwt1";
+  console.log(res.locals.user);
+  res.cookie(jwt, token, {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
@@ -29,7 +32,6 @@ const createSendToken = (user, statusCode, req, res) => {
 
   // Remove password from output
   user.password = undefined;
-
   res.status(statusCode).json({
     status: "success",
     token,
@@ -62,6 +64,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!email || !password) {
     return next(new AppError("Please provide email and password!", 400));
   }
+  console.log(User);
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select("+password");
   if (!user || !(await user.correctPassword(password, user.password))) {
@@ -73,10 +76,16 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
-  res.cookie("jwt", "loggedout", {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
+  if (req.cookies.jwt)
+    res.cookie("jwt", "loggedout", {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+    });
+  else
+    res.cookie("jwt1", "loggedout", {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+    });
   res.status(200).json({ status: "success" });
 };
 
@@ -129,6 +138,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
   setUser(res);
+
   if (req.cookies.jwt) {
     try {
       // 1) verify token
@@ -163,6 +173,42 @@ exports.isLoggedIn = async (req, res, next) => {
       }
 
       // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+
+      return next();
+    } catch (err) {
+      return next();
+    }
+  } else if (req.cookies.jwt1) {
+    try {
+      // 1) verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt1,
+        process.env.JWT_SECRET
+      );
+      console.log("req.cookies.jwt1");
+
+      // 2) Check if user still exists
+      let currentUser = await Seller.findById(decoded.id)
+        .populate({
+          path: "currentOrders",
+          select:
+            "id products productsQty totalPrice -buyer createdAt estimateDelivery",
+        })
+        .populate({
+          path: "negotiations",
+          select:
+            "startingPrice qty product seller createdAt -buyer currentBid negoStage",
+        });
+      if (!currentUser) return next();
+
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+      currentUser.products = await Product.find({ seller: currentUser.id });
+      // THERE IS A LOGGED IN USER
+      currentUser.role = "seller";
       res.locals.user = currentUser;
 
       return next();

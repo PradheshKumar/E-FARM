@@ -1,0 +1,70 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+         .row
+             .col-lg-12
+                h2 Cart
+                ul.breadcrumb
+                    li.breadcrumb-item
+                        a(href=`/account`) My Account
+                    li.breadcrumb-item.active Negotiations
+
+    .cart-box-main
+        .container
+            -negos = user.negotiations
+            -sum=0
+            .row
+                .col-lg-12
+                    .table-main.table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th Image
+                                    th Product Name
+                                    th Orginal Price
+                                    th Quantity
+                                    th Current Bid
+                                    th Your Bid ( in ₹ )
+                                    th Bid 
+                                    th Accept
+                                    th Cancel
+                            tbody
+                                if(negos.length !=0)
+                                    each nego in negos
+                                        tr.negoRow
+                                            td.thumbnail-img
+                                                img.img-fluid(src=`./../img/${nego.product.images[0]}` alt='')
+                                            td.name-pr
+                                                a(href=`/product/${nego.product.id}`)= nego.product.name
+                                            td.price-pr
+                                                p= `₹ ${nego.startingPrice}`
+                                            td.total-pr
+                                                p.prodPrice= `${nego.qty} ${nego.product.costPer}`
+                                            td.remove-pr
+                                                if(nego.negoStage==0)
+                                                    strong  WAIT FOR STARTING BID
+                                                else
+                                                    p= `₹ ${nego.currentBid}`
+                                            td.quantity-box
+                                                input.qtyInput.c-input-text.replyValue(type='number' size='4' value=nego.currentBid min='1'  step='1' data-id=i data-prodid=nego.product.id)
+                                            if( Number(nego.negoStage)%2 !=0)
+                                                td.remove-pr
+                                                    a(href='#')
+                                                    i.fas.negoPgBtn.fa-reply(data-id=nego.id).replyNegoBtn
+                                                td.remove-pr
+                                                    a(href='#')
+                                                    i.fas.negoPgBtn.fa-check(data-id=nego.id).acceptNegoBtn
+                                            else
+                                                 td.remove-pr
+                                                    p WAIT FOR 
+                                                 td.remove-pr
+                                                    p BUYER'S REPLY
+                                            td.remove-pr
+                                                a(href='#')
+                                                i.fas.fa-times.negoPgBtn.cancelNegoBtn(data-id=nego.id)
+                                                
+                                    
+                
+            

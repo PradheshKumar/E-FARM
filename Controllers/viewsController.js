@@ -122,3 +122,14 @@ exports.getLoginForm = (req, res) => {
     title: "Log into your account",
   });
 };
+/////////////////////////////////SELLER
+exports.sellerProducts = catchAsync(async (req, res, next) => {
+  res.status(200).render("seller_products", {
+    title: "Log into your account",
+  });
+});
+exports.sellergetNegotiations = catchAsync(async (req, res, next) => {
+  res.status(200).render("seller_negotiate", {
+    title: "My Negotiations",
+  });
+});

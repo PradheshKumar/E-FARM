@@ -7,18 +7,33 @@ export const login = async (email, password) => {
   const input = document.querySelectorAll(".validate-input");
 
   try {
-    const res = await axios({
-      method: "POST",
-      url: "/api/v1/user/login",
-      data: {
-        email,
-        password,
-      },
-    });
+    let res;
+    if (!window.location.href.includes("seller")) {
+      res = await axios({
+        method: "POST",
+        url: "/api/v1/user/login",
+        data: {
+          email,
+          password,
+        },
+      });
+    } else {
+      res = await axios({
+        method: "POST",
+        url: "/api/v1/seller/login",
+        data: {
+          email,
+          password,
+        },
+      });
+    }
     if (res.data.status === "success") {
       showAlert("success", "Logged in successfully!");
       window.setTimeout(() => {
-        location.assign("/");
+        if (!window.location.href.includes("seller")) location.assign("/");
+        else {
+          location.assign("/seller_products");
+        }
       }, 200);
     }
   } catch (err) {
@@ -32,16 +47,30 @@ export const login = async (email, password) => {
 export const signUp = async (name, email, password, passwordConfirm) => {
   const input = document.querySelectorAll(".validate-input");
   try {
-    const res = await axios({
-      method: "POST",
-      url: "/api/v1/user/signup",
-      data: { name, email, password, passwordConfirm },
-    });
-    if (res.data.status === "success") {
-      showAlert("success", "SignedUp successfully!");
-      window.setTimeout(() => {
-        location.assign("/");
-      }, 200);
+    if (!window.location.href.includes("seller")) {
+      const res = await axios({
+        method: "POST",
+        url: "/api/v1/user/signup",
+        data: { name, email, password, passwordConfirm },
+      });
+      if (res.data.status === "success") {
+        showAlert("success", "SignedUp successfully!");
+        window.setTimeout(() => {
+          location.assign("/");
+        }, 200);
+      }
+    } else {
+      const res = await axios({
+        method: "POST",
+        url: "/api/v1/seller/signup",
+        data: { name, email, password, passwordConfirm },
+      });
+      if (res.data.status === "success") {
+        showAlert("success", "SignedUp successfully!");
+        window.setTimeout(() => {
+          location.assign("/seller_products");
+        }, 200);
+      }
     }
   } catch (err) {
     showValidate(input[0]);
@@ -199,14 +228,22 @@ export const logout = async () => {
       url: "/api/v1/user/logout",
     });
     if ((res.data.status = "success")) {
-      const url = ["account", "myCart", "checkOut", "myOrders", "negotiate"];
+      const url = [
+        "account",
+        "myCart",
+        "checkOut",
+        "myOrders",
+        "negotiate",
+        "seller_products",
+      ];
 
       const hasUrl = url.map((e) => {
         console.log(e);
         return window.location.href.includes(e);
       });
       if (hasUrl.includes(true)) window.location.href = "/";
-      else location.reload(true);
+      else if (!window.location.href.includes("seller-login"))
+        location.reload();
     }
   } catch (err) {
     console.log(err.response);

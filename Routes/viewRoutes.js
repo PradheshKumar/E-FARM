@@ -4,7 +4,10 @@ const authController = require("../controllers/authController");
 const productController = require("../controllers/productController");
 
 const router = express.Router();
-
+const setUser = (req, res, next) => {
+  res.locals.user = "seller";
+  next();
+};
 // router.use(viewsController.alerts);
 
 router.get("/", authController.isLoggedIn, viewsController.getIndex);
@@ -29,6 +32,19 @@ router.get(
   "/search/:key",
   authController.isLoggedIn,
   viewsController.searchProduct
+);
+/////////////////////SELLER ROUTES
+router.get("/seller-login", viewsController.getLoginForm);
+router.get(
+  "/seller_products",
+  setUser,
+  authController.isLoggedIn,
+  viewsController.sellerProducts
+);
+router.get(
+  "/seller_negotiate",
+  authController.isLoggedIn,
+  viewsController.sellergetNegotiations
 );
 
 module.exports = router;

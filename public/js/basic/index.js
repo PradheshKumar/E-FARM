@@ -13,6 +13,7 @@ import {
 } from "./ApiCalls.js";
 import { signUpForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
+import { sellerSideHandle } from "./sellerSide.js";
 const input = document.querySelectorAll(".validate-input .input100");
 const form = document.querySelector(".validate-form");
 const loginBtn = document.querySelector(".loginBtn");
@@ -38,9 +39,12 @@ if (form) {
     // return check;
   });
 }
+if (window.location.href.includes("seller")) {
+  sellerSideHandle();
+}
 if (loginBtn) {
-  console.log("DSdssdsdsdadsbdis");
   loginBtn.addEventListener("click", () => {
+    if (window.location.href.includes("seller")) logout();
     let check = true;
     input.forEach((i) => {
       if (validate(i) == false) {

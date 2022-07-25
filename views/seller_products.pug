@@ -1,0 +1,50 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+         .row
+             .col-lg-12
+                h2 Cart
+                ul.breadcrumb
+                    li.breadcrumb-item
+                        a(href='#') Shop
+                    li.breadcrumb-item.active Cart
+
+    .cart-box-main
+        .container
+            -sum=0
+            .row
+                .col-lg-12
+                    .table-main.table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th Images
+                                    th Product Name
+                                    th Price( in ₹)
+                                    th StockLeft
+                                    th Remove
+                            tbody
+                                each prod,i in user.products
+                                    tr.cartProducts
+                                        td.thumbnail-img
+                                            a(href='#')
+                                                img.img-fluid(src=`./../img/${prod.images[0]}` alt='')
+                                        td.name-pr
+                                            a(href=`/product/${prod.id}`)= prod.name
+                                        td.quantity-box
+                                            input.c-input-text.priceSel(type='number' size ="2" min =1 value = prod.price data-id=prod.id) 
+                                        td.quantity-box
+                                            input.c-input-text.stockSel(type='number' size ="2" min=0 value = prod.stockLeft)      
+                                            p= `(${prod.costPer})`                                                                    
+                                        td.remove-pr.rmBtnSel
+                                            a(href='#')
+                                            i.fas.fa-times
+                                            
+                                
+            
+            .row.my-5
+               
+                .col-12.d-flex.shopping-box
+                    a.ml-auto.btn.hvr-hover.updateBtnSel(href='#') Update Details
