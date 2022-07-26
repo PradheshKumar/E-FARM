@@ -18,11 +18,21 @@ block content
           #carousel-example-1.single-product-slider.carousel.slide(data-ride='carousel')
             .carousel-inner(role='listbox')
               .carousel-item.active
-                img.d-block.w-100(src=`./../img/${products[0].images[0]}` alt='First slide')
-              each img,i in products[0].images
-                if(i!=0)
-                  .carousel-item
-                    img.d-block.w-100(src=`./../img/${img}` alt=`${products[0].name} Image`)
+                if(products[0].img=="")
+                  img.d-block.w-100(src=`./../img/${products[0].images[0]}` alt='First slide')
+                else 
+                  img.d-block.w-100(src=`data:image/png;base64,${products[0].img[0]}` alt='First slide') 
+              if(products[0].img=="")
+                each img,i in products[0].images
+                  if(i!=0)
+                    .carousel-item
+                      img.d-block.w-100(src=`./../img/${img}` alt=`${products[0].name} Image`)
+              else 
+                each img,i in products[0].img
+                  if(i!=0)
+                    .carousel-item
+                      p= img
+                      img.d-block.w-100(src=`data:image/png;base64,${img}` alt=`${products[0].name} Image`)
             a.carousel-control-prev(href='#carousel-example-1' role='button' data-slide='prev')
               i.fa.fa-angle-left(aria-hidden='true')
               span.sr-only Previous
@@ -31,11 +41,20 @@ block content
               span.sr-only Next
             ol.carousel-indicators
               li.active(data-target='#carousel-example-1' data-slide-to='0')
-                img.d-block.w-100.img-fluid(src=`./../img/${products[0].images[0]}` alt='')
-              each img,i in products[0].images
-                if(i!=0)
-                  li(data-target='#carousel-example-1' data-slide-to= i)
-                    img.d-block.w-100.img-fluid(src=`./../img/${img}` alt='')
+                if(products[0].img=="")
+                  img.d-block.w-100.img-fluid(src=`./../img/${products[0].images[0]}` alt='')
+                else 
+                  img.d-block.w-100.img-fluid(src=`data:image/png;base64,${products[0].img[0]}` alt='')
+              if(products[0].img=="")
+                each img,i in products[0].images
+                  if(i!=0)
+                    li(data-target='#carousel-example-1' data-slide-to= i)
+                      img.d-block.w-100.img-fluid(src=`./../img/${img}` alt='')
+              else
+                each img,i in products[0].img
+                  if(i!=0)
+                    li(data-target='#carousel-example-1' data-slide-to= i)
+                      img.d-block.w-100.img-fluid(src=`data:image/png;base64,${img}` alt='')
          
         .col-xl-7.col-lg-7.col-md-6
           .single-product-details
@@ -77,7 +96,10 @@ block content
               .item
                 .products-single.fix
                   .box-img-hover
-                    img.img-fluid(src=`./../img/${prod.images[0]}` alt='Image')
+                    if(prod.img=="")
+                      img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo`)
+                    else 
+                      img.img-fluid(src=`data:image/png;base64,${prod.img[0]}` alt=`${prod.name} photo`) 
                     .mask-icon
                       ul
                         li

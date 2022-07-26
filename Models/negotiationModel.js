@@ -45,7 +45,7 @@ negotiationSchema.pre(/^find/, function (next) {
   });
   this.populate({
     path: "product",
-    select: "name  -seller images costPer",
+    select: "name  -seller images img costPer",
   });
   next();
 });

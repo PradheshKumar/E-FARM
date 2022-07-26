@@ -35,7 +35,11 @@ block content
                                     each nego in negos
                                         tr.negoRow
                                             td.thumbnail-img
-                                                img.img-fluid(src=`./../img/${nego.product.images[0]}` alt='')
+                                                if(nego.product.img=="")
+                                                    img.img-fluid(src=`./../img/${nego.product.images[0]}` alt='')
+                                                else 
+                                                    img.img-fluid(src=`data:image/png;base64,${nego.product.img[0]}` alt='') 
+                                                
                                             td.name-pr
                                                 a(href=`/product/${nego.product.id}`)= nego.product.name
                                             td.price-pr

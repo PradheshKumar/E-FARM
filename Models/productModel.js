@@ -61,6 +61,7 @@ const productSchema = new mongoose.Schema(
     },
     type: String,
     stockLeft: { type: Number, required: [true, "Enter Remaining Stock"] },
+    img: [String],
   },
   {
     toJSON: { virtuals: true },

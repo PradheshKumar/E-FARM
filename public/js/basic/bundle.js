@@ -5452,9 +5452,20 @@ var priceInput = document.querySelectorAll(".priceSel");
 var stockInput = document.querySelectorAll(".stockSel");
 var updateBtn = document.querySelector(".updateBtnSel");
 var rmBtn = document.querySelectorAll(".rmBtnSel");
+var prodName = document.querySelector(".prodName");
+var prodPrice = document.querySelector(".prodPrice");
+var prodCostPer = document.querySelector(".prodcostPer");
+var prodSummary = document.querySelector(".prodSummary");
+var prodType = document.querySelector(".prodType");
+var prodStockLeft = document.querySelector(".prodStockLeft");
+var prodImages = document.querySelector(".prodImage");
+var prodImageLabel = document.querySelector(".prodImagelabel");
+var addProdBtn = document.querySelector(".prodBtn");
+var addProdInput = document.querySelectorAll(".prodInput");
 var price = [],
     stock = [],
-    products = [];
+    products = [],
+    img = [];
 
 var sellerSideHandle = function sellerSideHandle() {
   if (updateBtn) {
@@ -5477,23 +5488,150 @@ var sellerSideHandle = function sellerSideHandle() {
       });
     });
   }
+
+  if (addProdBtn) {
+    addProdBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      var flag = 0;
+      addProdInput.forEach(function (el) {
+        console.log("repeat");
+
+        if (!el.value) {
+          $(el.parentElement).addClass("alert-validate");
+          flag = 1;
+          return;
+        }
+      });
+      if (flag == 1) return;
+      console.log("Send");
+      console.log(prodImages.value);
+      addProduct();
+    });
+  }
+
+  if (prodImages) {
+    // let images = [/];
+    prodImages.addEventListener("change",
+    /*#__PURE__*/
+    _asyncToGenerator(
+    /*#__PURE__*/
+    _regeneratorRuntime().mark(function _callee() {
+      var getBase64, j;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (prodImages.files.length != 0) prodImageLabel.innerHTML = "".concat(prodImages.files.length, " files uploaded");else prodImageLabel.innerHTML = "No File Choosen"; // for (let i = 0; i < prodImages.files.length; i++)
+              //   images.push(prodImages.files.item(i));
+              // console.log(document.querySelector("input[type=file]")["files"][0]);
+              // var file = document.querySelector("input[type=file]")["files"][0];
+              // const file = images;
+
+              getBase64 = function getBase64(file) {
+                return new Promise(function (resolve, reject) {
+                  console.log(file);
+                  var reader = new FileReader();
+                  reader.readAsDataURL(file);
+
+                  reader.onload = function () {
+                    return resolve(reader.result);
+                  };
+
+                  reader.onerror = function (err) {
+                    return reject(err);
+                  };
+                });
+              }; // const images = await Promise.all(
+
+
+              for (j = 0; j < prodImages.files.length; j++) {
+                img.push(getBase64(prodImages.files[j]));
+              }
+
+              _context.next = 5;
+              return Promise.all(img);
+
+            case 5:
+              img = _context.sent;
+              img = img.map(function (el) {
+                return el.split(",")[1];
+              }); // );
+
+              console.log(img);
+
+            case 8:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })));
+  }
 };
 
 exports.sellerSideHandle = sellerSideHandle;
+
+var addProduct =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee2() {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            console.log("sending");
+            _context2.next = 3;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "/api/v1/seller/addProduct",
+              data: {
+                name: prodName.value,
+                price: prodPrice.value,
+                costPer: prodCostPer.value,
+                summary: prodSummary.value,
+                img: img,
+                type: prodType.value,
+                stockLeft: prodStockLeft.value
+              }
+            });
+
+          case 3:
+            res = _context2.sent;
+
+            if (res.data.status === "success") {
+              console.log("receiver");
+              window.location.href("/seller_products");
+            }
+
+          case 5:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function addProduct() {
+    return _ref2.apply(this, arguments);
+  };
+}();
 
 var updateProducts = function updateProducts() {
   products.forEach(
   /*#__PURE__*/
   function () {
-    var _ref = _asyncToGenerator(
+    var _ref3 = _asyncToGenerator(
     /*#__PURE__*/
-    _regeneratorRuntime().mark(function _callee(el, i) {
+    _regeneratorRuntime().mark(function _callee3(el, i) {
       var res;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _context.next = 2;
+              _context3.next = 2;
               return (0, _axios.default)({
                 method: "PATCH",
                 url: "/api/v1/product/".concat(el),
@@ -5504,7 +5642,7 @@ var updateProducts = function updateProducts() {
               });
 
             case 2:
-              res = _context.sent;
+              res = _context3.sent;
 
               if (res.data.status === "success") {
                 location.reload();
@@ -5512,14 +5650,14 @@ var updateProducts = function updateProducts() {
 
             case 4:
             case "end":
-              return _context.stop();
+              return _context3.stop();
           }
         }
-      }, _callee);
+      }, _callee3);
     }));
 
     return function (_x, _x2) {
-      return _ref.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }());
 };
@@ -5527,22 +5665,22 @@ var updateProducts = function updateProducts() {
 var removeProd =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(
+  var _ref4 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee2(id) {
+  _regeneratorRuntime().mark(function _callee4(id) {
     var res;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
-            _context2.next = 2;
+            _context4.next = 2;
             return (0, _axios.default)({
               method: "DELETE",
               url: "/api/v1/product/".concat(id)
             });
 
           case 2:
-            res = _context2.sent;
+            res = _context4.sent;
 
             if (res.data.status === "success") {
               location.reload();
@@ -5550,14 +5688,14 @@ function () {
 
           case 4:
           case "end":
-            return _context2.stop();
+            return _context4.stop();
         }
       }
-    }, _callee2);
+    }, _callee4);
   }));
 
   return function removeProd(_x3) {
-    return _ref2.apply(this, arguments);
+    return _ref4.apply(this, arguments);
   };
 }();
 },{"axios":"../../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
@@ -5631,6 +5769,7 @@ if (signUpFormBtn) {
 
 if (addCartBtn) {
   addCartBtn.addEventListener("click", function () {
+    console.log("DSDS");
     (0, _ApiCalls.addToCart)(window.location.pathname.split("/")[2]);
   });
 }
@@ -5755,7 +5894,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60732" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61996" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

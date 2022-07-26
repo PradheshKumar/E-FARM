@@ -88,12 +88,14 @@ exports.acceptBid = catchAsync(async (req, res, next) => {
   const seller = await Seller.findById(sellerId);
   const buyer = await Buyer.findById(nego.buyer);
   req.body = {
-    products: nego.product,
+    products: [nego.product],
     buyer: nego.buyer,
     totalPrice: nego.currentBid,
-    productsQty: nego.qty,
+    productsQty: [nego.qty],
     estimateDelivery: Date.now() + 300000000,
   };
+  console.log("Dsdsd", req.body.productsQty);
+  req.body.products.length = 1;
   await Negotiation.findByIdAndDelete(req.params.id);
   // const buyerNego = buyer.negotiations;
   let index;

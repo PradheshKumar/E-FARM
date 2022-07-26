@@ -69,6 +69,7 @@ if (signUpFormBtn) {
 }
 if (addCartBtn) {
   addCartBtn.addEventListener("click", () => {
+    console.log("DSDS");
     addToCart(window.location.pathname.split("/")[2]);
   });
 }

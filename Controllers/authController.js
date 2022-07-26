@@ -100,6 +100,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
+  } else if (req.cookies.jwt1) {
+    token = req.cookies.jwt1;
   }
 
   if (!token) {
@@ -153,7 +155,7 @@ exports.isLoggedIn = async (req, res, next) => {
         currentUser = await Buyer.findById(decoded.id)
           .populate({
             path: "cart",
-            select: "name -seller price images costPer stockLeft",
+            select: "name -seller price images img costPer stockLeft",
           })
           .populate({
             path: "currentOrders",
@@ -186,7 +188,6 @@ exports.isLoggedIn = async (req, res, next) => {
         req.cookies.jwt1,
         process.env.JWT_SECRET
       );
-      console.log("req.cookies.jwt1");
 
       // 2) Check if user still exists
       let currentUser = await Seller.findById(decoded.id)

@@ -36,14 +36,7 @@ block content
             strong Total
             | : $180.00
  
-  .top-search
-    .container
-      .input-group
-        span.input-group-addon
-          i.fa.fa-search
-        input.form-control(type='text' placeholder='Search')
-        span.input-group-addon.close-search
-          i.fa.fa-times
+  
   // End Top Search
   // Start Slider
   #slides-shop.cover-slides
@@ -143,7 +136,10 @@ block content
               .box-img-hover
                 .type-lb
                   p.sale Sale
-                img.img-fluid(src=`img/${product.images[0]}` alt='Image')
+                if(product.img=="")
+                  img.img-fluid(src=`./../img/${product.images[0]}` alt='Image')
+                else 
+                  img.img-fluid(src=`data:image/png;base64,${product.img[0]}` alt='Image') 
                 .mask-icon
                   ul
                     li

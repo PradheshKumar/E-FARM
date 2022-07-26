@@ -1,0 +1,84 @@
+extends base
+
+block content
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  link(rel='icon' type='image/png' href='images/icons/favicon.ico')
+  link(rel='stylesheet' type='text/css' href='vendor/bootstrap/css/bootstrap.min.css')
+  link(rel='stylesheet' type='text/css' href='fonts/font-awesome-4.7.0/css/font-awesome.min.css')
+  link(rel='stylesheet' type='text/css' href='fonts/Linearicons-Free-v1.0.0/icon-font.min.css')
+  link(rel='stylesheet' type='text/css' href='vendor/animate/animate.css')
+  link(rel='stylesheet' type='text/css' href='vendor/css-hamburgers/hamburgers.min.css')
+  link(rel='stylesheet' type='text/css' href='vendor/animsition/css/animsition.min.css')
+  link(rel='stylesheet' type='text/css' href='vendor/select2/select2.min.css')
+  link(rel='stylesheet' type='text/css' href='vendor/daterangepicker/daterangepicker.css')
+  link(rel='stylesheet' type='text/css' href='css/util.css')
+  link(rel='stylesheet' type='text/css' href='css/main.css')
+  .limiter
+    .container-login200()
+      .wrap-login200.p-l-110.p-r-110.p-t-62.p-b-33
+        form.login200-form.validate-form.flex-sb.flex-w
+          .p-t-31.p-b-9
+            span.txt1
+              | Product Name
+          .wrap-input100.validate-input(data-validate='ProductName is required')
+            input.input100.prodName.prodInput(type='text' name='Productname')
+            span.focus-input100
+          .p-t-13.p-b-9
+            span.txt1
+              | Price
+           
+          .wrap-input100.validate-input(data-validate='Price is required')
+            input.input100.prodPrice.prodInput(type='number' name='price')
+            span.focus-input100
+          .p-t-13.p-b-9
+            span.txt1
+              | Cost Per?
+           
+          .wrap-input100.validate-input(data-validate='It is required')
+            input.input100.prodcostPer.prodInput(type='text' name='costPer' )
+            span.focus-input100
+          .p-t-13.p-b-9
+            span.txt1
+              | Details
+           
+          .wrap-input100.validate-input(data-validate='Enter Detail about the Product')
+            input.input100.prodSummary.prodInput(type='text' name='price')
+            span.focus-input100
+          .p-t-13.p-b-9
+            span.txt1
+              | Type (Vegetable,Fruit,Leaf)
+           
+          .wrap-input100.validate-input(data-validate='Enter Type of Product')
+            input.input100.prodType.prodInput(type='text' name='price')
+            span.focus-input100
+          .p-t-13.p-b-9
+            span.txt1
+              | Stock Left
+           
+          .wrap-input100.validate-input(data-validate='Enter Remaining Stock')
+            input.input100.prodStockLeft.prodInput(type='number' name='price')
+            span.focus-input100
+          .p-t-13.p-b-9
+            span.txt1
+              | Images
+           
+          .wrap-input100.validate-input.photo(data-validate='Add some Photo')
+            input.form__upload.prodImage.prodInput(type='file' name='price' id="photo" , accept='image/*' multiple)
+            label.input100(for='photo') Choose Photos for your product
+            span.imagesName.prodImagelabel No File Choosen
+          
+          
+        button.btn.prodBtn ADD
+        span.focus-input100
+
+          
+  #dropDownSelect1
+
+  script(src='vendor/jquery/jquery-3.2.1.min.js')
+  script(src='vendor/animsition/js/animsition.min.js')
+  script(src='vendor/bootstrap/js/popper.js')
+  script(src='vendor/bootstrap/js/bootstrap.min.js')
+  script(src='vendor/select2/select2.min.js')
+  script(src='vendor/daterangepicker/moment.min.js')
+  script(src='vendor/daterangepicker/daterangepicker.js')
+  script(src='vendor/countdowntime/countdowntime.js')

@@ -143,7 +143,10 @@ block content
               .box-img-hover
                 .type-lb
                   p.sale Sale
-                img.img-fluid(src=`img/${product.images[0]}` alt='Image')
+                if(product.img=="")
+                  img.img-fluid(src=`./../img/${product.images[0]}` alt=`${product.name} photo`)
+                else 
+                  img.img-fluid(src=`data:image/png;base64,${product.img[0]}` alt=`${product.name} photo`)
                 .mask-icon
                   ul
                     li

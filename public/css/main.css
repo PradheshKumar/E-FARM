@@ -34,7 +34,7 @@
 	box-sizing: border-box;
 }
 
-body, html {
+body, html {background-image: -moz-box-shadow();
 	height: 100%;
 	font-family: Poppins-Regular, sans-serif;
 }
@@ -198,6 +198,47 @@ iframe {
 }
 
 .login100-form-title {
+  width: 100%;
+  display: block;
+  font-family: Montserrat-Medium;
+  font-size: 39px;
+  color: #555555;
+  line-height: 1.2;
+  text-align: center;
+}
+.container-login200 {
+  width: 100%;  
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+  
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;;
+}
+
+
+.wrap-login200 {
+  width: 680px;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+}
+
+
+/*==================================================================
+[ Form ]*/
+
+.login200-form {
+  width: 100%;
+}
+
+.login200-form-title {
   width: 100%;
   display: block;
   font-family: Montserrat-Medium;
@@ -436,8 +477,132 @@ iframe {
 .login100-form-btn:hover:before {
   opacity: 1;
 }
+.container-login200-form-btn {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
 
+.login200-form-btn {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  width: 100%;
+  height: 60px;
+  background-color: #333333;
+  border-radius: 10px;
 
+  font-family: Poppins-Medium;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.2;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+  position: relative;
+  z-index: 1;
+}
+
+.login200-form-btn::before {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  top: 0;
+  left: 0;
+  background: #a64bf4;
+  background: -webkit-linear-gradient(45deg, #36b540, #35b440);
+  background: -o-linear-gradient(45deg, #35b440, #35b440);
+  background: -moz-linear-gradient(45deg, #35b440, #35b440);
+  background: linear-gradient(45deg, #35b440, #35b440);
+  opacity: 0;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.login200-form-btn:hover:before {
+  opacity: 1;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 0;
+}
+.form__upload {
+  width: 10%;
+  height: 10%;
+  opacity: 1;
+  position: absolute;
+  z-index: -1;
+  color: #36b540;
+}
+.form__upload + label::after {
+  background-color: #36b540;
+
+}
+
+.form__upload:focus + label {
+  outline: 3px solid #36b540;
+  outline-offset: 3px;
+}
+
+.form__upload + label {
+  color: #000000;
+  display: inline-block;
+  text-decoration: none;
+  border-bottom: 1px solid #36b540;
+  padding: 3px;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.form__upload + label:hover {
+  background-color: #36b540;
+  color: #fff;
+  -webkit-box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  -webkit-transform: translateY(-2px);
+  transform: translateY(-2px);
+}
+.btn {
+  margin-top: 20px;
+  background-color: transparent;
+  border: 4px solid #36b540;
+  padding: 12px 40px;
+  font-size: 16px;
+  border-radius: 40px;
+  align-content: center;
+  color: #36b540;
+  
+}
+.btn:hover { 
+  color: rgb(0, 0, 0);
+  background-color: #35b440;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  -webkit-transition-property: color;
+  transition-property: color;
+ }
+.wrap-input100.validate-input.photo {
+  margin-bottom: 30px;
+}
 /*------------------------------------------------------------------
 [ Alert validate ]*/
 
@@ -516,6 +681,17 @@ iframe {
 
 @media (max-width: 576px) {
   .wrap-login100 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+@media (max-width: 768px) {
+  .wrap-login200 {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+
+@media (max-width: 576px) {
+  .wrap-login200 {
     padding-left: 15px;
     padding-right: 15px;
   }

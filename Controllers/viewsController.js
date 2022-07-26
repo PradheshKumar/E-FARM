@@ -42,6 +42,11 @@ exports.getAccount = catchAsync(async (req, res, next) => {
     User,
   });
 });
+exports.getAbout = catchAsync(async (req, res, next) => {
+  res.status(200).render("aboutus", {
+    title: "ABOUT US",
+  });
+});
 exports.getCart = catchAsync(async (req, res, next) => {
   // 1) Get product data from collections
 
@@ -125,7 +130,12 @@ exports.getLoginForm = (req, res) => {
 /////////////////////////////////SELLER
 exports.sellerProducts = catchAsync(async (req, res, next) => {
   res.status(200).render("seller_products", {
-    title: "Log into your account",
+    title: "Your Products",
+  });
+});
+exports.sellerAddProduct = catchAsync(async (req, res, next) => {
+  res.status(200).render("seller_addProduct", {
+    title: "Add New Product",
   });
 });
 exports.sellergetNegotiations = catchAsync(async (req, res, next) => {

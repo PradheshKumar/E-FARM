@@ -1,11 +1,11 @@
-const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
-const APIFeatures = require('./../utils/apiFeatures');
-const Buyer = require('../Models/BuyerModel');
-const Seller = require('../Models/SellerModel');
+const catchAsync = require("./../utils/catchAsync");
+const AppError = require("./../utils/appError");
+const APIFeatures = require("./../utils/apiFeatures");
+const Buyer = require("../Models/BuyerModel");
+const Seller = require("../Models/SellerModel");
 
 const setUser = (req, res) => {
-  return res.locals.user == 'buyer' ? Buyer : Seller;
+  return res.locals.user == "buyer" ? Buyer : Seller;
 };
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -13,11 +13,11 @@ exports.deleteOne = (Model) =>
     const doc = await Model.findByIdAndDelete(req.params.id);
 
     if (!doc) {
-      return next(new AppError('No document found with that ID', 404));
+      return next(new AppError("No document found with that ID", 404));
     }
 
     res.status(204).json({
-      status: 'success',
+      status: "success",
       data: null,
     });
   });
@@ -31,11 +31,11 @@ exports.updateOne = (Model) =>
     });
 
     if (!doc) {
-      return next(new AppError('No document found with that ID', 404));
+      return next(new AppError("No document found with that ID", 404));
     }
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         data: doc,
       },
@@ -44,15 +44,18 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    if (!Model) Model = setUser(req, res);
-    const doc = await Model.create(req.body);
-
-    res.status(201).json({
-      status: 'success',
-      data: {
-        data: doc,
-      },
-    });
+   
+      console.log(req.body);
+      if (!Model) Model = setUser(req, res);
+      const doc = await Model.create(req.body);
+    
+        res.status(201).json({
+          status: "success",
+          data: {
+            data: doc,
+          },
+        });
+ 
   });
 
 exports.getOne = (Model, popOptions) =>
@@ -63,11 +66,11 @@ exports.getOne = (Model, popOptions) =>
     const doc = await query;
 
     if (!doc) {
-      return next(new AppError('No document found with that ID', 404));
+      return next(new AppError("No document found with that ID", 404));
     }
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         data: doc,
       },
@@ -91,7 +94,7 @@ exports.getAll = (Model) =>
 
     // SEND RESPONSE
     res.status(200).json({
-      status: 'success',
+      status: "success",
       results: doc.length,
       data: {
         data: doc,

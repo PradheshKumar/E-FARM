@@ -29,9 +29,9 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
   });
 
   // // //Reduce Stock of Product
-
   products.forEach(async (el, i) => {
     let stockLeft = el.stockLeft;
+    console.log(stockLeft, req.body.productsQty[i]);
     stockLeft -= req.body.productsQty[i];
     await Product.findByIdAndUpdate(el.id, {
       stockLeft,
@@ -42,6 +42,7 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
     await Seller.findByIdAndUpdate(el.seller.id, {
       currentOrders: sellerOrders,
     });
+    console.log("dsds", sellerOrders, doc.id);
   });
 
   res.status(201).json({
