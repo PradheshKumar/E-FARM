@@ -1,6 +1,6 @@
 const express = require("express");
-const negotiationController = require("../controllers/negotiationController");
-const orderController = require("../controllers/orderController");
+const negotiationController = require("../Controllers/negotiationController");
+const orderController = require("../Controllers/orderController");
 
 const router = express.Router();
 router.patch(

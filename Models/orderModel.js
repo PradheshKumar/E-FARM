@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const orderController = require("../controllers/orderController");
+const orderController = require("../Controllers/orderController");
 
 const orderSchema = new mongoose.Schema({
   products: [

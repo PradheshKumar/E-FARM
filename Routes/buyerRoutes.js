@@ -1,7 +1,7 @@
 const express = require("express");
-// const BuyerController = require('./../controllers/BuyerController');
-const authController = require("../controllers/authController");
-const userController = require("../controllers/userController");
+// const BuyerController = require('./../Controllers/BuyerController');
+const authController = require("../Controllers/authController");
+const userController = require("../Controllers/userController");
 const router = express.Router();
 const setUser = (req, res, next) => {
   res.locals.user = "buyer";

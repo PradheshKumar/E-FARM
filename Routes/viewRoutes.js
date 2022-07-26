@@ -1,7 +1,7 @@
 const express = require("express");
-const viewsController = require("../controllers/viewsController");
-const authController = require("../controllers/authController");
-const productController = require("../controllers/productController");
+const viewsController = require("../Controllers/viewsController");
+const authController = require("../Controllers/authController");
+const productController = require("../Controllers/productController");
 
 const router = express.Router();
 const setUser = (req, res, next) => {
