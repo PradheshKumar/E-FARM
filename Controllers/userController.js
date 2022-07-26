@@ -1,4 +1,4 @@
-const Buyer = require("../Models/BuyerModel");
+// const Buyer = require("../Models/BuyerModel");
 const Seller = require("../Models/SellerModel");
 const Product = require("../Models/ProductModel");
 const catchAsync = require("../utils/catchAsync");

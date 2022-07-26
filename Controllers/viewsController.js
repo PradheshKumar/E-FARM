@@ -2,7 +2,7 @@ const Product = require("../models/productModel");
 const Buyer = require("../models/buyerModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
-const APIFeatures = require("./../utils/apiFeatures");
+const APIFeatures = require("../utils/apiFeatures");
 const ObjectId = require("mongodb").ObjectID;
 exports.getIndex = catchAsync(async (req, res, next) => {
   // 1) Get product data from collection
