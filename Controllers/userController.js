@@ -1,6 +1,6 @@
-// const Buyer = require("../Models/BuyerModel");
-const Seller = require("../Models/SellerModel");
-const Product = require("../Models/ProductModel");
+const Buyer = require("../models/BuyerModel");
+const Seller = require("../models/SellerModel");
+const Product = require("../models/ProductModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const factory = require("./handlerFactory");
