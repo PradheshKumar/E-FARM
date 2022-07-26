@@ -76,7 +76,6 @@ exports.getOrders = catchAsync(async (req, res, next) => {
   // const doc = await features.query.explain();
   const User = await Buyer.findById(req.params.id); // 2) Build template
   // 3) Render that template using product data from 1)
-  console.log(req.user);
   res.status(200).render("myorder", {
     title: "My Orders",
     User,

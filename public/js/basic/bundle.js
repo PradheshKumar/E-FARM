@@ -4857,7 +4857,6 @@ function () {
             res = _context4.sent;
 
             if (res.data.status === "success") {
-              console.log("REMOVED");
               cart = document.querySelector(".cartProducts");
               if (cart) location.reload();else window.location.href = "/overview";
             }
@@ -4916,8 +4915,7 @@ function () {
           case 3:
             res = _context5.sent;
 
-            if (res.data.status === "success") {
-              console.log("PLACED"); // const cart = document.querySelector(".cartProducts");
+            if (res.data.status === "success") {// const cart = document.querySelector(".cartProducts");
               // if (cart) location.reload();
               // else window.location.href = "/overview";
             }
@@ -4970,9 +4968,8 @@ function () {
             res = _context6.sent;
 
             if (res.data.status === "success") {
-              console.log("PLACED"); // const cart = document.querySelector(".cartProducts");
+              // const cart = document.querySelector(".cartProducts");
               // if (cart) location.reload();
-
               window.location.href = "/myOrders";
             }
 
@@ -5026,7 +5023,6 @@ function () {
             if (res.data.status === "success") {
               console.log("REMOVED");
               nego = document.querySelector(".negoRow");
-              console.log(nego);
               if (nego) location.reload();else window.location.href = "/";
             }
 
@@ -5081,7 +5077,6 @@ function () {
             res = _context8.sent;
 
             if (res.data.status === "success") {
-              console.log("Replied");
               location.reload(); // const nego = document.querySelector(".negoRow");
               // console.log(nego);
               // if (nego) location.reload();
@@ -5194,7 +5189,6 @@ function () {
             if (res.data.status = "success") {
               url = ["account", "myCart", "checkOut", "myOrders", "negotiate", "seller_products"];
               hasUrl = url.map(function (e) {
-                console.log(e);
                 return window.location.href.includes(e);
               });
               if (hasUrl.includes(true)) window.location.href = "/";else if (!window.location.href.includes("seller-login")) location.reload();
@@ -5241,7 +5235,6 @@ var signUpForm = function signUpForm(e) {
   e.preventDefault();
   loginForm.innerHTML = markup;
   input = document.querySelectorAll(".validate-input .input100");
-  console.log(document.querySelector(".signupBtn"));
   document.querySelector(".signupBtn").addEventListener("click", signUpFn);
   input.forEach(function (el) {
     el.addEventListener("focus", function () {
@@ -5494,8 +5487,6 @@ var sellerSideHandle = function sellerSideHandle() {
       e.preventDefault();
       var flag = 0;
       addProdInput.forEach(function (el) {
-        console.log("repeat");
-
         if (!el.value) {
           $(el.parentElement).addClass("alert-validate");
           flag = 1;
@@ -5503,8 +5494,6 @@ var sellerSideHandle = function sellerSideHandle() {
         }
       });
       if (flag == 1) return;
-      console.log("Send");
-      console.log(prodImages.value);
       addProduct();
     });
   }
@@ -5529,7 +5518,6 @@ var sellerSideHandle = function sellerSideHandle() {
 
               getBase64 = function getBase64(file) {
                 return new Promise(function (resolve, reject) {
-                  console.log(file);
                   var reader = new FileReader();
                   reader.readAsDataURL(file);
 
@@ -5557,9 +5545,7 @@ var sellerSideHandle = function sellerSideHandle() {
                 return el.split(",")[1];
               }); // );
 
-              console.log(img);
-
-            case 8:
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -5582,8 +5568,7 @@ function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            console.log("sending");
-            _context2.next = 3;
+            _context2.next = 2;
             return (0, _axios.default)({
               method: "POST",
               url: "/api/v1/seller/addProduct",
@@ -5598,15 +5583,14 @@ function () {
               }
             });
 
-          case 3:
+          case 2:
             res = _context2.sent;
 
             if (res.data.status === "success") {
-              console.log("receiver");
               window.location.href("/seller_products");
             }
 
-          case 5:
+          case 4:
           case "end":
             return _context2.stop();
         }
@@ -5769,7 +5753,6 @@ if (signUpFormBtn) {
 
 if (addCartBtn) {
   addCartBtn.addEventListener("click", function () {
-    console.log("DSDS");
     (0, _ApiCalls.addToCart)(window.location.pathname.split("/")[2]);
   });
 }
@@ -5815,7 +5798,6 @@ if (negoPgaccept) {
     el.addEventListener("click", function () {
       el.parentElement.parentElement.remove();
       (0, _ApiCalls.acceptNego)(el.dataset.id);
-      console.log(el.dataset.id, "ACCEPT");
     });
   });
 }
@@ -5824,7 +5806,6 @@ if (negoPgreply) {
   negoPgreply.forEach(function (el) {
     el.addEventListener("click", function () {
       (0, _ApiCalls.replyNego)(el.dataset.id, negoReplyPrice.value);
-      console.log(el.dataset.id, "REPLY");
     });
   });
 }
@@ -5834,7 +5815,6 @@ if (negoPgcancel) {
     el.addEventListener("click", function () {
       el.parentElement.parentElement.remove();
       (0, _ApiCalls.cancelNego)(el.dataset.id);
-      console.log(el.dataset.id, "CANCEL");
     });
   });
 }

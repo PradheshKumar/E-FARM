@@ -1,21 +1,20 @@
-const nodemailer = require('nodemailer');
-const pug = require('pug');
-const htmlToText = require('html-to-text');
+const nodemailer = require("nodemailer");
+const pug = require("pug");
+const htmlToText = require("html-to-text");
 
 module.exports = class Email {
   constructor(user, url) {
-    console.log(user);
     this.to = user.email;
-    this.firstName = user.name.split(' ')[0];
+    this.firstName = user.name.split(" ")[0];
     this.url = url;
     this.from = `<${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production1") {
       // Sendgrid
       return nodemailer.createTransport({
-        service: 'SendGrid',
+        service: "SendGrid",
         auth: {
           user: process.env.SENDGRID_USERNAME,
           pass: process.env.SENDGRID_PASSWORD,
@@ -67,22 +66,22 @@ module.exports = class Email {
   }
 
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to the Natours Family!');
+    await this.send("welcome", "Welcome to the Natours Family!");
   }
   async sendNewNego() {
     await this.send(
-      'welcome',
-      'New Negotiation has been Placed For Your Product'
+      "welcome",
+      "New Negotiation has been Placed For Your Product"
     );
   }
   async sendOldNego(bid) {
-    await this.send('welcome', `Your Negotiation has a New Bid :$${bid}`);
+    await this.send("welcome", `Your Negotiation has a New Bid :$${bid}`);
   }
 
   async sendPasswordReset() {
     await this.send(
-      'passwordReset',
-      'Your password reset token (valid for only 10 minutes)'
+      "passwordReset",
+      "Your password reset token (valid for only 10 minutes)"
     );
   }
 };

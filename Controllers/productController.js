@@ -34,7 +34,6 @@ exports.uploadImages = (req, res, next) => {
   const imgNames = fs.readdirSync(req.filePath);
   // cp.copy(img.toString("base64"));
   const imgId = imgNames.map((img) => {
-    console.log(img);
     const image = fs.readFileSync(path.join(req.filePath, img));
     // cp.copy(image.toString("base64"));
   });

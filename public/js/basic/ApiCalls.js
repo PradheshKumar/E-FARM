@@ -105,7 +105,6 @@ export const rmCart = async (id) => {
       url: `/api/v1/buyer/rmCart/${id}`,
     });
     if (res.data.status === "success") {
-      console.log("REMOVED");
       const cart = document.querySelector(".cartProducts");
       if (cart) location.reload();
       else window.location.href = "/overview";
@@ -130,7 +129,6 @@ export const addNego = async (id, buyer, price, qty) => {
       },
     });
     if (res.data.status === "success") {
-      console.log("PLACED");
       // const cart = document.querySelector(".cartProducts");
       // if (cart) location.reload();
       // else window.location.href = "/overview";
@@ -148,7 +146,6 @@ export const acceptNego = async (negoId) => {
       url: `/api/v1/negotiation/acceptBid/${negoId}`,
     });
     if (res.data.status === "success") {
-      console.log("PLACED");
       // const cart = document.querySelector(".cartProducts");
       // if (cart) location.reload();
       window.location.href = "/myOrders";
@@ -168,7 +165,6 @@ export const cancelNego = async (negoId) => {
     if (res.data.status === "success") {
       console.log("REMOVED");
       const nego = document.querySelector(".negoRow");
-      console.log(nego);
       if (nego) location.reload();
       else window.location.href = "/";
     }
@@ -186,7 +182,6 @@ export const replyNego = async (negoId, replyPrice) => {
       data: { replyPrice },
     });
     if (res.data.status === "success") {
-      console.log("Replied");
       location.reload();
       // const nego = document.querySelector(".negoRow");
       // console.log(nego);
@@ -238,7 +233,6 @@ export const logout = async () => {
       ];
 
       const hasUrl = url.map((e) => {
-        console.log(e);
         return window.location.href.includes(e);
       });
       if (hasUrl.includes(true)) window.location.href = "/";

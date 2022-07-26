@@ -69,7 +69,6 @@ if (signUpFormBtn) {
 }
 if (addCartBtn) {
   addCartBtn.addEventListener("click", () => {
-    console.log("DSDS");
     addToCart(window.location.pathname.split("/")[2]);
   });
 }
@@ -116,7 +115,6 @@ if (negoPgaccept) {
     el.addEventListener("click", () => {
       el.parentElement.parentElement.remove();
       acceptNego(el.dataset.id);
-      console.log(el.dataset.id, "ACCEPT");
     });
   });
 }
@@ -124,7 +122,6 @@ if (negoPgreply) {
   negoPgreply.forEach((el) => {
     el.addEventListener("click", () => {
       replyNego(el.dataset.id, negoReplyPrice.value);
-      console.log(el.dataset.id, "REPLY");
     });
   });
 }
@@ -133,7 +130,6 @@ if (negoPgcancel) {
     el.addEventListener("click", () => {
       el.parentElement.parentElement.remove();
       cancelNego(el.dataset.id);
-      console.log(el.dataset.id, "CANCEL");
     });
   });
 }

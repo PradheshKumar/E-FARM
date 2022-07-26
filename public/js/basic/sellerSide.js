@@ -42,7 +42,6 @@ export const sellerSideHandle = () => {
       e.preventDefault();
       let flag = 0;
       addProdInput.forEach((el) => {
-        console.log("repeat");
         if (!el.value) {
           $(el.parentElement).addClass("alert-validate");
           flag = 1;
@@ -50,8 +49,6 @@ export const sellerSideHandle = () => {
         }
       });
       if (flag == 1) return;
-      console.log("Send");
-      console.log(prodImages.value);
       addProduct();
     });
   }
@@ -68,7 +65,6 @@ export const sellerSideHandle = () => {
       // const file = images;
       const getBase64 = (file) =>
         new Promise((resolve, reject) => {
-          console.log(file);
           const reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = () => resolve(reader.result);
@@ -82,13 +78,11 @@ export const sellerSideHandle = () => {
       img = img.map((el) => el.split(",")[1]);
 
       // );
-      console.log(img);
     });
   }
 };
 
 const addProduct = async () => {
-  console.log("sending");
   const res = await axios({
     method: "POST",
     url: `/api/v1/seller/addProduct`,
@@ -104,7 +98,6 @@ const addProduct = async () => {
   });
 
   if (res.data.status === "success") {
-    console.log("receiver");
     window.location.href("/seller_products");
   }
 };

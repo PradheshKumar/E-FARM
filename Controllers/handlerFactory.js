@@ -45,7 +45,6 @@ exports.updateOne = (Model) =>
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
    
-      console.log(req.body);
       if (!Model) Model = setUser(req, res);
       const doc = await Model.create(req.body);
     

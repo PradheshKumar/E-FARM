@@ -125,7 +125,6 @@ exports.updateCart = catchAsync(async (req, res, next) => {
     }
     return true;
   });
-  // console.log(index);
   buyer.cartQty[index] = req.params.qty;
   const cartQty = buyer.cartQty;
   const updatedBuyer = await User.findByIdAndUpdate(req.user.id, {

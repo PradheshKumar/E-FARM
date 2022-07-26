@@ -28,7 +28,6 @@ export const signUpForm = (e) => {
   e.preventDefault();
   loginForm.innerHTML = markup;
   input = document.querySelectorAll(".validate-input .input100");
-  console.log(document.querySelector(".signupBtn"));
   document.querySelector(".signupBtn").addEventListener("click", signUpFn);
   input.forEach((el) => {
     el.addEventListener("focus", () => {
