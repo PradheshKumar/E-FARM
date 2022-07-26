@@ -1,8 +1,8 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const APIFeatures = require("../utils/apiFeatures");
-const Buyer = require("../Models/BuyerModel");
-const Seller = require("../Models/SellerModel");
+const Buyer = require("../Models/buyerModel");
+const Seller = require("../Models/sellerModel");
 
 const setUser = (req, res) => {
   return res.locals.user == "buyer" ? Buyer : Seller;
