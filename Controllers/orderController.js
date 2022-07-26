@@ -4,7 +4,7 @@ const Product = require("../Models/productModel");
 const Order = require("../Models/orderModel");
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
-const AppError = require("./../utils/appError");
+const AppError = require("../utils/appError");
 const mongoose = require("mongoose");
 
 exports.placeOrder = catchAsync(async (req, res, next) => {

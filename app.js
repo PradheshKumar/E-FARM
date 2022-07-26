@@ -12,13 +12,13 @@ const compression = require("compression");
 const cors = require("cors");
 
 const AppError = require("./utils/appError");
-const globalErrorHandler = require("./Controllers/errorController");
-const buyerRouter = require("./routes/buyerRoutes");
-const negotiationRouter = require("./routes/negotiationRoutes");
-const orderRouter = require("./routes/orderRoutes");
-const productRouter = require("./routes/productRoutes");
-const sellerRouter = require("./routes/sellerRoutes");
-const viewRouter = require("./routes/viewRoutes");
+const globalErrorHandler = require("./controllers/errorController");
+const buyerRouter = require("./Routes/buyerRoutes");
+const negotiationRouter = require("./Routes/negotiationRoutes");
+const orderRouter = require("./Routes/orderRoutes");
+const productRouter = require("./Routes/productRoutes");
+const sellerRouter = require("./Routes/sellerRoutes");
+const viewRouter = require("./Routes/viewRoutes");
 
 // Start express app
 const app = express();

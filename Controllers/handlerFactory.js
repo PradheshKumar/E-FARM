@@ -1,6 +1,6 @@
-const catchAsync = require("./../utils/catchAsync");
-const AppError = require("./../utils/appError");
-const APIFeatures = require("./../utils/apiFeatures");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
+const APIFeatures = require("../utils/apiFeatures");
 const Buyer = require("../Models/BuyerModel");
 const Seller = require("../Models/SellerModel");
 
@@ -44,17 +44,15 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-   
-      if (!Model) Model = setUser(req, res);
-      const doc = await Model.create(req.body);
-    
-        res.status(201).json({
-          status: "success",
-          data: {
-            data: doc,
-          },
-        });
- 
+    if (!Model) Model = setUser(req, res);
+    const doc = await Model.create(req.body);
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        data: doc,
+      },
+    });
   });
 
 exports.getOne = (Model, popOptions) =>
