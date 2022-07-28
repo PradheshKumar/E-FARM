@@ -22,19 +22,22 @@ block content
                                 tr
                                     th Order No
                                     th Order Placed On
-                                    th Total Products
+                                    th Products
                                     th Total Price
                                     th Estimated Delivery Date                             
                             tbody
-                                each order,i in user.currentOrders
+                                each order,i in User.currentOrders
                                     tr.cartProducts
                                         td.thumbnail-img
-                                            p= i+1
+                                            a(href=`/viewOrder/${order.id}`)= i+1
                                         td.thumbnail-img
-                                            p= (order.createdAt).toString().slice(4,16)
-                                        td.name-pr
-                                            p= order.products.length
-                                        td.price-pr
-                                            p= `₹ ${order.totalPrice}`
+                                            a(href=`/viewOrder/${order.id}`)= (order.createdAt).toString().slice(4,16)
                                         td.thumbnail-img
-                                            p= order.estimateDelivery.toString().slice(4,16)
+                                            if(order.products.length ==1 )
+                                                a(href=`/viewOrder/${order.id}`)= order.products[0].name
+                                            else
+                                                a(href=`/viewOrder/${order.id}`)= `${order.products[0].name} and ${order.products.length-1} more products`
+                                        td.thumbnail-img
+                                            a(href=`/viewOrder/${order.id}`)= `₹ ${order.totalPrice}`
+                                        td.thumbnail-img
+                                            a(href=`/viewOrder/${order.id}`)= order.estimateDelivery.toString().slice(4,16)

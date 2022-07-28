@@ -75,8 +75,10 @@ exports.getOrders = catchAsync(async (req, res, next) => {
   // 1) Get product data from collections
 
   // const doc = await features.query.explain();
-  const User = await Buyer.findById(req.params.id); // 2) Build template
-  // 3) Render that template using product data from 1)
+  const User = await Buyer.findById(res.locals.user).populate({
+    path: "currentOrders",
+    populate: { path: "products" },
+  });
   res.status(200).render("myorder", {
     title: "My Orders",
     User,
@@ -123,8 +125,8 @@ exports.searchProduct = catchAsync(async (req, res, next) => {
   });
 });
 exports.getOrderPlaced = catchAsync(async (req, res, next) => {
-  const products = await Product.find();
   const order = await Order.findById(req.params.id).populate("products");
+  const products = await Product.find();
   res.status(200).render("order_placed", {
     title: "Order placed successfully",
     products,
