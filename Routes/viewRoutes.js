@@ -2,6 +2,7 @@ const express = require("express");
 const viewsController = require("../Controllers/viewsController");
 const authController = require("../Controllers/authController");
 const productController = require("../Controllers/productController");
+const userController = require("../Controllers/userController");
 
 const router = express.Router();
 const setUser = (req, res, next) => {
@@ -65,6 +66,18 @@ router.get(
   allowBuyer,
   viewsController.searchProduct
 );
+
+router.get(
+  "/order_placed/:id",
+  authController.isLoggedIn,
+  viewsController.getOrderPlaced
+);
+router.get(
+  "/viewOrder/:id",
+  authController.isLoggedIn,
+  viewsController.viewOrder
+);
+
 /////////////////////SELLER ROUTES
 router.get("/seller-login", viewsController.getLoginForm);
 router.get(

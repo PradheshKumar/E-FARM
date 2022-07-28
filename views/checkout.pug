@@ -47,46 +47,14 @@ block content
                         span Payment
                     .d-block.my-3
                         .custom-control.custom-radio
-                            input#credit.custom-control-input(name='paymentMethod' type='radio' checked='' required='')
-                            label.custom-control-label(for='credit') Credit card
+                            input#credit.custom-control-input.payToggle(name='paymentMethod' type='radio' checked='' required='' data-id="1")
+                            label.custom-control-label(for='credit') Credit/Debit card
+                        
                         .custom-control.custom-radio
-                            input#debit.custom-control-input(name='paymentMethod' type='radio' required='')
-                            label.custom-control-label(for='debit') Debit card
-                        .custom-control.custom-radio
-                            input#cod.custom-control-input(name='paymentMethod' type='radio' required='')
+                            input#cod.custom-control-input.payToggle(name='paymentMethod' type='radio' required='' data-id="2")
                             label.custom-control-label(for='cod') Cash On Delivery
-                    .row
-                        .col-md-6.mb-3
-                            label(for='cc-name') Name on card
-                            input#cc-name.form-control(type='text' placeholder='' required='')
-                            small.text-muted Full name as displayed on card
-                            .invalid-feedback  Name on card is required 
-                        .col-md-6.mb-3
-                            label(for='cc-number') Credit card number
-                            input#cc-number.form-control(type='text' placeholder='' required='')
-                            .invalid-feedback  Credit card number is required 
-                    .row
-                        .col-md-3.mb-3
-                            label(for='cc-expiration') Expiration
-                            input#cc-expiration.form-control(type='text' placeholder='' required='')
-                            .invalid-feedback  Expiration date required 
-                        .col-md-3.mb-3
-                            label(for='cc-expiration') CVV
-                            input#cc-cvv.form-control(type='text' placeholder='' required='')
-                            .invalid-feedback  Security code required 
-                        .col-md-6.mb-3
-                            .payment-icon
-                                ul
-                                    li
-                                        img.img-fluid(src='images/payment-icon/1.png' alt='')
-                                    li
-                                        img.img-fluid(src='images/payment-icon/2.png' alt='')
-                                    li
-                                        img.img-fluid(src='images/payment-icon/3.png' alt='')
-                                    li
-                                        img.img-fluid(src='images/payment-icon/5.png' alt='')
-                                    li
-                                        img.img-fluid(src='images/payment-icon/7.png' alt='')
+                     
+                        
                     hr.mb-1
                 .col-sm-6.col-lg-6.mb-3
                     .row
@@ -99,12 +67,12 @@ block content
                                     input#shippingOption1.custom-control-input.delToggle(name='shipping-option' checked='checked' type='radio' data-id="1")
                                     label.custom-control-label(for='shippingOption1') Standard Delivery
                                     span.float-right.font-weight-bold FREE
-                                .ml-4.mb-2.small (3-7  days)
+                                .ml-4.mb-2.small (3-5  days)
                                 .custom-control.custom-radio
                                     input#shippingOption2.custom-control-input.delToggle(name='shipping-option' type='radio' data-id="2")
                                     label.custom-control-label(for='shippingOption2') Express Delivery
                                     span.float-right.font-weight-bold ₹50.00
-                                .ml-4.mb-2.small (2-4  days)
+                                .ml-4.mb-2.small (within 48 hours)
                                 .custom-control.custom-radio
                                     input#shippingOption3.custom-control-input.delToggle(name='shipping-option' type='radio' data-id="3")
                                     label.custom-control-label(for='shippingOption3') Get it Tommorow

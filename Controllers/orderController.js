@@ -7,6 +7,7 @@ const factory = require("./handlerFactory");
 const AppError = require("../utils/appError");
 const mongoose = require("mongoose");
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 exports.placeOrder = catchAsync(async (req, res, next) => {
   const doc = await Order.create(req.body);
   const buyer = await Buyer.findById(req.body.buyer);
@@ -68,23 +69,33 @@ exports.deleteOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("No document found with that ID", 404));
   }
   const buyer = await Buyer.findById(doc.buyer.id);
-  const seller = await Seller.findById(doc.seller.id);
 
+  let products = [];
+  for (let i = 0; i < req.body.products.length; i++) {
+    const product = await Product.findById(doc.products[i]);
+    products.push(product);
+  }
   let buyerOrders = [...buyer.currentOrders];
-  let sellerOrders = [...seller.currentOrders];
+
   buyerOrders = UpdatedOrder(buyerOrders, req.params.id);
   await Buyer.findByIdAndUpdate(buyer, {
     currentOrders: buyerOrders,
   });
-  sellerOrders = UpdatedOrder(sellerOrders, req.params.id);
-  await Seller.findByIdAndUpdate(seller, {
-    currentOrders: sellerOrders,
-  });
 
-  res.status(203).json({
-    status: "success",
-    data: null,
+  products.forEach(async (el, i) => {
+    let stockLeft = el.stockLeft;
+    stockLeft += order.productsQty[i];
+    await Product.findByIdAndUpdate(el.id, {
+      stockLeft,
+    });
+    const seller = await Seller.findById(el.seller.id);
+    let sellerOrders = [...seller.currentOrders];
+    sellerOrders = UpdatedOrder(sellerOrders, req.params.id);
+    await Seller.findByIdAndUpdate(seller, {
+      currentOrders: sellerOrders,
+    });
   });
+  res.status(304).redirect("/");
 });
 const UpdatedOrder = (userOrders, id) => {
   let a = [],
@@ -98,3 +109,48 @@ const UpdatedOrder = (userOrders, id) => {
   userOrders.splice(i, 1);
   return userOrders;
 };
+exports.getCheckoutSession = catchAsync(async (req, res, next) => {
+  // 1) Get the currently booked tour
+  const order = await Order.findById(req.params.orderId);
+  const prod = await Product.findById(order.products[0]);
+  // console.log(tour);
+  console.log(prod);
+  let session;
+  // 2) Create checkout session
+  try {
+    session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+
+      success_url: `${req.protocol}://${req.get("host")}/order_placed/${
+        req.params.orderId
+      }`,
+      cancel_url: `${req.protocol}://${req.get(
+        "host"
+      )}/api/v1/order/order_cancel/${req.params.orderId}`,
+      customer_email: order.buyer.email,
+      client_reference_id: req.params.orderId,
+      line_items: [
+        {
+          name: `Order Id :${order.buyer.id}`,
+          images: [
+            `https://e-farm-web.herokuapp.com/img/${prod.images[0]}`,
+            `https://e-farm-web.herokuapp.com/img/${prod.images[1]}`,
+          ],
+          amount: order.totalPrice * 100,
+          currency: "inr",
+          quantity: order.productsQty.length,
+        },
+      ],
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  // console.log(session.url);
+  // res.redirect(303, session.url);
+
+  // 3) Create session as response
+  res.status(200).json({
+    status: "success",
+    data: session.url,
+  });
+});

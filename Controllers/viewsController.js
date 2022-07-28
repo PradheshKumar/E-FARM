@@ -1,4 +1,5 @@
 const Product = require("../Models/productModel");
+const Order = require("../Models/orderModel");
 const Buyer = require("../Models/buyerModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -119,6 +120,24 @@ exports.searchProduct = catchAsync(async (req, res, next) => {
   res.status(200).render("overview", {
     title: "E-FARM",
     products,
+  });
+});
+exports.getOrderPlaced = catchAsync(async (req, res, next) => {
+  const products = await Product.find();
+  const order = await Order.findById(req.params.id).populate("products");
+  res.status(200).render("order_placed", {
+    title: "Order placed successfully",
+    products,
+    order,
+  });
+});
+exports.viewOrder = catchAsync(async (req, res, next) => {
+  const products = await Product.find();
+  const order = await Order.findById(req.params.id).populate("products");
+  res.status(200).render("order_view", {
+    title: "Your Order",
+    products,
+    order,
   });
 });
 exports.getLoginForm = (req, res) => {

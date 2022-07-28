@@ -44,7 +44,40 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Set security HTTP headers
 app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", "data:", "blob:"],
 
+      fontSrc: ["'self'", "https:", "data:"],
+
+      scriptSrc: ["'self'", "unsafe-inline"],
+
+      scriptSrc: ["'self'", "https://*.cloudflare.com"],
+
+      scriptSrcElem: ["'self'", "https:", "https://*.cloudflare.com"],
+
+      styleSrc: ["'self'", "https:", "unsafe-inline"],
+
+      connectSrc: [
+        "'self'",
+        "data",
+        "https://*.cloudflare.com",
+        "http://127.0.0.1:3000",
+        "ws://127.0.0.1:55413/",
+        "ws://127.0.0.1:62560/",
+        "ws://127.0.0.1:62713/",
+        "ws://127.0.0.1:61040/",
+        "ws://127.0.0.1:58760/",
+        "ws://127.0.0.1:64454/",
+        "ws://127.0.0.1:60432/",
+        "ws://127.0.0.1:64959/",
+        "https://js.stripe.com/v3/",
+        "https://checkout.stripe.com/*",
+      ],
+    },
+  })
+);
 // Development logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

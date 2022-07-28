@@ -2321,6 +2321,23 @@ ul.cart-list > li.total > .btn:hover {
 .service-desc p {
   font-size: 16px;
 }
+.placed {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.pl-1 .pl-2 {
+  color: #000;
+  background-color: #35b440;
+}
+.pl-1 {
+  font-size: 35px;
+  margin-bottom: 40px;
+}
+.pl-1 p {
+  font-size: 10px;
+}
 .service-desc h4 {
   text-decoration: underline;
   font-size: 18px;

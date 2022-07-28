@@ -2,91 +2,59 @@ extends base
 
 block content 
   
-  // End Top Search
-  // Start Slider
-  #slides-shop.cover-slides
-    ul.slides-container
-      li.text-center
-        img(src='images/banner-01.jpg' alt='')
-        .container
-          .row
-            .col-md-12
-              h1.m-b-20
-                strong
-                  | Welcome To 
-                  br
-                  |  E-FARM
-              p.m-b-40
-                | See how your users experience your website in realtime or view 
-                br
-                |  trends to see any changes in performance over time.
-              p
-                a.btn.hvr-hover(href='/overview') Shop Now
-      li.text-center
-        img(src='images/banner-02.jpg' alt='')
-        .container
-          .row
-            .col-md-12
-              h1.m-b-20
-                strong
-                  | Welcome To 
-                  br
-                  |  E-FARM
-              p.m-b-40
-                | See how your users experience your website in realtime or view 
-                br
-                |  trends to see any changes in performance over time.
-              p
-                a.btn.hvr-hover(href='/overview') Shop Now
-      li.text-center
-        img(src='images/banner-03.jpg' alt='')
-        .container
-          .row
-            .col-md-12
-              h1.m-b-20
-                strong
-                  | Welcome To 
-                  br
-                  |  E-FARM
-              p.m-b-40
-                | See how your users experience your website in realtime or view 
-                br
-                |  trends to see any changes in performance over time.
-              p
-                a.btn.hvr-hover(href='/overview') Shop Now
-    .slides-navigation
-      a.next(href='#')
-        i.fa.fa-angle-right(aria-hidden='true')
-      a.prev(href='#')
-        i.fa.fa-angle-left(aria-hidden='true')
-  // End Slider
-  // Start Categories
-  .categories-shop
-    .container
-      .row
-        .col-lg-4.col-md-4.col-sm-12.col-xs-12
-          .shop-cat-box
-            img.img-fluid(src='images/categories_img_01.jpg' alt='')
-            a.btn.hvr-hover(href='/overview/?type=veg') Fresh Vegetables
-        .col-lg-4.col-md-4.col-sm-12.col-xs-12
-          .shop-cat-box
-            img.img-fluid(src='images/categories_img_02.jpg' alt='')
-            a.btn.hvr-hover(href='/overview/?type=fruit') Fresh Fruits
-        .col-lg-4.col-md-4.col-sm-12.col-xs-12
-          .shop-cat-box
-            img.img-fluid(src='images/categories_img_03.jpg' alt='')
-            a.btn.hvr-hover(href='/overview/?type=leaf') Fresh Leafs
-  // End Categories
+  .placed
+    strong.pl-1
+      |   ORDER PLACED 
+      strong.pl-2 SUCCESSFULLY
+      p
+      p SEE YOUR ORDERS  AT MY ORDER SECTION IN ACCOUNT PAGE
+    //- p
+    //-   a.btn.hvr-hover(href='/myOrders') View Orders
   
+  .container
+    -sum=0
+          .row
+              .col-lg-12
+                  .table-main.table-responsive
+                      table.table
+                          thead
+                              tr
+                                  th Product no
+                                  th Image
+                                  th Product Name
+                                  th Price
+                                  th Quantity
+                                  th Total
+                          tbody
+                              each prod,i in order.products
+                                  tr.cartProducts
+                                      td.price-pr
+                                        p= i+1
+                                      td.thumbnail-img
+                                          a(href='#')
+                                              if(prod.img=="")
+                                                  img.img-fluid(src=`./../img/${prod.images[0]}` alt='')
+                                              else 
+                                                  img.img-fluid(src=`data:image/png;base64,${prod.img[0]}` alt='') 
+                                      td.name-pr
+                                          a(href=`/product/${prod.id}`)= prod.name
+                                      td.price-pr
+                                          p= `₹ ${prod.price}`
+                                      td.quantity-box
+                                          p= order.productsQty[i]
+                                      td.total-pr
+                                          p.prodPrice= `₹ ${prod.price*order.productsQty[i]} `
+          
+  .placed
+       a.btn.hvr-hover(href='/myorders') View Your Orders
+                                      
   // Start Products
   .products-box
     .container
       .row
         .col-lg-12
           .title-all.text-center
-            h1 Fruits &amp; Vegetables
-            p
-              | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.
+            h1 Shop Other products
       .row
         .col-lg-12
           .special-menu.text-center
@@ -145,61 +113,61 @@ block content
     .main-instagram.owl-carousel.owl-theme
       .item
         .ins-inner-box
-          img(src='images/instagram-img-01.jpg' alt='')
+          img(src='./../images/instagram-img-01.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-02.jpg' alt='')
+          img(src='./../images/instagram-img-02.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-03.jpg' alt='')
+          img(src='./../images/instagram-img-03.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-04.jpg' alt='')
+          img(src='./../images/instagram-img-04.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-05.jpg' alt='')
+          img(src='./../images/instagram-img-05.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-06.jpg' alt='')
+          img(src='./../images/instagram-img-06.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-07.jpg' alt='')
+          img(src='./../images/instagram-img-07.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-08.jpg' alt='')
+          img(src='./../images/instagram-img-08.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-09.jpg' alt='')
+          img(src='./../images/instagram-img-09.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
       .item
         .ins-inner-box
-          img(src='images/instagram-img-05.jpg' alt='')
+          img(src='./../images/instagram-img-05.jpg' alt='')
           .hov-in
             a(href='#')
               i.fab.fa-instagram
