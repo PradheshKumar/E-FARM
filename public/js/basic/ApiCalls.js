@@ -148,10 +148,11 @@ export const acceptNego = async (negoId) => {
       method: "POST",
       url: `/api/v1/negotiation/acceptBid/${negoId}`,
     });
+    console.log(res);
     if (res.data.status === "success") {
       // const cart = document.querySelector(".cartProducts");
       // if (cart) location.reload();
-      window.location.href = "/myOrders";
+      window.location.href = `/order_placed/${res.data.data.data._id}`;
     }
   } catch (err) {
     console.log("ERRRRORR", err);

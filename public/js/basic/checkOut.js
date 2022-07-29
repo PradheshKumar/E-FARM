@@ -11,7 +11,9 @@ import { showCheckout } from "./stripe.js";
 let finalPrice = price;
 let prodId = [],
   prodQty = [],
-  pay,buyer,delTime = 400000000;
+  pay = 1,
+  buyer,
+  delTime = 400000000;
 if (products.length != 0) {
   products.forEach((e) => prodId.push(e.dataset.id));
   products.forEach((e) => prodQty.push(e.dataset.qty));
@@ -48,10 +50,8 @@ export const addListener = () => {
       e.addEventListener("click", () => {
         if (e.dataset.id == 1) {
           pay = 1;
-          priceTxt.innerHTML = `₹ ${price}`;
         } else if (e.dataset.id == 2) {
           pay = 2;
-          priceTxt.innerHTML = `₹ ${price + 50}`;
         }
 
         finalPrice = Number(

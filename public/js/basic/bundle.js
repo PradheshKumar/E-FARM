@@ -4944,30 +4944,31 @@ var acceptNego = /*#__PURE__*/function () {
 
           case 3:
             res = _context6.sent;
+            console.log(res);
 
             if (res.data.status === "success") {
               // const cart = document.querySelector(".cartProducts");
               // if (cart) location.reload();
-              window.location.href = "/myOrders";
+              window.location.href = "/order_placed/".concat(res.data.data.data._id);
             }
 
-            _context6.next = 10;
+            _context6.next = 11;
             break;
 
-          case 7:
-            _context6.prev = 7;
+          case 8:
+            _context6.prev = 8;
             _context6.t0 = _context6["catch"](0);
             console.log("ERRRRORR", _context6.t0); // showAlert("error", err.response.data.message);
 
-          case 10:
+          case 11:
             return _context6.abrupt("return", true);
 
-          case 11:
+          case 12:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee6, null, [[0, 7]]);
+    }, _callee6, null, [[0, 8]]);
   }));
 
   return function acceptNego(_x13) {
@@ -5352,7 +5353,7 @@ var products = document.querySelectorAll(".prodName");
 var finalPrice = price;
 var prodId = [],
     prodQty = [],
-    pay,
+    pay = 1,
     buyer,
     delTime = 400000000;
 
@@ -5397,10 +5398,8 @@ var addListener = function addListener() {
       e.addEventListener("click", function () {
         if (e.dataset.id == 1) {
           pay = 1;
-          priceTxt.innerHTML = "\u20B9 ".concat(price);
         } else if (e.dataset.id == 2) {
           pay = 2;
-          priceTxt.innerHTML = "\u20B9 ".concat(price + 50);
         }
 
         finalPrice = Number(document.querySelector(".finalPrice").innerHTML.replace("₹", ""));

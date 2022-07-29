@@ -56,23 +56,24 @@ block content
                   p Accept,reply,cancel your negotiations
                 else
                   h4 You Dont Have Pending Negotiations
-        .col-lg-4.col-md-12
-          .account-box
-            .service-box
-              .service-icon
-                a(href='/seller_products')
-                  i.fa.fa-shopping-basket
-              .service-desc
-                h4 Your products
-                p View All products that you sell
-        .col-lg-4.col-md-12
-          .account-box
-            .service-box
-              .service-icon
-                a(href='/seller_addProduct')
-                  i.fa.fa-cart-plus
-              .service-desc
-                h4 Sell a New Product
-                p Add a new Product
+        if(user.role == "seller")
+          .col-lg-4.col-md-12
+            .account-box
+              .service-box
+                .service-icon
+                  a(href='/seller_products')
+                    i.fa.fa-shopping-basket
+                .service-desc
+                  h4 Your products
+                  p View All products that you sell
+          .col-lg-4.col-md-12
+            .account-box
+              .service-box
+                .service-icon
+                  a(href='/seller_addProduct')
+                    i.fa.fa-cart-plus
+                .service-desc
+                  h4 Sell a New Product
+                  p Add a new Product
+        
       
-    

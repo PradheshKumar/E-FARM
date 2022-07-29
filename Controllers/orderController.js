@@ -71,7 +71,7 @@ exports.deleteOrder = catchAsync(async (req, res, next) => {
   const buyer = await Buyer.findById(doc.buyer.id);
 
   let products = [];
-  for (let i = 0; i < req.body.products.length; i++) {
+  for (let i = 0; i < doc.products.length; i++) {
     const product = await Product.findById(doc.products[i]);
     products.push(product);
   }
@@ -84,7 +84,7 @@ exports.deleteOrder = catchAsync(async (req, res, next) => {
 
   products.forEach(async (el, i) => {
     let stockLeft = el.stockLeft;
-    stockLeft += order.productsQty[i];
+    stockLeft += doc.productsQty[i];
     await Product.findByIdAndUpdate(el.id, {
       stockLeft,
     });
