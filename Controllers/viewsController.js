@@ -143,6 +143,7 @@ exports.viewOrder = catchAsync(async (req, res, next) => {
   });
 });
 exports.getLoginForm = (req, res) => {
+  // console.log(req.query);
   res.status(200).render("login", {
     title: "Log into your account",
   });

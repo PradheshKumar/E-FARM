@@ -4641,7 +4641,9 @@ var login = /*#__PURE__*/function () {
             if (res.data.status === "success") {
               (0, _alerts.showAlert)("success", "Logged in successfully!");
               window.setTimeout(function () {
-                if (!window.location.href.includes("seller")) location.assign("/");else {
+                if (!window.location.href.includes("seller")) {
+                  if (window.location.search.includes("prod")) location.assign("/product/".concat(window.location.search.slice(6)));else location.assign("/");
+                } else {
                   location.assign("/seller_products");
                 }
               }, 200);
@@ -5740,6 +5742,8 @@ if (form) {
     e.preventDefault(); // return check;
   });
 }
+
+console.log(window.location.search.slice(6));
 
 if (window.location.href.includes("seller")) {
   (0, _sellerSide.sellerSideHandle)();

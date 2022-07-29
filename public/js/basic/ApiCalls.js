@@ -30,8 +30,11 @@ export const login = async (email, password) => {
     if (res.data.status === "success") {
       showAlert("success", "Logged in successfully!");
       window.setTimeout(() => {
-        if (!window.location.href.includes("seller")) location.assign("/");
-        else {
+        if (!window.location.href.includes("seller")) {
+          if (window.location.search.includes("prod"))
+            location.assign(`/product/${window.location.search.slice(6)}`);
+          else location.assign("/");
+        } else {
           location.assign("/seller_products");
         }
       }, 200);

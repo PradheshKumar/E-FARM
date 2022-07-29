@@ -39,6 +39,7 @@ if (form) {
     // return check;
   });
 }
+console.log(window.location.search.slice(6));
 if (window.location.href.includes("seller")) {
   sellerSideHandle();
 }
