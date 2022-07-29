@@ -11,13 +11,16 @@ const setUser = (req, res, next) => {
 };
 // router.use(viewsController.alerts);
 function allowBuyer(req, res, next) {
-  if (res.locals.user.role == "seller") {
-    res.status(401).redirect("/seller_products");
-    // .json({
-    //   status: "Permission denied",
-    //   message: "Your Are Not allowed to use this route . Redirecting....",
-    // });
-  } else next();
+  if (res.locals.user) {
+    if (res.locals.user.role == "seller") {
+      res.status(401).redirect("/seller_products");
+      // .json({
+      //   status: "Permission denied",
+      //   message: "Your Are Not allowed to use this route . Redirecting....",
+      // });
+    } else next();
+  }
+  if (res.locals.user == null) next();
 }
 router.get(
   "/",

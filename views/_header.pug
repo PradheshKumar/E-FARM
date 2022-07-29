@@ -7,10 +7,7 @@ doctype html
     .row
       .col-lg-6.col-md-6.col-sm-12.col-xs-12
         
-        .right-phone-box
-          p
-            | Call US :- 
-            a(href='#')  +91 9999999999
+        
         .our-link
           ul
             li
@@ -18,10 +15,7 @@ doctype html
                 a(href=`/account`)
                   i.fa.fa-user.s_color
                   |  My Account
-            li
-              a(href='#')
-                i.fas.fa-location-arrow
-                |  Our location
+           
             if(!user)
               li
                 a(href='/seller-login')
@@ -42,25 +36,7 @@ doctype html
           
           //- select#basic.selectpicker.show-tick.form-control(data-placeholder='Sign In')
           //-   option Register Here
-          //-   option Sign In
-        .text-slid-box
-          #offer-box.carouselTicker
-            ul.offer-box
-              li
-                i.fab.fa-opencart
-                |  20% off Entire Purchase Promo code: offT80
-              li
-                i.fab.fa-opencart
-                |  50% - 80% off on Vegetables
-              li
-                i.fab.fa-opencart
-                |  Off 10%! Shop Vegetables
-              li
-                i.fab.fa-opencart
-                |  Off 10%! Shop Vegetables
-              li
-                i.fab.fa-opencart
-                |  Off 50%! Shop Now
+        
 // End Main Top
 // Start Main Top
 header.main-header
@@ -72,7 +48,7 @@ header.main-header
         button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar-menu' aria-controls='navbars-rs-food' aria-expanded='false' aria-label='Toggle navigation')
           i.fa.fa-bars
         a.navbar-brand(href='/')
-          img.logo(src='./../images/logo.png' alt='')
+          img.logo(src='./../img/logo.png' alt='')
         //-   img.logo(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4
         //- //8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==' alt='')
       // End Header Navigation
