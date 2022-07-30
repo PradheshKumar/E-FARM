@@ -186,7 +186,7 @@ export const replyNego = async (negoId, replyPrice) => {
       data: { replyPrice },
     });
     if (res.data.status === "success") {
-      location.reload();
+      // location.reload();
       // const nego = document.querySelector(".negoRow");
       // console.log(nego);
       // if (nego) location.reload();

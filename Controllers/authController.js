@@ -49,7 +49,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  const url = `${req.protocol}://${req.get("host")}/me`;
+  const url = `${req.protocol}://${req.get("host")}/`;
   await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, req, res);
@@ -173,6 +173,7 @@ exports.isLoggedIn = async (req, res, next) => {
       }
 
       // THERE IS A LOGGED IN USER
+      // console.log(currentUser);
       res.locals.user = currentUser;
 
       return next();

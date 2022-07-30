@@ -30,7 +30,7 @@ const negoBtn = document.querySelectorAll(".negoBtn");
 const negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 const negoPgreply = document.querySelectorAll(".replyNegoBtn");
 const negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
-const negoReplyPrice = document.querySelector(".replyValue");
+const negoReplyPrice = document.querySelectorAll(".replyValue");
 addListener();
 if (form) {
   form.addEventListener("submit", function (e) {
@@ -119,10 +119,12 @@ if (negoPgaccept) {
     });
   });
 }
+console.log(negoPgreply);
 if (negoPgreply) {
-  negoPgreply.forEach((el) => {
+  negoPgreply.forEach((el, i) => {
+    console.log(negoReplyPrice[i]);
     el.addEventListener("click", () => {
-      replyNego(el.dataset.id, negoReplyPrice.value);
+      replyNego(el.dataset.id, negoReplyPrice[i].value);
     });
   });
 }

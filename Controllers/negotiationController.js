@@ -9,41 +9,41 @@ const Email = require("../utils/email");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 let bid;
-exports.placeBid1 = catchAsync(async (req, res, next) => {
-  try {
-    let startingPrice;
-    if (req.params.id) {
-      bid = await Negotiation.findByIdAndUpdate(req.params.id, req.body);
+// exports.placeBid1 = catchAsync(async (req, res, next) => {
+//   try {
+//     let startingPrice;
+//     if (req.params.id) {
+//       bid = await Negotiation.findByIdAndUpdate(req.params.id, req.body);
 
-      sendNegoMail(req, res, "old");
-    } else {
-      const sellerId = (await Product.findById(req.body.product)).seller.id;
-      req.body.seller = sellerId;
-      bid = await Negotiation.create(req.body);
-      const seller = await Seller.findByIdAndUpdate(req.body.seller, {
-        negotiations: bid.id,
-      });
-      const buyer = await Buyer.findByIdAndUpdate(req.body.buyer, {
-        negotiations: bid.id,
-      });
+//       sendNegoMail(req, res, "old");
+//     } else {
+//       const sellerId = (await Product.findById(req.body.product)).seller.id;
+//       req.body.seller = sellerId;
+//       bid = await Negotiation.create(req.body);
+//       const seller = await Seller.findByIdAndUpdate(req.body.seller, {
+//         negotiations: bid.id,
+//       });
+//       const buyer = await Buyer.findByIdAndUpdate(req.body.buyer, {
+//         negotiations: bid.id,
+//       });
 
-      // console.log(req.body.buyer);
-      res.status(201).json({
-        status: "success",
-        data: {
-          data: bid,
-        },
-      });
-    }
-  } catch (e) {
-    console.log(e);
-  }
-  // startingPrice = (await Product.findById(req.body.product)).price;
-  // bid = await Negotiation.findByIdAndUpdate(bid.id, {
-  //   startingPrice,
-  // });
-  // sendNegoMail(req, res, 'new');
-});
+//       // console.log(req.body.buyer);
+//       res.status(201).json({
+//         status: "success",
+//         data: {
+//           data: bid,
+//         },
+//       });
+//     }
+//   } catch (e) {
+//     console.log(e);
+//   }
+//   // startingPrice = (await Product.findById(req.body.product)).price;
+//   // bid = await Negotiation.findByIdAndUpdate(bid.id, {
+//   //   startingPrice,
+//   // });
+//   // sendNegoMail(req, res, 'new');
+// });
 exports.placeBid = catchAsync(async (req, res, next) => {
   try {
     let startingPrice;
@@ -57,7 +57,7 @@ exports.placeBid = catchAsync(async (req, res, next) => {
       const buyer = await Buyer.findById(req.body.buyer);
       req.body.seller = sellerId;
       bid = await Negotiation.create(req.body);
-
+      sendNegoMail(req, res, "new");
       await Seller.findByIdAndUpdate(req.body.seller, {
         negotiations: [...seller.negotiations, bid.id],
       });
@@ -87,6 +87,7 @@ exports.acceptBid = catchAsync(async (req, res, next) => {
   const sellerId = (await Product.findById(nego.product)).seller.id;
   const seller = await Seller.findById(sellerId);
   const buyer = await Buyer.findById(nego.buyer);
+  bid = nego;
   req.body = {
     products: [nego.product],
     buyer: nego.buyer,
@@ -166,6 +167,8 @@ exports.replyBid = catchAsync(async (req, res, next) => {
       $inc: { negoStage: 1 },
       currentBid: req.body.replyPrice,
     });
+    bid = nego;
+    sendNegoMail(req, res, "old");
   } catch (e) {
     console.log(e);
   }
@@ -186,8 +189,8 @@ exports.addBuyerSeller = catchAsync(async (req, res, next) => {
 });
 const sendNegoMail = catchAsync(async (req, res, type) => {
   // 1) Get user based on POSTed email
-  const seller = await Seller.findById(req.body.seller);
-  const buyer = await Buyer.findById(req.body.buyer);
+  const seller = await Seller.findById(bid.seller);
+  const buyer = await Buyer.findById(bid.buyer);
   const nego = await Negotiation.findById(bid.id);
   // if (!seller) {
 
@@ -204,20 +207,27 @@ const sendNegoMail = catchAsync(async (req, res, type) => {
   }
 
   // 3) Send it to user's email
-
   try {
     if (type == "new") {
-      const resetURL = `${req.protocol}://${req.get(
-        "host"
-      )}/api/v1/negotiation/reply/${resetToken}`;
+      const resetURL = `${req.protocol}://${req.get("host")}/seller_negotiate`;
       await new Email(seller, resetURL).sendNewNego();
     } else {
-      const resetURL = `${req.protocol}://${req.get(
-        "host"
-      )}/api/v1/negotiation/reply/${resetToken}`;
+      let resetURL;
       if (bid.lastBidBy == "seller")
-        await new Email(buyer, resetURL).sendOldNego(bid.lastBid);
-      else await new Email(seller, resetURL).sendOldNego(bid.lastBid);
+        resetURL = `${req.protocol}://${req.get("host")}/negotiate`;
+      else resetURL = `${req.protocol}://${req.get("host")}/seller_negotiate`;
+      if (bid.lastBidBy == "seller")
+        await new Email(buyer, resetURL, nego).sendOldNego(
+          nego.currentBid,
+          "seller"
+        );
+      else
+        await new Email(seller, resetURL, nego).sendOldNego(
+          nego.currentBid,
+          "buyer"
+        );
+
+      console.log("SEndinfs");
     }
     res.status(201).json({
       status: "success",
@@ -227,10 +237,10 @@ const sendNegoMail = catchAsync(async (req, res, type) => {
     });
   } catch (err) {
     console.log(err);
-    return next(
-      new AppError("There was an error sending the email. Try again later!"),
-      500
-    );
+    // return next(
+    //   new AppError("There was an error sending the email. Try again later!"),
+    //   500
+    // );
   }
 });
 exports.redirectToReply = catchAsync(async (req, res, next) => {

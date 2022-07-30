@@ -5047,8 +5047,8 @@ var replyNego = /*#__PURE__*/function () {
           case 3:
             res = _context8.sent;
 
-            if (res.data.status === "success") {
-              location.reload(); // const nego = document.querySelector(".negoRow");
+            if (res.data.status === "success") {// location.reload();
+              // const nego = document.querySelector(".negoRow");
               // console.log(nego);
               // if (nego) location.reload();
               // else window.location.href = "/";
@@ -5733,7 +5733,7 @@ var negoBtn = document.querySelectorAll(".negoBtn");
 var negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 var negoPgreply = document.querySelectorAll(".replyNegoBtn");
 var negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
-var negoReplyPrice = document.querySelector(".replyValue");
+var negoReplyPrice = document.querySelectorAll(".replyValue");
 (0, _checkOut.addListener)();
 
 if (form) {
@@ -5828,10 +5828,13 @@ if (negoPgaccept) {
   });
 }
 
+console.log(negoPgreply);
+
 if (negoPgreply) {
-  negoPgreply.forEach(function (el) {
+  negoPgreply.forEach(function (el, i) {
+    console.log(negoReplyPrice[i]);
     el.addEventListener("click", function () {
-      (0, _ApiCalls.replyNego)(el.dataset.id, negoReplyPrice.value);
+      (0, _ApiCalls.replyNego)(el.dataset.id, negoReplyPrice[i].value);
     });
   });
 }
@@ -5900,7 +5903,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58175" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58407" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

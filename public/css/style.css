@@ -160,6 +160,7 @@ p {
 }
 /*------------------------------------------------------------------ LOADER -------------------------------------------------------------------*/
 #back-to-top {
+  padding: 0.5rem 0rem;
   position: fixed;
   bottom: 40px;
   right: 40px;
@@ -1007,9 +1008,10 @@ ul.cart-list > li.total > .btn:hover {
   padding-bottom: 15px;
 }
 .why-text h5 {
+  border-radius: 10px;
   font-size: 18px;
   font-family: "Poppins", sans-serif;
-  padding: 4px;
+  padding: 10px;
   display: inline-block;
   background: #35b440;
   color: #ffffff;
@@ -2651,6 +2653,7 @@ ul.cart-list > li.total > .btn:hover {
   width: 34px;
   text-align: center;
 }
+
 .share-bar a {
 }
 .featured-products-box {
