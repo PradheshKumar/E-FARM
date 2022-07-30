@@ -14,11 +14,11 @@ const signUpmarkup = `<span class="login100-form-title p-b-53">Sign Up </span>
   </div>
   <div class="p-t-13 p-b-9"><span class="txt1">Password</span>
   <div class="wrap-input100 validate-input" data-validate="Password is required">
-    <input class="input100" type="password" name="pass"/><span class="focus-input100"></span>
+    <input class="input100" type="password" name="pass" autocomplete="on"/><span class="focus-input100"></span>
   </div>
   <div class="p-t-13 p-b-9"><span class="txt1">Confirm Password</span>
   <div class="wrap-input100 validate-input" data-validate="Password is required">
-    <input class="input100" type="password" name="ConfirmPass"/><span class="focus-input100"></span>
+    <input class="input100" type="password" name="ConfirmPass" autocomplete="on"/><span class="focus-input100"></span>
   </div>
   <div class="container-login100-form-btn m-t-17 signupBtn">
     <button type="button" class="login100-form-btn signupBtn" >Sign Up</button>
@@ -55,6 +55,7 @@ const signUpFn = (e) => {
       check = false;
     }
   });
+  console.log("SIGNUP");
   if (check) {
     const name = input[0].value;
     const email = input[1].value;

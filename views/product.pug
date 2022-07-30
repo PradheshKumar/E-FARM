@@ -82,7 +82,7 @@ block content
                   if(user)
                     button.btn.hvr-hover.cartBtn(data-fancybox-close='') Add to cart
                   else
-                    a(href=`/login?prod=${products[0].id}`).btn.hvr-hover.cartBtn(data-fancybox-close='') Login to add to Cart
+                    a(href=`/login?prod=${products[0].id}`).btn.hvr-hover.cartBtn Login to add to Cart
             .product-rating
               - var n = 0;
               while n++<Math.floor(products[0].ratingsAverage)

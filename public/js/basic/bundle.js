@@ -4575,7 +4575,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateCart = exports.signUp = exports.rmCart = exports.replyNego = exports.logout = exports.login = exports.forgPassFn = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
+exports.updateCart = exports.signUp = exports.rmCart = exports.resetPassFn = exports.replyNego = exports.logout = exports.login = exports.forgPassFn = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -5137,7 +5137,7 @@ var forgPassFn = /*#__PURE__*/function () {
             _context9.prev = 17;
             _context9.t0 = _context9["catch"](3);
             showValidate(input[0]);
-            if (_context9.t0.response.data.message.includes("Cast to string failed")) input[0].dataset.validate = "The given mail id is not registered";
+            input[0].dataset.validate = _context9.t0.response.data.message;
             return _context9.abrupt("return", false);
 
           case 22:
@@ -5158,61 +5158,96 @@ var forgPassFn = /*#__PURE__*/function () {
 
 exports.forgPassFn = forgPassFn;
 
+var resetPassFn = /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(token, password, passwordConfirm) {
+    var input, res;
+    return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            // const emailInput = document.querySelector(".emailInpt");
+            // const email = emailInput.value;
+            input = document.querySelectorAll(".validate-input");
+            _context10.prev = 1;
+
+            if (window.location.href.includes("seller")) {
+              _context10.next = 8;
+              break;
+            }
+
+            _context10.next = 5;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "/api/v1/buyer/resetPassword/".concat(token),
+              data: {
+                password: password,
+                passwordConfirm: passwordConfirm
+              }
+            });
+
+          case 5:
+            res = _context10.sent;
+            _context10.next = 12;
+            break;
+
+          case 8:
+            console.log(email);
+            _context10.next = 11;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "/api/v1/seller/resetPassword/".concat(token),
+              data: {
+                password: password,
+                passwordConfirm: passwordConfirm
+              }
+            });
+
+          case 11:
+            res = _context10.sent;
+
+          case 12:
+            if (res.data.status === "success") {
+              console.log("SUCCESS");
+              if (!window.location.href.includes("seller")) window.location.href = "/login";else window.location.href = "/seller-login";
+            }
+
+            _context10.next = 20;
+            break;
+
+          case 15:
+            _context10.prev = 15;
+            _context10.t0 = _context10["catch"](1);
+            showValidate(input[0]); // if (err.response.data.message.includes("Cast to string failed"))
+
+            input[0].dataset.validate = _context10.t0.response.data.message;
+            return _context10.abrupt("return", false);
+
+          case 20:
+            console.log("sendmail");
+
+          case 21:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10, null, [[1, 15]]);
+  }));
+
+  return function resetPassFn(_x17, _x18, _x19) {
+    return _ref10.apply(this, arguments);
+  };
+}();
+
+exports.resetPassFn = resetPassFn;
+
 function showValidate(input) {
   var thisAlert = $(input);
   $(thisAlert).addClass("alert-validate");
 }
 
 var updateCart = /*#__PURE__*/function () {
-  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(prodId, qty) {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(prodId, qty) {
     var res;
-    return _regeneratorRuntime().wrap(function _callee10$(_context10) {
-      while (1) {
-        switch (_context10.prev = _context10.next) {
-          case 0:
-            _context10.prev = 0;
-            _context10.next = 3;
-            return (0, _axios.default)({
-              method: "PATCH",
-              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
-            });
-
-          case 3:
-            res = _context10.sent;
-
-            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
-              // location.reload();
-            }
-
-            _context10.next = 10;
-            break;
-
-          case 7:
-            _context10.prev = 7;
-            _context10.t0 = _context10["catch"](0);
-            console.log("ERRRRORR", _context10.t0); // showAlert("error", err.response.data.message);
-
-          case 10:
-            return _context10.abrupt("return", true);
-
-          case 11:
-          case "end":
-            return _context10.stop();
-        }
-      }
-    }, _callee10, null, [[0, 7]]);
-  }));
-
-  return function updateCart(_x17, _x18) {
-    return _ref10.apply(this, arguments);
-  };
-}();
-
-exports.updateCart = updateCart;
-
-var logout = /*#__PURE__*/function () {
-  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
-    var res, url, hasUrl;
     return _regeneratorRuntime().wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
@@ -5220,29 +5255,27 @@ var logout = /*#__PURE__*/function () {
             _context11.prev = 0;
             _context11.next = 3;
             return (0, _axios.default)({
-              method: "GET",
-              url: "/api/v1/user/logout"
+              method: "PATCH",
+              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
             });
 
           case 3:
             res = _context11.sent;
 
-            if (res.data.status = "success") {
-              url = ["account", "myCart", "checkOut", "myOrders", "negotiate", "seller_products"];
-              hasUrl = url.map(function (e) {
-                return window.location.href.includes(e);
-              });
-              if (hasUrl.includes(true)) window.location.href = "/";else if (!window.location.href.includes("seller-login")) location.reload();
+            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
+              // location.reload();
             }
 
-            _context11.next = 11;
+            _context11.next = 10;
             break;
 
           case 7:
             _context11.prev = 7;
             _context11.t0 = _context11["catch"](0);
-            console.log(_context11.t0.response);
-            (0, _alerts.showAlert)("error", "Error logging out! Try again.");
+            console.log("ERRRRORR", _context11.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context11.abrupt("return", true);
 
           case 11:
           case "end":
@@ -5252,8 +5285,57 @@ var logout = /*#__PURE__*/function () {
     }, _callee11, null, [[0, 7]]);
   }));
 
-  return function logout() {
+  return function updateCart(_x20, _x21) {
     return _ref11.apply(this, arguments);
+  };
+}();
+
+exports.updateCart = updateCart;
+
+var logout = /*#__PURE__*/function () {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
+    var res, url, hasUrl;
+    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+      while (1) {
+        switch (_context12.prev = _context12.next) {
+          case 0:
+            _context12.prev = 0;
+            _context12.next = 3;
+            return (0, _axios.default)({
+              method: "GET",
+              url: "/api/v1/user/logout"
+            });
+
+          case 3:
+            res = _context12.sent;
+
+            if (res.data.status = "success") {
+              url = ["account", "myCart", "checkOut", "myOrders", "negotiate", "seller_products"];
+              hasUrl = url.map(function (e) {
+                return window.location.href.includes(e);
+              });
+              if (hasUrl.includes(true)) window.location.href = "/";else if (!window.location.href.includes("seller-login")) location.reload();
+            }
+
+            _context12.next = 11;
+            break;
+
+          case 7:
+            _context12.prev = 7;
+            _context12.t0 = _context12["catch"](0);
+            console.log(_context12.t0.response);
+            (0, _alerts.showAlert)("error", "Error logging out! Try again.");
+
+          case 11:
+          case "end":
+            return _context12.stop();
+        }
+      }
+    }, _callee12, null, [[0, 7]]);
+  }));
+
+  return function logout() {
+    return _ref12.apply(this, arguments);
   };
 }();
 
@@ -5270,7 +5352,7 @@ var _ApiCalls = require("./ApiCalls.js");
 
 var loginForm = document.querySelector(".login100-form");
 var input;
-var signUpmarkup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
+var signUpmarkup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
 var forgotMarkup = "<span class=\"login100-form-title p-b-53\">Forgot Password </span>\n \n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100 emailInpt\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  \n  <div class=\"container-login100-form-btn m-t-17 \">\n    <button type=\"button\" class=\"login100-form-btn forgotPassword\" >Send Mail</button>\n  </div>";
 
 var signUpForm = function signUpForm(e) {
@@ -5297,6 +5379,7 @@ var signUpFn = function signUpFn(e) {
       check = false;
     }
   });
+  console.log("SIGNUP");
 
   if (check) {
     var name = input[0].value;
@@ -5822,13 +5905,16 @@ var rmBtn = document.querySelectorAll(".rmBtn");
 var subTotal = document.querySelector(".subTotal");
 var tax = document.querySelector(".tax");
 var grandTotal = document.querySelector(".grandTotal");
+var passwordReset = document.querySelector(".passReset");
+var passConfirmReset = document.querySelector(".confirmPassReset");
+var resetPassBtn = document.querySelector(".resetPassBtn");
 var negoBtn = document.querySelectorAll(".negoBtn");
 var forgotPassBtn = document.querySelector(".forgotPass");
 var negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 var negoPgreply = document.querySelectorAll(".replyNegoBtn");
 var negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 var negoReplyPrice = document.querySelectorAll(".replyValue");
-console.log(forgotPassBtn[0]);
+console.log(forgotPassBtn);
 (0, _checkOut.addListener)();
 
 if (form) {
@@ -5862,6 +5948,8 @@ if (loginBtn) {
   });
 }
 
+console.log(logoutBtn);
+
 if (logoutBtn) {
   logoutBtn.addEventListener("click", _ApiCalls.logout);
 }
@@ -5874,7 +5962,10 @@ if (forgotPassBtn) {
   forgotPassBtn.addEventListener("click", _loginForm.forgotPasswordForm);
 }
 
+console.log(addCartBtn);
+
 if (addCartBtn) {
+  console.log(addCartBtn, "vcvc");
   addCartBtn.addEventListener("click", function () {
     (0, _ApiCalls.addToCart)(window.location.pathname.split("/")[2]);
   });
@@ -5947,6 +6038,13 @@ if (negoPgcancel) {
   });
 }
 
+if (resetPassBtn) {
+  resetPassBtn.addEventListener("click", function () {
+    console.log("Click");
+    (0, _ApiCalls.resetPassFn)(passConfirmReset.dataset.token, passwordReset.value, passConfirmReset.value);
+  });
+}
+
 $(".validate-form .input100").each(function () {
   $(this).focus(function () {
     hideValidate(this);
@@ -6002,7 +6100,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58407" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62975" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

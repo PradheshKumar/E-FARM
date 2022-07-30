@@ -10,6 +10,7 @@ import {
   acceptNego,
   cancelNego,
   replyNego,
+  resetPassFn,
 } from "./ApiCalls.js";
 import { signUpForm, forgotPasswordForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
@@ -26,13 +27,16 @@ const rmBtn = document.querySelectorAll(".rmBtn");
 const subTotal = document.querySelector(".subTotal");
 const tax = document.querySelector(".tax");
 const grandTotal = document.querySelector(".grandTotal");
+const passwordReset = document.querySelector(".passReset");
+const passConfirmReset = document.querySelector(".confirmPassReset");
+const resetPassBtn = document.querySelector(".resetPassBtn");
 const negoBtn = document.querySelectorAll(".negoBtn");
 const forgotPassBtn = document.querySelector(".forgotPass");
 const negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 const negoPgreply = document.querySelectorAll(".replyNegoBtn");
 const negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 const negoReplyPrice = document.querySelectorAll(".replyValue");
-console.log(forgotPassBtn[0]);
+console.log(forgotPassBtn);
 addListener();
 if (form) {
   form.addEventListener("submit", function (e) {
@@ -63,6 +67,7 @@ if (loginBtn) {
     }
   });
 }
+console.log(logoutBtn);
 if (logoutBtn) {
   logoutBtn.addEventListener("click", logout);
 }
@@ -72,7 +77,9 @@ if (signUpFormBtn) {
 if (forgotPassBtn) {
   forgotPassBtn.addEventListener("click", forgotPasswordForm);
 }
+console.log(addCartBtn);
 if (addCartBtn) {
+  console.log(addCartBtn, "vcvc");
   addCartBtn.addEventListener("click", () => {
     addToCart(window.location.pathname.split("/")[2]);
   });
@@ -143,7 +150,16 @@ if (negoPgcancel) {
     });
   });
 }
-
+if (resetPassBtn) {
+  resetPassBtn.addEventListener("click", () => {
+    console.log("Click");
+    resetPassFn(
+      passConfirmReset.dataset.token,
+      passwordReset.value,
+      passConfirmReset.value
+    );
+  });
+}
 $(".validate-form .input100").each(function () {
   $(this).focus(function () {
     hideValidate(this);

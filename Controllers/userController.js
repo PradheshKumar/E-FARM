@@ -80,39 +80,46 @@ exports.addProductSeller = catchAsync(async (req, res, next) => {
   next();
 });
 exports.addToCart = catchAsync(async (req, res, next) => {
-  setUser(res);
-  const buyer = await User.findById(req.user.id);
-  let cart,
-    cartQty,
-    flag = 0,
-    index;
-  buyer.cart.every((el, i) => {
-    if (el == req.params.id) {
-      flag = 1;
-      index = i;
-      return false;
+  try {
+    console.log("1");
+    setUser(res);
+    const buyer = await User.findById(req.user.id);
+    let cart,
+      cartQty,
+      flag = 0,
+      index;
+    buyer.cart.every((el, i) => {
+      if (el == req.params.id) {
+        flag = 1;
+        index = i;
+        return false;
+      }
+      return true;
+    });
+    console.log("2");
+    if (flag == 0) {
+      cart = [...buyer.cart, req.params.id];
+      cartQty = [...buyer.cartQty, req.params.qty];
+    } else {
+      cartQty = [...buyer.cartQty];
+      cartQty[index] += Number(req.params.qty);
+      cart = [...buyer.cart];
     }
-    return true;
-  });
-  if (flag == 0) {
-    cart = [...buyer.cart, req.params.id];
-    cartQty = [...buyer.cartQty, req.params.qty];
-  } else {
-    cartQty = [...buyer.cartQty];
-    cartQty[index] += Number(req.params.qty);
-    cart = [...buyer.cart];
-  }
 
-  const updatedBuyer = await User.findByIdAndUpdate(req.user.id, {
-    cart,
-    cartQty,
-  });
-  res.status(200).json({
-    status: "success",
-    data: {
-      User: updatedBuyer,
-    },
-  });
+    const updatedBuyer = await User.findByIdAndUpdate(req.user.id, {
+      cart,
+      cartQty,
+    });
+    console.log("3");
+    res.status(200).json({
+      status: "success",
+      data: {
+        User: updatedBuyer,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
 });
 exports.updateCart = catchAsync(async (req, res, next) => {
   setUser(res);

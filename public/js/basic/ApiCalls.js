@@ -227,8 +227,49 @@ export const forgPassFn = async () => {
     }
   } catch (err) {
     showValidate(input[0]);
-    if (err.response.data.message.includes("Cast to string failed"))
-      input[0].dataset.validate = "The given mail id is not registered";
+    input[0].dataset.validate = err.response.data.message;
+    return false;
+    // showAlert("error", err.response.data.message);
+  }
+  console.log("sendmail");
+};
+export const resetPassFn = async (token, password, passwordConfirm) => {
+  // const emailInput = document.querySelector(".emailInpt");
+  // const email = emailInput.value;
+  const input = document.querySelectorAll(".validate-input");
+
+  try {
+    let res;
+    if (!window.location.href.includes("seller")) {
+      res = await axios({
+        method: "PATCH",
+        url: `/api/v1/buyer/resetPassword/${token}`,
+        data: {
+          password,
+          passwordConfirm,
+        },
+      });
+    } else {
+      console.log(email);
+      res = await axios({
+        method: "PATCH",
+        url: `/api/v1/seller/resetPassword/${token}`,
+        data: {
+          password,
+          passwordConfirm,
+        },
+      });
+    }
+    if (res.data.status === "success") {
+      console.log("SUCCESS");
+      if (!window.location.href.includes("seller"))
+        window.location.href = "/login";
+      else window.location.href = "/seller-login";
+    }
+  } catch (err) {
+    showValidate(input[0]);
+    // if (err.response.data.message.includes("Cast to string failed"))
+    input[0].dataset.validate = err.response.data.message;
     return false;
     // showAlert("error", err.response.data.message);
   }

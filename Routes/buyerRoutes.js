@@ -14,7 +14,6 @@ router.get("/logout", setUser, authController.logout);
 
 router.post("/forgotPassword", setUser, authController.forgotPassword);
 router.patch("/resetPassword/:token", setUser, authController.resetPassword);
-
 // Protect all routes after this middleware
 router.use(setUser, authController.protect);
 // router.use(authController.restrictTo("buyer"));
