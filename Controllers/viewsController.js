@@ -110,7 +110,7 @@ exports.getProduct = catchAsync(async (req, res, next) => {
   if (!product)
     return next(new AppError("There is no product with that id", 404));
   res.status(200).render("product", {
-    title: `${product.name} product`,
+    title: product.name,
     products,
   });
 });
