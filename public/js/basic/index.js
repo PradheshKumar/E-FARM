@@ -11,6 +11,8 @@ import {
   cancelNego,
   replyNego,
   resetPassFn,
+  updateDetails,
+  updatePassword,
 } from "./ApiCalls.js";
 import { signUpForm, forgotPasswordForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
@@ -37,6 +39,12 @@ const negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 const negoPgreply = document.querySelectorAll(".replyNegoBtn");
 const negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 const negoReplyPrice = document.querySelectorAll(".replyValue");
+const updateNameInput = document.querySelector(".updateName");
+const updateNameBtn = document.querySelector(".updateNameBtn");
+const oldPassInput = document.querySelector(".oldPassUpdate");
+const newPassInput = document.querySelector(".newPassUpdate");
+const confirmPassInput = document.querySelector(".confirmPassUpdate");
+const updatePassBtn = document.querySelector(".updatePassBtn");
 console.log(forgotPassBtn);
 addListener();
 if (form) {
@@ -161,6 +169,24 @@ if (resetPassBtn) {
       passwordReset.value,
       passConfirmReset.value
     );
+  });
+}
+if (updateNameBtn) {
+  updateNameBtn.addEventListener("click", () => {
+    updateDetails(updateNameInput.value);
+  });
+}
+if (updatePassBtn) {
+  updatePassBtn.addEventListener("click", () => {
+    if (!oldPassInput.value) showValidate(oldPassInput);
+    else if (!newPassInput.value) showValidate(newPassInput);
+    else if (!confirmPassInput.value) showValidate(confirmPassInput);
+    else
+      updatePassword(
+        oldPassInput.value,
+        newPassInput.value,
+        confirmPassInput.value
+      );
   });
 }
 $(".validate-form .input100").each(function () {

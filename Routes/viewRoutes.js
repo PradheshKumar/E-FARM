@@ -80,6 +80,11 @@ router.get(
   authController.isLoggedIn,
   viewsController.viewOrder
 );
+router.get(
+  "/editAccount",
+  authController.isLoggedIn,
+  viewsController.getEditAccount
+);
 router.get("/resetPassword/:token", viewsController.getForgotPassword);
 /////////////////////SELLER ROUTES
 router.get("/seller-login", viewsController.getLoginForm);

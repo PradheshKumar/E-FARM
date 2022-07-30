@@ -233,6 +233,72 @@ export const forgPassFn = async () => {
   }
   console.log("sendmail");
 };
+export const updateDetails = async (name) => {
+  const input = document.querySelectorAll(".validate-input");
+  try {
+    let res;
+    if (!window.location.href.includes("seller")) {
+      res = await axios({
+        method: "PATCH",
+        url: "api/v1/buyer/updateMe",
+        data: {
+          name,
+        },
+      });
+    } else {
+      res = await axios({
+        method: "PATCH",
+        url: "api/v1/seller/updateMe",
+        data: {
+          name,
+        },
+      });
+    }
+    if (res.data.status === "success") {
+      location.reload();
+    }
+  } catch (err) {
+    showValidate(input[0]);
+    input[0].dataset.validate = err.response.data.message;
+    return false;
+    // showAlert("error", err.response.data.message);
+  }
+};
+export const updatePassword = async (
+  passwordCurrent,
+  password,
+  passwordConfirm
+) => {
+  const input = document.querySelectorAll(".validate-input");
+  try {
+    let res;
+    if (!window.location.href.includes("seller")) {
+      res = await axios({
+        method: "PATCH",
+        url: "api/v1/buyer/updateMyPassword",
+        data: { passwordCurrent, password, passwordConfirm },
+      });
+    } else {
+      res = await axios({
+        method: "PATCH",
+        url: "api/v1/seller/updateMyPassword",
+        data: { passwordCurrent, password, passwordConfirm },
+      });
+    }
+    if (res.data.status === "success") {
+      showAlert("success", "Password Changed successfully!");
+      window.setTimeout(() => {
+        location.reload();
+      }, 300);
+    }
+  } catch (err) {
+    console.log(err.response.data);
+    showValidate(input[1]);
+    input[1].dataset.validate = err.response.data.message;
+    return false;
+    // showAlert("error", err.response.data.message);
+  }
+};
 export const resetPassFn = async (token, password, passwordConfirm) => {
   // const emailInput = document.querySelector(".emailInpt");
   // const email = emailInput.value;
@@ -308,6 +374,7 @@ export const logout = async () => {
         "account",
         "myCart",
         "checkOut",
+        "editAccount",
         "myOrders",
         "negotiate",
         "seller_products",

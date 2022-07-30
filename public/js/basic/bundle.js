@@ -4575,7 +4575,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateCart = exports.signUp = exports.rmCart = exports.resetPassFn = exports.replyNego = exports.logout = exports.login = exports.forgPassFn = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
+exports.updatePassword = exports.updateDetails = exports.updateCart = exports.signUp = exports.rmCart = exports.resetPassFn = exports.replyNego = exports.logout = exports.login = exports.forgPassFn = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -5158,15 +5158,13 @@ var forgPassFn = /*#__PURE__*/function () {
 
 exports.forgPassFn = forgPassFn;
 
-var resetPassFn = /*#__PURE__*/function () {
-  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(token, password, passwordConfirm) {
+var updateDetails = /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(name) {
     var input, res;
     return _regeneratorRuntime().wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
-            // const emailInput = document.querySelector(".emailInpt");
-            // const email = emailInput.value;
             input = document.querySelectorAll(".validate-input");
             _context10.prev = 1;
 
@@ -5178,6 +5176,160 @@ var resetPassFn = /*#__PURE__*/function () {
             _context10.next = 5;
             return (0, _axios.default)({
               method: "PATCH",
+              url: "api/v1/buyer/updateMe",
+              data: {
+                name: name
+              }
+            });
+
+          case 5:
+            res = _context10.sent;
+            _context10.next = 11;
+            break;
+
+          case 8:
+            _context10.next = 10;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "api/v1/seller/updateMe",
+              data: {
+                name: name
+              }
+            });
+
+          case 10:
+            res = _context10.sent;
+
+          case 11:
+            if (res.data.status === "success") {
+              location.reload();
+            }
+
+            _context10.next = 19;
+            break;
+
+          case 14:
+            _context10.prev = 14;
+            _context10.t0 = _context10["catch"](1);
+            showValidate(input[0]);
+            input[0].dataset.validate = _context10.t0.response.data.message;
+            return _context10.abrupt("return", false);
+
+          case 19:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10, null, [[1, 14]]);
+  }));
+
+  return function updateDetails(_x17) {
+    return _ref10.apply(this, arguments);
+  };
+}();
+
+exports.updateDetails = updateDetails;
+
+var updatePassword = /*#__PURE__*/function () {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(passwordCurrent, password, passwordConfirm) {
+    var input, res;
+    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            input = document.querySelectorAll(".validate-input");
+            _context11.prev = 1;
+
+            if (window.location.href.includes("seller")) {
+              _context11.next = 8;
+              break;
+            }
+
+            _context11.next = 5;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "api/v1/buyer/updateMyPassword",
+              data: {
+                passwordCurrent: passwordCurrent,
+                password: password,
+                passwordConfirm: passwordConfirm
+              }
+            });
+
+          case 5:
+            res = _context11.sent;
+            _context11.next = 11;
+            break;
+
+          case 8:
+            _context11.next = 10;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "api/v1/seller/updateMyPassword",
+              data: {
+                passwordCurrent: passwordCurrent,
+                password: password,
+                passwordConfirm: passwordConfirm
+              }
+            });
+
+          case 10:
+            res = _context11.sent;
+
+          case 11:
+            if (res.data.status === "success") {
+              (0, _alerts.showAlert)("success", "Password Changed successfully!");
+              window.setTimeout(function () {
+                location.reload();
+              }, 300);
+            }
+
+            _context11.next = 20;
+            break;
+
+          case 14:
+            _context11.prev = 14;
+            _context11.t0 = _context11["catch"](1);
+            console.log(_context11.t0.response.data);
+            showValidate(input[1]);
+            input[1].dataset.validate = _context11.t0.response.data.message;
+            return _context11.abrupt("return", false);
+
+          case 20:
+          case "end":
+            return _context11.stop();
+        }
+      }
+    }, _callee11, null, [[1, 14]]);
+  }));
+
+  return function updatePassword(_x18, _x19, _x20) {
+    return _ref11.apply(this, arguments);
+  };
+}();
+
+exports.updatePassword = updatePassword;
+
+var resetPassFn = /*#__PURE__*/function () {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(token, password, passwordConfirm) {
+    var input, res;
+    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+      while (1) {
+        switch (_context12.prev = _context12.next) {
+          case 0:
+            // const emailInput = document.querySelector(".emailInpt");
+            // const email = emailInput.value;
+            input = document.querySelectorAll(".validate-input");
+            _context12.prev = 1;
+
+            if (window.location.href.includes("seller")) {
+              _context12.next = 8;
+              break;
+            }
+
+            _context12.next = 5;
+            return (0, _axios.default)({
+              method: "PATCH",
               url: "/api/v1/buyer/resetPassword/".concat(token),
               data: {
                 password: password,
@@ -5186,13 +5338,13 @@ var resetPassFn = /*#__PURE__*/function () {
             });
 
           case 5:
-            res = _context10.sent;
-            _context10.next = 12;
+            res = _context12.sent;
+            _context12.next = 12;
             break;
 
           case 8:
             console.log(email);
-            _context10.next = 11;
+            _context12.next = 11;
             return (0, _axios.default)({
               method: "PATCH",
               url: "/api/v1/seller/resetPassword/".concat(token),
@@ -5203,7 +5355,7 @@ var resetPassFn = /*#__PURE__*/function () {
             });
 
           case 11:
-            res = _context10.sent;
+            res = _context12.sent;
 
           case 12:
             if (res.data.status === "success") {
@@ -5211,30 +5363,30 @@ var resetPassFn = /*#__PURE__*/function () {
               if (!window.location.href.includes("seller")) window.location.href = "/login";else window.location.href = "/seller-login";
             }
 
-            _context10.next = 20;
+            _context12.next = 20;
             break;
 
           case 15:
-            _context10.prev = 15;
-            _context10.t0 = _context10["catch"](1);
+            _context12.prev = 15;
+            _context12.t0 = _context12["catch"](1);
             showValidate(input[0]); // if (err.response.data.message.includes("Cast to string failed"))
 
-            input[0].dataset.validate = _context10.t0.response.data.message;
-            return _context10.abrupt("return", false);
+            input[0].dataset.validate = _context12.t0.response.data.message;
+            return _context12.abrupt("return", false);
 
           case 20:
             console.log("sendmail");
 
           case 21:
           case "end":
-            return _context10.stop();
+            return _context12.stop();
         }
       }
-    }, _callee10, null, [[1, 15]]);
+    }, _callee12, null, [[1, 15]]);
   }));
 
-  return function resetPassFn(_x17, _x18, _x19) {
-    return _ref10.apply(this, arguments);
+  return function resetPassFn(_x21, _x22, _x23) {
+    return _ref12.apply(this, arguments);
   };
 }();
 
@@ -5246,96 +5398,96 @@ function showValidate(input) {
 }
 
 var updateCart = /*#__PURE__*/function () {
-  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(prodId, qty) {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(prodId, qty) {
     var res;
-    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
-            _context11.prev = 0;
-            _context11.next = 3;
+            _context13.prev = 0;
+            _context13.next = 3;
             return (0, _axios.default)({
               method: "PATCH",
               url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
             });
 
           case 3:
-            res = _context11.sent;
+            res = _context13.sent;
 
             if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
               // location.reload();
             }
 
-            _context11.next = 10;
+            _context13.next = 10;
             break;
 
           case 7:
-            _context11.prev = 7;
-            _context11.t0 = _context11["catch"](0);
-            console.log("ERRRRORR", _context11.t0); // showAlert("error", err.response.data.message);
+            _context13.prev = 7;
+            _context13.t0 = _context13["catch"](0);
+            console.log("ERRRRORR", _context13.t0); // showAlert("error", err.response.data.message);
 
           case 10:
-            return _context11.abrupt("return", true);
+            return _context13.abrupt("return", true);
 
           case 11:
           case "end":
-            return _context11.stop();
+            return _context13.stop();
         }
       }
-    }, _callee11, null, [[0, 7]]);
+    }, _callee13, null, [[0, 7]]);
   }));
 
-  return function updateCart(_x20, _x21) {
-    return _ref11.apply(this, arguments);
+  return function updateCart(_x24, _x25) {
+    return _ref13.apply(this, arguments);
   };
 }();
 
 exports.updateCart = updateCart;
 
 var logout = /*#__PURE__*/function () {
-  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
+  var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
     var res, url, hasUrl;
-    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+    return _regeneratorRuntime().wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context12.prev = _context12.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
-            _context12.prev = 0;
-            _context12.next = 3;
+            _context14.prev = 0;
+            _context14.next = 3;
             return (0, _axios.default)({
               method: "GET",
               url: "/api/v1/user/logout"
             });
 
           case 3:
-            res = _context12.sent;
+            res = _context14.sent;
 
             if (res.data.status = "success") {
-              url = ["account", "myCart", "checkOut", "myOrders", "negotiate", "seller_products"];
+              url = ["account", "myCart", "checkOut", "editAccount", "myOrders", "negotiate", "seller_products"];
               hasUrl = url.map(function (e) {
                 return window.location.href.includes(e);
               });
               if (hasUrl.includes(true)) window.location.href = "/";else if (!window.location.href.includes("seller-login")) location.reload();
             }
 
-            _context12.next = 11;
+            _context14.next = 11;
             break;
 
           case 7:
-            _context12.prev = 7;
-            _context12.t0 = _context12["catch"](0);
-            console.log(_context12.t0.response);
+            _context14.prev = 7;
+            _context14.t0 = _context14["catch"](0);
+            console.log(_context14.t0.response);
             (0, _alerts.showAlert)("error", "Error logging out! Try again.");
 
           case 11:
           case "end":
-            return _context12.stop();
+            return _context14.stop();
         }
       }
-    }, _callee12, null, [[0, 7]]);
+    }, _callee14, null, [[0, 7]]);
   }));
 
   return function logout() {
-    return _ref12.apply(this, arguments);
+    return _ref14.apply(this, arguments);
   };
 }();
 
@@ -5915,6 +6067,12 @@ var negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 var negoPgreply = document.querySelectorAll(".replyNegoBtn");
 var negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 var negoReplyPrice = document.querySelectorAll(".replyValue");
+var updateNameInput = document.querySelector(".updateName");
+var updateNameBtn = document.querySelector(".updateNameBtn");
+var oldPassInput = document.querySelector(".oldPassUpdate");
+var newPassInput = document.querySelector(".newPassUpdate");
+var confirmPassInput = document.querySelector(".confirmPassUpdate");
+var updatePassBtn = document.querySelector(".updatePassBtn");
 console.log(forgotPassBtn);
 (0, _checkOut.addListener)();
 
@@ -6045,6 +6203,18 @@ if (resetPassBtn) {
   resetPassBtn.addEventListener("click", function () {
     console.log("Click");
     (0, _ApiCalls.resetPassFn)(passConfirmReset.dataset.token, passwordReset.value, passConfirmReset.value);
+  });
+}
+
+if (updateNameBtn) {
+  updateNameBtn.addEventListener("click", function () {
+    (0, _ApiCalls.updateDetails)(updateNameInput.value);
+  });
+}
+
+if (updatePassBtn) {
+  updatePassBtn.addEventListener("click", function () {
+    if (!oldPassInput.value) showValidate(oldPassInput);else if (!newPassInput.value) showValidate(newPassInput);else if (!confirmPassInput.value) showValidate(confirmPassInput);else (0, _ApiCalls.updatePassword)(oldPassInput.value, newPassInput.value, confirmPassInput.value);
   });
 }
 

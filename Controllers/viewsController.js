@@ -154,6 +154,11 @@ exports.getForgotPassword = (req, res) => {
     token: req.params.token,
   });
 };
+exports.getEditAccount = (req, res) => {
+  res.status(200).render("editAccount", {
+    title: "Edit Your Details",
+  });
+};
 /////////////////////////////////SELLER
 exports.sellerProducts = catchAsync(async (req, res, next) => {
   res.status(200).render("seller_products", {
