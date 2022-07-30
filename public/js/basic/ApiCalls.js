@@ -2,7 +2,6 @@
 import axios from "axios";
 import { showAlert } from "./alerts";
 const addCartBtn = document.querySelector(".cartBtn");
-
 export const login = async (email, password) => {
   const input = document.querySelectorAll(".validate-input");
 
@@ -186,7 +185,7 @@ export const replyNego = async (negoId, replyPrice) => {
       data: { replyPrice },
     });
     if (res.data.status === "success") {
-      // location.reload();
+      location.reload();
       // const nego = document.querySelector(".negoRow");
       // console.log(nego);
       // if (nego) location.reload();
@@ -197,6 +196,43 @@ export const replyNego = async (negoId, replyPrice) => {
     // showAlert("error", err.response.data.message);
   }
   return true;
+};
+export const forgPassFn = async () => {
+  const emailInput = document.querySelector(".emailInpt");
+  const email = emailInput.value;
+  const input = document.querySelectorAll(".validate-input");
+
+  try {
+    let res;
+    if (!window.location.href.includes("seller")) {
+      res = await axios({
+        method: "POST",
+        url: "api/v1/buyer/forgotPassword",
+        data: {
+          email,
+        },
+      });
+    } else {
+      console.log(email);
+      res = await axios({
+        method: "POST",
+        url: "api/v1/seller/forgotPassword",
+        data: {
+          email,
+        },
+      });
+    }
+    if (res.data.status === "success") {
+      location.reload();
+    }
+  } catch (err) {
+    showValidate(input[0]);
+    if (err.response.data.message.includes("Cast to string failed"))
+      input[0].dataset.validate = "The given mail id is not registered";
+    return false;
+    // showAlert("error", err.response.data.message);
+  }
+  console.log("sendmail");
 };
 
 function showValidate(input) {

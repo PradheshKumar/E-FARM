@@ -148,6 +148,12 @@ exports.getLoginForm = (req, res) => {
     title: "Log into your account",
   });
 };
+exports.getForgotPassword = (req, res) => {
+  res.status(200).render("forgotPassword", {
+    title: "Change Your Password",
+    token: req.params.token,
+  });
+};
 /////////////////////////////////SELLER
 exports.sellerProducts = catchAsync(async (req, res, next) => {
   res.status(200).render("seller_products", {

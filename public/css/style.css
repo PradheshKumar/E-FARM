@@ -697,23 +697,27 @@ ul.cart-list p .price {
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  color: white;
   position: relative;
   background: #35b440;
   -webkit-transition-property: color;
   transition-property: color;
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
+  transition: all ease-in-out 0.3s !important;
   border-radius: 0;
   box-shadow: none;
 }
 .hvr-hover::after {
   content: "";
+  transition: all ease-in-out 0.3s !important;
   position: absolute;
   z-index: -1;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  color: white;
   background: #000000;
   border-radius: 100%;
   -webkit-transform: scale(0);

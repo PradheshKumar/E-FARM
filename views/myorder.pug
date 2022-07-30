@@ -26,7 +26,7 @@ block content
                                     th Total Price
                                     th Estimated Delivery Date                             
                             tbody
-                                each order,i in User.currentOrders
+                                each order,i in user.currentOrders
                                     tr.cartProducts
                                         td.thumbnail-img
                                             a(href=`/viewOrder/${order.id}`)= i+1

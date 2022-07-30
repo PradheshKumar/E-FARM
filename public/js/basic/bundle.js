@@ -4575,7 +4575,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateCart = exports.signUp = exports.rmCart = exports.replyNego = exports.logout = exports.login = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
+exports.updateCart = exports.signUp = exports.rmCart = exports.replyNego = exports.logout = exports.login = exports.forgPassFn = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -5047,8 +5047,8 @@ var replyNego = /*#__PURE__*/function () {
           case 3:
             res = _context8.sent;
 
-            if (res.data.status === "success") {// location.reload();
-              // const nego = document.querySelector(".negoRow");
+            if (res.data.status === "success") {
+              location.reload(); // const nego = document.querySelector(".negoRow");
               // console.log(nego);
               // if (nego) location.reload();
               // else window.location.href = "/";
@@ -5080,61 +5080,92 @@ var replyNego = /*#__PURE__*/function () {
 
 exports.replyNego = replyNego;
 
+var forgPassFn = /*#__PURE__*/function () {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+    var emailInput, email, input, res;
+    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            emailInput = document.querySelector(".emailInpt");
+            email = emailInput.value;
+            input = document.querySelectorAll(".validate-input");
+            _context9.prev = 3;
+
+            if (window.location.href.includes("seller")) {
+              _context9.next = 10;
+              break;
+            }
+
+            _context9.next = 7;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "api/v1/buyer/forgotPassword",
+              data: {
+                email: email
+              }
+            });
+
+          case 7:
+            res = _context9.sent;
+            _context9.next = 14;
+            break;
+
+          case 10:
+            console.log(email);
+            _context9.next = 13;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "api/v1/seller/forgotPassword",
+              data: {
+                email: email
+              }
+            });
+
+          case 13:
+            res = _context9.sent;
+
+          case 14:
+            if (res.data.status === "success") {
+              location.reload();
+            }
+
+            _context9.next = 22;
+            break;
+
+          case 17:
+            _context9.prev = 17;
+            _context9.t0 = _context9["catch"](3);
+            showValidate(input[0]);
+            if (_context9.t0.response.data.message.includes("Cast to string failed")) input[0].dataset.validate = "The given mail id is not registered";
+            return _context9.abrupt("return", false);
+
+          case 22:
+            console.log("sendmail");
+
+          case 23:
+          case "end":
+            return _context9.stop();
+        }
+      }
+    }, _callee9, null, [[3, 17]]);
+  }));
+
+  return function forgPassFn() {
+    return _ref9.apply(this, arguments);
+  };
+}();
+
+exports.forgPassFn = forgPassFn;
+
 function showValidate(input) {
   var thisAlert = $(input);
   $(thisAlert).addClass("alert-validate");
 }
 
 var updateCart = /*#__PURE__*/function () {
-  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(prodId, qty) {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(prodId, qty) {
     var res;
-    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-      while (1) {
-        switch (_context9.prev = _context9.next) {
-          case 0:
-            _context9.prev = 0;
-            _context9.next = 3;
-            return (0, _axios.default)({
-              method: "PATCH",
-              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
-            });
-
-          case 3:
-            res = _context9.sent;
-
-            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
-              // location.reload();
-            }
-
-            _context9.next = 10;
-            break;
-
-          case 7:
-            _context9.prev = 7;
-            _context9.t0 = _context9["catch"](0);
-            console.log("ERRRRORR", _context9.t0); // showAlert("error", err.response.data.message);
-
-          case 10:
-            return _context9.abrupt("return", true);
-
-          case 11:
-          case "end":
-            return _context9.stop();
-        }
-      }
-    }, _callee9, null, [[0, 7]]);
-  }));
-
-  return function updateCart(_x17, _x18) {
-    return _ref9.apply(this, arguments);
-  };
-}();
-
-exports.updateCart = updateCart;
-
-var logout = /*#__PURE__*/function () {
-  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
-    var res, url, hasUrl;
     return _regeneratorRuntime().wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
@@ -5142,29 +5173,27 @@ var logout = /*#__PURE__*/function () {
             _context10.prev = 0;
             _context10.next = 3;
             return (0, _axios.default)({
-              method: "GET",
-              url: "/api/v1/user/logout"
+              method: "PATCH",
+              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
             });
 
           case 3:
             res = _context10.sent;
 
-            if (res.data.status = "success") {
-              url = ["account", "myCart", "checkOut", "myOrders", "negotiate", "seller_products"];
-              hasUrl = url.map(function (e) {
-                return window.location.href.includes(e);
-              });
-              if (hasUrl.includes(true)) window.location.href = "/";else if (!window.location.href.includes("seller-login")) location.reload();
+            if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
+              // location.reload();
             }
 
-            _context10.next = 11;
+            _context10.next = 10;
             break;
 
           case 7:
             _context10.prev = 7;
             _context10.t0 = _context10["catch"](0);
-            console.log(_context10.t0.response);
-            (0, _alerts.showAlert)("error", "Error logging out! Try again.");
+            console.log("ERRRRORR", _context10.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context10.abrupt("return", true);
 
           case 11:
           case "end":
@@ -5174,8 +5203,57 @@ var logout = /*#__PURE__*/function () {
     }, _callee10, null, [[0, 7]]);
   }));
 
-  return function logout() {
+  return function updateCart(_x17, _x18) {
     return _ref10.apply(this, arguments);
+  };
+}();
+
+exports.updateCart = updateCart;
+
+var logout = /*#__PURE__*/function () {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+    var res, url, hasUrl;
+    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            _context11.prev = 0;
+            _context11.next = 3;
+            return (0, _axios.default)({
+              method: "GET",
+              url: "/api/v1/user/logout"
+            });
+
+          case 3:
+            res = _context11.sent;
+
+            if (res.data.status = "success") {
+              url = ["account", "myCart", "checkOut", "myOrders", "negotiate", "seller_products"];
+              hasUrl = url.map(function (e) {
+                return window.location.href.includes(e);
+              });
+              if (hasUrl.includes(true)) window.location.href = "/";else if (!window.location.href.includes("seller-login")) location.reload();
+            }
+
+            _context11.next = 11;
+            break;
+
+          case 7:
+            _context11.prev = 7;
+            _context11.t0 = _context11["catch"](0);
+            console.log(_context11.t0.response);
+            (0, _alerts.showAlert)("error", "Error logging out! Try again.");
+
+          case 11:
+          case "end":
+            return _context11.stop();
+        }
+      }
+    }, _callee11, null, [[0, 7]]);
+  }));
+
+  return function logout() {
+    return _ref11.apply(this, arguments);
   };
 }();
 
@@ -5186,17 +5264,18 @@ exports.logout = logout;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.signUpForm = void 0;
+exports.signUpForm = exports.forgotPasswordForm = void 0;
 
 var _ApiCalls = require("./ApiCalls.js");
 
 var loginForm = document.querySelector(".login100-form");
 var input;
-var markup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
+var signUpmarkup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
+var forgotMarkup = "<span class=\"login100-form-title p-b-53\">Forgot Password </span>\n \n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100 emailInpt\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  \n  <div class=\"container-login100-form-btn m-t-17 \">\n    <button type=\"button\" class=\"login100-form-btn forgotPassword\" >Send Mail</button>\n  </div>";
 
 var signUpForm = function signUpForm(e) {
   e.preventDefault();
-  loginForm.innerHTML = markup;
+  loginForm.innerHTML = signUpmarkup;
   input = document.querySelectorAll(".validate-input .input100");
   document.querySelector(".signupBtn").addEventListener("click", signUpFn);
   input.forEach(function (el) {
@@ -5229,6 +5308,20 @@ var signUpFn = function signUpFn(e) {
     return false;
   }
 };
+
+var forgotPasswordForm = function forgotPasswordForm() {
+  // e.preventDefault();
+  loginForm.innerHTML = forgotMarkup;
+  input = document.querySelectorAll(".validate-input .input100");
+  document.querySelector(".forgotPassword").addEventListener("click", _ApiCalls.forgPassFn);
+  input.forEach(function (el) {
+    el.addEventListener("focus", function () {
+      hideValidate(el);
+    });
+  });
+};
+
+exports.forgotPasswordForm = forgotPasswordForm;
 
 function validate(input) {
   if ($(input).attr("type") == "email" || $(input).attr("name") == "email") {
@@ -5730,10 +5823,12 @@ var subTotal = document.querySelector(".subTotal");
 var tax = document.querySelector(".tax");
 var grandTotal = document.querySelector(".grandTotal");
 var negoBtn = document.querySelectorAll(".negoBtn");
+var forgotPassBtn = document.querySelector(".forgotPass");
 var negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 var negoPgreply = document.querySelectorAll(".replyNegoBtn");
 var negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 var negoReplyPrice = document.querySelectorAll(".replyValue");
+console.log(forgotPassBtn[0]);
 (0, _checkOut.addListener)();
 
 if (form) {
@@ -5741,8 +5836,6 @@ if (form) {
     e.preventDefault(); // return check;
   });
 }
-
-console.log(window.location.search.slice(6));
 
 if (window.location.href.includes("seller")) {
   (0, _sellerSide.sellerSideHandle)();
@@ -5775,6 +5868,10 @@ if (logoutBtn) {
 
 if (signUpFormBtn) {
   signUpFormBtn.addEventListener("click", _loginForm.signUpForm);
+}
+
+if (forgotPassBtn) {
+  forgotPassBtn.addEventListener("click", _loginForm.forgotPasswordForm);
 }
 
 if (addCartBtn) {
@@ -5828,13 +5925,15 @@ if (negoPgaccept) {
   });
 }
 
-console.log(negoPgreply);
-
 if (negoPgreply) {
   negoPgreply.forEach(function (el, i) {
-    console.log(negoReplyPrice[i]);
     el.addEventListener("click", function () {
-      (0, _ApiCalls.replyNego)(el.dataset.id, negoReplyPrice[i].value);
+      var negoReply;
+      negoReplyPrice.forEach(function (replyBtn) {
+        if (replyBtn.dataset.id == el.dataset.id) negoReply = replyBtn;
+      }); // console.log(negoReplyPrice);
+
+      (0, _ApiCalls.replyNego)(el.dataset.id, negoReply.value);
     });
   });
 }

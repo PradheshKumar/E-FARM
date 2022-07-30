@@ -11,7 +11,7 @@ import {
   cancelNego,
   replyNego,
 } from "./ApiCalls.js";
-import { signUpForm } from "./loginForm.js";
+import { signUpForm, forgotPasswordForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
 import { sellerSideHandle } from "./sellerSide.js";
 const input = document.querySelectorAll(".validate-input .input100");
@@ -27,10 +27,12 @@ const subTotal = document.querySelector(".subTotal");
 const tax = document.querySelector(".tax");
 const grandTotal = document.querySelector(".grandTotal");
 const negoBtn = document.querySelectorAll(".negoBtn");
+const forgotPassBtn = document.querySelector(".forgotPass");
 const negoPgaccept = document.querySelectorAll(".acceptNegoBtn");
 const negoPgreply = document.querySelectorAll(".replyNegoBtn");
 const negoPgcancel = document.querySelectorAll(".cancelNegoBtn");
 const negoReplyPrice = document.querySelectorAll(".replyValue");
+console.log(forgotPassBtn[0]);
 addListener();
 if (form) {
   form.addEventListener("submit", function (e) {
@@ -39,7 +41,6 @@ if (form) {
     // return check;
   });
 }
-console.log(window.location.search.slice(6));
 if (window.location.href.includes("seller")) {
   sellerSideHandle();
 }
@@ -67,6 +68,9 @@ if (logoutBtn) {
 }
 if (signUpFormBtn) {
   signUpFormBtn.addEventListener("click", signUpForm);
+}
+if (forgotPassBtn) {
+  forgotPassBtn.addEventListener("click", forgotPasswordForm);
 }
 if (addCartBtn) {
   addCartBtn.addEventListener("click", () => {
@@ -119,12 +123,15 @@ if (negoPgaccept) {
     });
   });
 }
-console.log(negoPgreply);
 if (negoPgreply) {
   negoPgreply.forEach((el, i) => {
-    console.log(negoReplyPrice[i]);
     el.addEventListener("click", () => {
-      replyNego(el.dataset.id, negoReplyPrice[i].value);
+      let negoReply;
+      negoReplyPrice.forEach((replyBtn) => {
+        if (replyBtn.dataset.id == el.dataset.id) negoReply = replyBtn;
+      });
+      // console.log(negoReplyPrice);
+      replyNego(el.dataset.id, negoReply.value);
     });
   });
 }

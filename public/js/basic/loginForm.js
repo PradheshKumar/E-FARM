@@ -1,9 +1,9 @@
 const loginForm = document.querySelector(".login100-form");
 
-import { signUp } from "./ApiCalls.js";
+import { signUp, forgPassFn } from "./ApiCalls.js";
 let input;
 
-const markup = `<span class="login100-form-title p-b-53">Sign Up </span>
+const signUpmarkup = `<span class="login100-form-title p-b-53">Sign Up </span>
   <div class="p-t-31 p-b-9"><span class="txt1">Name</span></div>
   <div class="wrap-input100 validate-input" data-validate="User Name is required">
     <input class="input100" type="text" name="username"/><span class="focus-input100"></span>
@@ -23,10 +23,20 @@ const markup = `<span class="login100-form-title p-b-53">Sign Up </span>
   <div class="container-login100-form-btn m-t-17 signupBtn">
     <button type="button" class="login100-form-btn signupBtn" >Sign Up</button>
   </div>`;
+const forgotMarkup = `<span class="login100-form-title p-b-53">Forgot Password </span>
+ 
+  <div class="p-t-31 p-b-9"><span class="txt1">Email Address</span></div>
+  <div class="wrap-input100 validate-input" data-validate="Email Id is required">
+    <input class="input100 emailInpt" type="text" name="email"/><span class="focus-input100"></span>
+  </div>
+  
+  <div class="container-login100-form-btn m-t-17 ">
+    <button type="button" class="login100-form-btn forgotPassword" >Send Mail</button>
+  </div>`;
 
 export const signUpForm = (e) => {
   e.preventDefault();
-  loginForm.innerHTML = markup;
+  loginForm.innerHTML = signUpmarkup;
   input = document.querySelectorAll(".validate-input .input100");
   document.querySelector(".signupBtn").addEventListener("click", signUpFn);
   input.forEach((el) => {
@@ -55,6 +65,20 @@ const signUpFn = (e) => {
     return false;
   }
 };
+export const forgotPasswordForm = () => {
+  // e.preventDefault();
+  loginForm.innerHTML = forgotMarkup;
+  input = document.querySelectorAll(".validate-input .input100");
+  document
+    .querySelector(".forgotPassword")
+    .addEventListener("click", forgPassFn);
+  input.forEach((el) => {
+    el.addEventListener("focus", () => {
+      hideValidate(el);
+    });
+  });
+};
+
 function validate(input) {
   if ($(input).attr("type") == "email" || $(input).attr("name") == "email") {
     if (

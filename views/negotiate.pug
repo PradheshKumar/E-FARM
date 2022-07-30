@@ -52,7 +52,7 @@ block content
                                                 else
                                                     p= `₹ ${nego.currentBid}`
                                             td.quantity-box
-                                                input.qtyInput.c-input-text.replyValue(type='number' size='4' value=nego.currentBid min='1'  step='1' data-id=i data-prodid=nego.product.id)
+                                                input.c-input-text.replyValue(type='number' size='4' value=nego.currentBid min='1'  step='1' data-id=nego.id data-prodid=nego.product.id)
                                             if( Number(nego.negoStage)%2 ==0)
                                                 td.remove-pr
                                                     a(href='#')
