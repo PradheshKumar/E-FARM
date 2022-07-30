@@ -18,6 +18,7 @@ import { sellerSideHandle } from "./sellerSide.js";
 const input = document.querySelectorAll(".validate-input .input100");
 const form = document.querySelector(".validate-form");
 const loginBtn = document.querySelector(".loginBtn");
+const loginRedirectBtn = document.querySelector(".loginRedirectBtn");
 const logoutBtn = document.querySelector(".logoutBtn");
 const signUpFormBtn = document.querySelector(".signupForm");
 const addCartBtn = document.querySelector(".cartBtn");
@@ -48,6 +49,8 @@ if (form) {
 if (window.location.href.includes("seller")) {
   sellerSideHandle();
 }
+if (window.location.href.includes("login"))
+  loginRedirectBtn.parentElement.parentElement.remove();
 if (loginBtn) {
   loginBtn.addEventListener("click", () => {
     if (window.location.href.includes("seller")) logout();

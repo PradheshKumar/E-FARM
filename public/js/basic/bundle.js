@@ -5896,6 +5896,7 @@ var _sellerSide = require("./sellerSide.js");
 var input = document.querySelectorAll(".validate-input .input100");
 var form = document.querySelector(".validate-form");
 var loginBtn = document.querySelector(".loginBtn");
+var loginRedirectBtn = document.querySelector(".loginRedirectBtn");
 var logoutBtn = document.querySelector(".logoutBtn");
 var signUpFormBtn = document.querySelector(".signupForm");
 var addCartBtn = document.querySelector(".cartBtn");
@@ -5926,6 +5927,8 @@ if (form) {
 if (window.location.href.includes("seller")) {
   (0, _sellerSide.sellerSideHandle)();
 }
+
+if (window.location.href.includes("login")) loginRedirectBtn.parentElement.parentElement.remove();
 
 if (loginBtn) {
   loginBtn.addEventListener("click", function () {
