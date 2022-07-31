@@ -38,7 +38,7 @@ function sortFn() {
   } else if (sort.value == 4) {
     url.searchParams.set("sort", "name");
   } else {
-    url.searchParams.set("sort", "Average");
+    url.searchParams.set("sort", "-ratingsAverage");
   }
 
   window.location.href = url;
