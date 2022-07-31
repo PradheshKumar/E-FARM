@@ -42,6 +42,7 @@ export const addListener = () => {
   }
   if (placeOrderBtn) {
     placeOrderBtn.addEventListener("click", () => {
+      if (pay == 1) placeOrderBtn.innerHTML == "Redirecting ....";
       placeOrder(delTime);
     });
   }

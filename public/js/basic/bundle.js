@@ -5717,6 +5717,7 @@ var addListener = function addListener() {
 
   if (placeOrderBtn) {
     placeOrderBtn.addEventListener("click", function () {
+      if (pay == 1) placeOrderBtn.innerHTML == "Redirecting ....";
       placeOrder(delTime);
     });
   }
