@@ -59,7 +59,7 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Seller",
     },
-    type: String,
+    type: { type: String, enum: ["vegetable", "fruit", "leaf", "crop"] },
     stockLeft: { type: Number, required: [true, "Enter Remaining Stock"] },
     img: [String],
   },
