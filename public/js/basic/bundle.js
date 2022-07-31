@@ -6126,7 +6126,8 @@ if (forgotPassBtn) {
 if (addCartBtn) {
   var qty = document.getElementById("qtyBox");
   qty.addEventListener("change", function () {
-    if (qty.value > qty.max) qty.value = qty.max;
+    // console.log(qty.value > qty.dataset.max, qty.value, qty.dataset.max);
+    if (Number(qty.value) > Number(qty.max)) qty.value = qty.max;
   });
   addCartBtn.addEventListener("click", function () {
     (0, _ApiCalls.addToCart)(window.location.pathname.split("/")[2]);
