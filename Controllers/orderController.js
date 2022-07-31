@@ -33,6 +33,7 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
   products.forEach(async (el, i) => {
     let stockLeft = el.stockLeft;
     stockLeft -= req.body.productsQty[i];
+    if (stockLeft < 0) stockLeft = 0;
     await Product.findByIdAndUpdate(el.id, {
       stockLeft,
     });
