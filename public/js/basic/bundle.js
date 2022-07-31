@@ -6123,10 +6123,11 @@ if (forgotPassBtn) {
   forgotPassBtn.addEventListener("click", _loginForm.forgotPasswordForm);
 }
 
-console.log(addCartBtn);
-
 if (addCartBtn) {
-  console.log(addCartBtn, "vcvc");
+  var qty = document.getElementById("qtyBox");
+  qty.addEventListener("change", function () {
+    if (qty.value > qty.max) qty.value = qty.max;
+  });
   addCartBtn.addEventListener("click", function () {
     (0, _ApiCalls.addToCart)(window.location.pathname.split("/")[2]);
   });

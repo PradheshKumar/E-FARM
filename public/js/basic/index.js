@@ -88,9 +88,11 @@ if (signUpFormBtn) {
 if (forgotPassBtn) {
   forgotPassBtn.addEventListener("click", forgotPasswordForm);
 }
-console.log(addCartBtn);
 if (addCartBtn) {
-  console.log(addCartBtn, "vcvc");
+  const qty = document.getElementById("qtyBox");
+  qty.addEventListener("change", () => {
+    if (qty.value > qty.max) qty.value = qty.max;
+  });
   addCartBtn.addEventListener("click", () => {
     addToCart(window.location.pathname.split("/")[2]);
   });
