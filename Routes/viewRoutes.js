@@ -29,12 +29,7 @@ router.get(
   viewsController.getIndex
 );
 router.get("/aboutUs", authController.isLoggedIn, viewsController.getAbout);
-router.get(
-  "/overview",
-  authController.isLoggedIn,
-  allowBuyer,
-  viewsController.getOverview
-);
+router.get("/overview", authController.isLoggedIn, viewsController.getOverview);
 router.get(
   "/myCart",
   authController.isLoggedIn,

@@ -69,20 +69,22 @@ block content
             h4 Short Description:
             p= products[0].summary
             ul
+              if(!user || user.role!="seller")
+                if(products[0].stockLeft !=0)
+                  li
+                    .form-group.quantity-box
+                      label.control-label Quantity
+                      input.form-control#qtyBox(value='0' min='0' max=products[0].stockLeft type='number')
+                else 
+                  p No stock available
+            if(!user || user.role!="seller")
               if(products[0].stockLeft !=0)
-                li
-                  .form-group.quantity-box
-                    label.control-label Quantity
-                    input.form-control#qtyBox(value='0' min='0' max=products[0].stockLeft type='number')
-              else 
-                p No stock available
-            if(products[0].stockLeft !=0)
-              .price-box-bar
-                .cart-and-bay-btn
-                  if(user)
-                    button.btn.hvr-hover.cartBtn(data-fancybox-close='') Add to cart
-                  else
-                    a(href=`/login?prod=${products[0].id}`).btn.hvr-hover.cartBtn Login to add to Cart
+                .price-box-bar
+                  .cart-and-bay-btn
+                    if(user)
+                      button.btn.hvr-hover.cartBtn(data-fancybox-close='') Add to cart
+                    else
+                      a(href=`/login?prod=${products[0].id}`).btn.hvr-hover.cartBtn Login to add to Cart
             .product-rating
               - var n = 0;
               while n++<Math.floor(products[0].ratingsAverage)
