@@ -31,13 +31,7 @@ app.set("views", path.join(__dirname, "views"));
 // Implement m
 app.use(cors());
 // Access-Control-Allow-Origin *
-// api.natours.com, front-end natours.com
-// app.use(cors({
-//   origin: 'https://www.natours.com'
-// }))
-
 app.options("*", cors());
-// app.options('/api/v1/tours/:id', cors());
 
 // Serving static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -91,14 +85,6 @@ const limiter = rateLimit({
 });
 app.use("/api", limiter);
 
-// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
-// app.post(
-//   "/webhook-checkout",
-//   bodyParser.raw({ type: "application/json" }),
-//   bookingController.webhookCheckout
-// );
-
-// app.use(bodyParser());
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
