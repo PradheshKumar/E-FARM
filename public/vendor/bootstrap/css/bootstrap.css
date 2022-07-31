@@ -511,7 +511,7 @@ mark,
   content: "\2014 \00A0";
 }
 
-.img-fluid {
+.img-fluid {padding-bottom: 1rem;
   max-width: 100%;
   height: auto;
 }
