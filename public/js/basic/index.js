@@ -45,8 +45,51 @@ const oldPassInput = document.querySelector(".oldPassUpdate");
 const newPassInput = document.querySelector(".newPassUpdate");
 const confirmPassInput = document.querySelector(".confirmPassUpdate");
 const updatePassBtn = document.querySelector(".updatePassBtn");
-console.log(forgotPassBtn);
+const negoIds = document.querySelectorAll(".negoId");
 addListener();
+function showNotification(name, bid, negoStage) {
+  var notification = new Notification(" New bid for your Negotiation  ", {
+    body: `New bid for The product(${name}) : ₹${bid} `,
+    icon: "img/logo.png",
+  });
+  notification.onclick = () => {
+    // console.log(negoStage);
+    if (negoStage % 2 != 0) window.location.href = "/negotiate";
+    else window.location.href = "/seller_negotiate";
+  };
+}
+
+if (negoIds) {
+  // console.log(negoIds[0].dataset.id);
+  var socket = io();
+  negoIds.forEach((el) => {
+    socket.emit("join", { id: el.dataset.id });
+  });
+  socket.on("wel", (arg) => {
+    console.log(negoIds[0].dataset.user, arg.negoStage);
+    if (negoIds[0].dataset.user == "buyer" && arg.negoStage % 2 != 0) {
+      if (localStorage.getItem("notify"))
+        showNotification(arg.name, arg.bid, arg.negoStage);
+      else
+        Notification.requestPermission().then((permission) => {
+          if (permission == "granted") {
+            localStorage.setItem("notify", true);
+            showNotification(arg.name, arg.bid, arg.negoStage);
+          }
+        });
+    } else if (negoIds[0].dataset.user == "seller" && arg.negoStage % 2 == 0) {
+      if (localStorage.getItem("notify"))
+        showNotification(arg.name, arg.bid, arg.negoStage);
+      else
+        Notification.requestPermission().then((permission) => {
+          if (permission == "granted") {
+            localStorage.setItem("notify", true);
+            showNotification(arg.name, arg.bid, arg.negoStage);
+          }
+        });
+    }
+  });
+}
 if (form) {
   form.addEventListener("submit", function (e) {
     e.preventDefault();

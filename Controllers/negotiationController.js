@@ -6,6 +6,7 @@ const AppError = require("../utils/appError");
 const Seller = require("../Models/sellerModel");
 const Buyer = require("../Models/buyerModel");
 const Email = require("../utils/email");
+const serverJs = require("../server");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 let bid;
@@ -167,6 +168,13 @@ exports.replyBid = catchAsync(async (req, res, next) => {
       $inc: { negoStage: 1 },
       currentBid: req.body.replyPrice,
     });
+
+    serverJs.sendMsg(
+      nego.id,
+      nego.currentBid,
+      nego.negoStage,
+      nego.product.name
+    );
     bid = nego;
     sendNegoMail(req, res, "old");
   } catch (e) {

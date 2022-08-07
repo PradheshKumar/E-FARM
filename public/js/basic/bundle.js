@@ -5047,8 +5047,8 @@ var replyNego = /*#__PURE__*/function () {
           case 3:
             res = _context8.sent;
 
-            if (res.data.status === "success") {
-              location.reload(); // const nego = document.querySelector(".negoRow");
+            if (res.data.status === "success") {// location.reload();
+              // const nego = document.querySelector(".negoRow");
               // console.log(nego);
               // if (nego) location.reload();
               // else window.location.href = "/";
@@ -6074,8 +6074,49 @@ var oldPassInput = document.querySelector(".oldPassUpdate");
 var newPassInput = document.querySelector(".newPassUpdate");
 var confirmPassInput = document.querySelector(".confirmPassUpdate");
 var updatePassBtn = document.querySelector(".updatePassBtn");
-console.log(forgotPassBtn);
+var negoIds = document.querySelectorAll(".negoId");
 (0, _checkOut.addListener)();
+
+function showNotification(name, bid, negoStage) {
+  var notification = new Notification(" New bid for your Negotiation  ", {
+    body: "New bid for The product(".concat(name, ") : \u20B9").concat(bid, " "),
+    icon: "img/logo.png"
+  });
+
+  notification.onclick = function () {
+    // console.log(negoStage);
+    if (negoStage % 2 != 0) window.location.href = "/negotiate";else window.location.href = "/seller_negotiate";
+  };
+}
+
+if (negoIds) {
+  // console.log(negoIds[0].dataset.id);
+  var socket = io();
+  negoIds.forEach(function (el) {
+    socket.emit("join", {
+      id: el.dataset.id
+    });
+  });
+  socket.on("wel", function (arg) {
+    console.log(negoIds[0].dataset.user, arg.negoStage);
+
+    if (negoIds[0].dataset.user == "buyer" && arg.negoStage % 2 != 0) {
+      if (localStorage.getItem("notify")) showNotification(arg.name, arg.bid, arg.negoStage);else Notification.requestPermission().then(function (permission) {
+        if (permission == "granted") {
+          localStorage.setItem("notify", true);
+          showNotification(arg.name, arg.bid, arg.negoStage);
+        }
+      });
+    } else if (negoIds[0].dataset.user == "seller" && arg.negoStage % 2 == 0) {
+      if (localStorage.getItem("notify")) showNotification(arg.name, arg.bid, arg.negoStage);else Notification.requestPermission().then(function (permission) {
+        if (permission == "granted") {
+          localStorage.setItem("notify", true);
+          showNotification(arg.name, arg.bid, arg.negoStage);
+        }
+      });
+    }
+  });
+}
 
 if (form) {
   form.addEventListener("submit", function (e) {
@@ -6276,7 +6317,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62975" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58566" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

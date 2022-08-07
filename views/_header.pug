@@ -15,6 +15,9 @@ doctype html
                 a(href=`/account`)
                   i.fa.fa-user.s_color
                   |  My Account
+                if user.negotiations
+                  each nego in user.negotiations
+                    span(class="negoId" data-id=nego.id data-user= user.role)
            
             if(!user)
               li
