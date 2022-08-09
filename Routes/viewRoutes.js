@@ -50,12 +50,12 @@ router.get(
   viewsController.getNegotiations
 );
 router.get("/account", authController.isLoggedIn, viewsController.getAccount);
-
 router.get(
   "/product/:id",
   authController.isLoggedIn,
   viewsController.getProduct
 );
+router.get("/productsWithin/:latlngDist", viewsController.withinRange);
 router.get("/login", viewsController.getLoginForm);
 router.get(
   "/search/:key",

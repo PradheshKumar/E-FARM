@@ -25,6 +25,7 @@ exports.getMe = (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   setUser(res);
+
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -37,9 +38,18 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(req.body, "name", "email");
   // 3) Update user
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+  let updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     runValidators: true,
   });
+  const temp = req.body.location.coordinates[0];
+  req.body.location.coordinates[0] = req.body.location.coordinates[1];
+  req.body.location.coordinates[1] = temp;
+
+  updatedUser = await User.findByIdAndUpdate(req.user.id, {
+    location: req.body.location,
+  });
+
+  console.log(this.updateUser);
   // Yes, it's a valid ObjectId, proceed with `findById` call.
 
   res.status(200).json({
@@ -169,3 +179,34 @@ exports.rmCart = catchAsync(async (req, res, next) => {
   });
 });
 exports.addProduct = factory.createOne(Product);
+
+// /tours-within/:distance/center/:latlng
+// /tours-within/233/center/13.058029017820031, 80.27323196844695
+exports.getUserWithin = catchAsync(async (req, res, next) => {
+  setUser(res);
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(",");
+
+  const radius = distance / 6378.1;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        "Please provide latitude and longitude in the format lat,lng.",
+        400
+      )
+    );
+  }
+
+  const users = await User.find({
+    location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: "success",
+    results: users.length,
+    data: {
+      data: users,
+    },
+  });
+});

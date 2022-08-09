@@ -204,18 +204,43 @@
   $(function () {
     $("#slider-range").slider({
       range: true,
-      min: 0,
-      max: 4000,
-      values: [1000, 3000],
+      min: 1,
+      max: 500,
+      values: [1, 500],
       slide: function (event, ui) {
-        $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+        $("#amount").val(" ₹ " + ui.values[0] + " -  ₹ " + ui.values[1]);
+        $("#amount").attr("data-startPrice", ui.values[0]);
+        $("#amount").attr("data-endPrice", ui.values[1]);
+        $("#amount").attr("data-valueChange", 1);
       },
     });
     $("#amount").val(
-      "$" +
+      " ₹ " +
         $("#slider-range").slider("values", 0) +
-        " - $" +
+        " -  ₹ " +
         $("#slider-range").slider("values", 1)
+    );
+    $("#amount").attr(
+      "data-startPrice",
+      $("#slider-range").slider("values", 0)
+    );
+    $("#amount").attr("data-endPrice", $("#slider-range").slider("values", 1));
+  });
+  $(function () {
+    $("#slider-range-dist").slider({
+      range: true,
+      min: 50,
+      max: 1000,
+      values: [50, 1000],
+      slide: function (event, ui) {
+        $("#dist").val(ui.values[0] + "km -  " + ui.values[1] + " km");
+      },
+    });
+    $("#dist").val(
+      $("#slider-range-dist").slider("values", 0) +
+        " km -  " +
+        $("#slider-range-dist").slider("values", 1) +
+        " km"
     );
   });
 

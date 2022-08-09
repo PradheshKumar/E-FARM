@@ -392,3 +392,22 @@ export const logout = async () => {
     showAlert("error", "Error logging out! Try again.");
   }
 };
+export const filterPrice = async (start, end) => {
+  let url = window.location;
+  if (!url.search) url = url.search + `?price[gte]=${start}&price[lte]=${end}`;
+  else if (url.search.includes("type") && url.search.includes("price[gte]")) {
+    url =
+      url.search.slice(0, url.search.indexOf("price[gte]") - 1) +
+      `&price[gte]=${start}&price[lte]=${end}`;
+  } else if (url.search.includes("sort"))
+    url = `?price[gte]=${start}&price[lte]=${end}`;
+  else url = `?price[gte]=${start}&price[lte]=${end}`;
+  // url.searchParams.set("price[gte]", "3");
+  window.location.href = url;
+  // window.location.href = `${window.location.search}?price[gte]=${start}&price[lte]=${end}`;
+};
+export const withinDistance = async (dist) => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    window.location.href = `/productsWithin/${position.coords.latitude},${position.coords.longitude},${dist}?sort=-price&price[gte]=20&price[lte]=60`;
+  });
+};

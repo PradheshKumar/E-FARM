@@ -62,6 +62,16 @@ const productSchema = new mongoose.Schema(
     type: { type: String, enum: ["vegetable", "fruit", "leaf", "crop"] },
     stockLeft: { type: Number, required: [true, "Enter Remaining Stock"] },
     img: [String],
+    location: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: "Point",
+        enum: ["Point"],
+      },
+      coordinates: [Number],
+      city: String,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -72,6 +82,7 @@ const productSchema = new mongoose.Schema(
 // productSchema.index({ price: 1 });
 productSchema.index({ price: 1, ratingsAverage: -1 });
 productSchema.index({ slug: 1 });
+productSchema.index({ location: "2dsphere" });
 
 // Virtual populate
 // productSchema.virtual('reviews', {

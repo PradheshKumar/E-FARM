@@ -1,6 +1,7 @@
 extends base
 
 block content 
+ 
   // Start All Title Box
   .all-title-box
     .container
@@ -29,6 +30,7 @@ block content
                     option(value='4') Alphabetical Order
                     option(value='5') Avg Review
                 p= `Showing all ${products.length} results`
+                
               .col-12.col-sm-4.text-center.text-sm-right
                 ul.nav.nav-tabs.ml-auto
                   li
@@ -61,7 +63,8 @@ block content
                             a(href=`/product/${prod.id}`)
                               h4= prod.name
                               h5= `₹ ${prod.price} per ${prod.costPer}`
-                    
+                if(products.length==0)
+                  h1 No products found. Try changing filter Options
                 #list-view.tab-pane.fade(role='tabpanel')
                   each prod in products
                     .list-view-box
@@ -112,5 +115,32 @@ block content
                   | Leafs 
                 a.list-group-item.list-group-item-action(href='?type=crop')
                   | Crops 
+            .filter-price-left
+              .title-left
+                h3 Price
+              .price-box-slider
+                #slider-range
+                p
+                  input#amount.priceTxtOverview(type='text' readonly='' )
+                  
+            .filter-price-left
+              .title-left
+                h3 Distance(in km)
+              .price-box-slider
+                //- #slider-range-dist
+                p
+                  input.c-input-text.distValue(type='number' size='4' placeHolder="Enter Distance" min =0 step='10')
+                  //- input#dist.priceTxtOverview(type='text' readonly='' )
+                  button.filterBtn.btn.hvr-hover(type='submit') Filter
+  
+  // ALL PLUGINS
+  script(src='./../js/jquery-3.2.1.min.js')
+  script(src='./../js/jquery.superslides.min.js')
+  script(src='./../js/inewsticker.js')
+  script(src='./../js/images-loded.min.js')
+  script(src='./../js/owl.carousel.min.js')
+  script(src='./../js/baguetteBox.min.js')
+  script(src='./../js/jquery-ui.js')
+  script(src='./../js/custom.js')
            
   

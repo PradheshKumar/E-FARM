@@ -30,6 +30,16 @@ const sellerSchema = new mongoose.Schema({
     minlength: 8,
     select: false,
   },
+  location: {
+    // GeoJSON
+    type: {
+      type: String,
+      default: "Point",
+      enum: ["Point"],
+    },
+    coordinates: [Number],
+    city: String,
+  },
   currentOrders: [
     {
       type: mongoose.Schema.ObjectId,
@@ -63,6 +73,7 @@ const sellerSchema = new mongoose.Schema({
     },
   ],
 });
+sellerSchema.index({ location: "2dsphere" });
 sellerSchema.pre("save", async function (next) {
   // Only run this function if password was actually modified
   if (!this.isModified("password")) return next();

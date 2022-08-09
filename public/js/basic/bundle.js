@@ -4575,7 +4575,7 @@ exports.showAlert = showAlert;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updatePassword = exports.updateDetails = exports.updateCart = exports.signUp = exports.rmCart = exports.resetPassFn = exports.replyNego = exports.logout = exports.login = exports.forgPassFn = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
+exports.withinDistance = exports.updatePassword = exports.updateDetails = exports.updateCart = exports.signUp = exports.rmCart = exports.resetPassFn = exports.replyNego = exports.logout = exports.login = exports.forgPassFn = exports.filterPrice = exports.cancelNego = exports.addToCart = exports.addNego = exports.acceptNego = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -5492,6 +5492,60 @@ var logout = /*#__PURE__*/function () {
 }();
 
 exports.logout = logout;
+
+var filterPrice = /*#__PURE__*/function () {
+  var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(start, end) {
+    var url;
+    return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
+            url = window.location;
+            if (!url.search) url = url.search + "?price[gte]=".concat(start, "&price[lte]=").concat(end);else if (url.search.includes("type") && url.search.includes("price[gte]")) {
+              url = url.search.slice(0, url.search.indexOf("price[gte]") - 1) + "&price[gte]=".concat(start, "&price[lte]=").concat(end);
+            } else if (url.search.includes("sort")) url = "?price[gte]=".concat(start, "&price[lte]=").concat(end);else url = "?price[gte]=".concat(start, "&price[lte]=").concat(end); // url.searchParams.set("price[gte]", "3");
+
+            window.location.href = url; // window.location.href = `${window.location.search}?price[gte]=${start}&price[lte]=${end}`;
+
+          case 3:
+          case "end":
+            return _context15.stop();
+        }
+      }
+    }, _callee15);
+  }));
+
+  return function filterPrice(_x26, _x27) {
+    return _ref15.apply(this, arguments);
+  };
+}();
+
+exports.filterPrice = filterPrice;
+
+var withinDistance = /*#__PURE__*/function () {
+  var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(dist) {
+    return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+      while (1) {
+        switch (_context16.prev = _context16.next) {
+          case 0:
+            navigator.geolocation.getCurrentPosition(function (position) {
+              window.location.href = "/productsWithin/".concat(position.coords.latitude, ",").concat(position.coords.longitude, ",").concat(dist, "?sort=-price&price[gte]=20&price[lte]=60");
+            });
+
+          case 1:
+          case "end":
+            return _context16.stop();
+        }
+      }
+    }, _callee16);
+  }));
+
+  return function withinDistance(_x28) {
+    return _ref16.apply(this, arguments);
+  };
+}();
+
+exports.withinDistance = withinDistance;
 },{"axios":"../../../node_modules/axios/index.js","./alerts":"alerts.js"}],"loginForm.js":[function(require,module,exports) {
 "use strict";
 
@@ -6075,6 +6129,9 @@ var newPassInput = document.querySelector(".newPassUpdate");
 var confirmPassInput = document.querySelector(".confirmPassUpdate");
 var updatePassBtn = document.querySelector(".updatePassBtn");
 var negoIds = document.querySelectorAll(".negoId");
+var filterBtn = document.querySelector(".filterBtn");
+var distValue = document.querySelector(".distValue"); // const filterBtn = document.querySelectorAll(".filterBtn");
+
 (0, _checkOut.addListener)();
 
 function showNotification(name, bid, negoStage) {
@@ -6115,6 +6172,14 @@ if (negoIds) {
         }
       });
     }
+  });
+}
+
+var a = document.querySelector("#amount");
+
+if (filterBtn) {
+  filterBtn.addEventListener("click", function () {
+    if (distValue.value) (0, _ApiCalls.withinDistance)(distValue.value);else (0, _ApiCalls.filterPrice)(a.dataset.startprice, a.dataset.endprice);
   });
 }
 
@@ -6317,7 +6382,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58566" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60799" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

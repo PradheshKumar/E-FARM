@@ -13,6 +13,8 @@ import {
   resetPassFn,
   updateDetails,
   updatePassword,
+  filterPrice,
+  withinDistance,
 } from "./ApiCalls.js";
 import { signUpForm, forgotPasswordForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
@@ -46,6 +48,9 @@ const newPassInput = document.querySelector(".newPassUpdate");
 const confirmPassInput = document.querySelector(".confirmPassUpdate");
 const updatePassBtn = document.querySelector(".updatePassBtn");
 const negoIds = document.querySelectorAll(".negoId");
+const filterBtn = document.querySelector(".filterBtn");
+const distValue = document.querySelector(".distValue");
+// const filterBtn = document.querySelectorAll(".filterBtn");
 addListener();
 function showNotification(name, bid, negoStage) {
   var notification = new Notification(" New bid for your Negotiation  ", {
@@ -88,6 +93,13 @@ if (negoIds) {
           }
         });
     }
+  });
+}
+const a = document.querySelector("#amount");
+if (filterBtn) {
+  filterBtn.addEventListener("click", () => {
+    if (distValue.value) withinDistance(distValue.value);
+    else filterPrice(a.dataset.startprice, a.dataset.endprice);
   });
 }
 if (form) {

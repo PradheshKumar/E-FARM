@@ -1931,6 +1931,30 @@ ul.cart-list > li.total > .btn:hover {
   margin-top: 14px;
   width: 100%;
 }
+#slider-range-dist .ui-slider-handle {
+  background-color: #35b440;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 21px;
+  top: -6px;
+  transition: none 0s ease 0s;
+  width: 21px;
+  box-shadow: 0px 0px 6.65px 0.35px rgba(0, 0, 0, 0.15);
+}
+#slider-range-dist .ui-slider-range {
+  background-color: #35b440;
+  border-radius: 0;
+}
+#slider-range-dist {
+  background: #000000;
+  border: medium none;
+  border-radius: 50px;
+  float: left;
+  height: 10px;
+  margin-top: 14px;
+  width: 100%;
+}
 .price-box-slider p {
   clear: both;
   margin-top: 20px;
@@ -2221,6 +2245,10 @@ ul.cart-list > li.total > .btn:hover {
 .payment-icon ul li {
   width: 20%;
   float: left;
+}
+.priceTxtOverview {
+  border: 0;
+  color: #000000;
 }
 .needs-validation label {
   font-size: 16px;

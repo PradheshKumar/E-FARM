@@ -6,6 +6,11 @@ const setUser = (req, res, next) => {
   res.locals.user = "seller";
   next();
 };
+router.get(
+  "/sellerWithin/:distance/center/:latlng",
+  setUser,
+  userController.getUserWithin
+);
 router.post("/signup", setUser, authController.signup);
 router.post("/login", setUser, authController.login);
 router.get("/logout", setUser, authController.logout);

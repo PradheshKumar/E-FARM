@@ -11,6 +11,10 @@ router
   .get(productController.getProduct)
   .patch(productController.updateProduct)
   .delete(productController.deleteProduct);
+router.get(
+  "/productsWithin/:distance/center/:latlng",
+  productController.getProductsWithin
+);
 
 router.get("/search/:key", productController.searchProduct);
 // Protect all routes after this middleware

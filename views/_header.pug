@@ -51,7 +51,7 @@ header.main-header
         button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar-menu' aria-controls='navbars-rs-food' aria-expanded='false' aria-label='Toggle navigation')
           i.fa.fa-bars
         a.navbar-brand(href='/')
-          img.logo(src='./../img/logo.png' alt='')
+          img.logo(src='./../../img/logo.png' alt='')
         //-   img.logo(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4
         //- //8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==' alt='')
       // End Header Navigation
@@ -92,7 +92,7 @@ header.main-header
                   li
                     a.photo(href='#')
                       if(prod.img=="")
-                        img.cart-thumb(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo`)
+                        img.cart-thumb(src=`./../../img/${prod.images[0]}` alt=`${prod.name} photo`)
                       else 
                         img.cart-thumb(src=`data:image/png;base64,${prod.img[0]}` alt=`${prod.name} photo`)
                     h6

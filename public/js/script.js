@@ -4,14 +4,15 @@ const search = document.querySelectorAll(".searchInput");
 
 const imgBtns = [...imgs];
 let url = new URL(window.location.href);
-
+console.log(url.searchParams);
 let imgId = 1;
 if (sort) {
-  if (window.location.href.slice(-6) == "-price") sort.value = 2;
-  else if (window.location.href.slice(-6) == "=price") sort.value = 3;
-  else if (window.location.href.slice(-4) == "name") sort.value = 4;
-  else if (window.location.href.slice(-7) == "Average") sort.value = 5;
+  if (window.location.href.includes("-price")) sort.value = 2;
+  else if (window.location.href.includes("=price")) sort.value = 3;
+  else if (window.location.href.includes("name")) sort.value = 4;
+  else if (window.location.href.includes("Average")) sort.value = 5;
 }
+console.log(sort.value);
 
 imgBtns.forEach((imgItem) => {
   imgItem.addEventListener("click", (event) => {
@@ -28,7 +29,15 @@ if (sort) {
   sort.addEventListener("change", sortFn);
 }
 function sortFn() {
-  url.searchParams.set("sort", "3");
+  let priceFilter;
+  if (window.location.href.includes("price[gte]"))
+    priceFilter = window.location.search.slice(
+      window.location.search.indexOf("price[gte]")
+    );
+  // console.log(priceFilter);
+
+  url.href = url.href.slice(0, url.href.indexOf("price[gte]"));
+  // url.searchParams.set("sort", "3");
   if (sort.value == 1) {
     url.searchParams.delete("sort");
   } else if (sort.value == 2) {
@@ -40,8 +49,9 @@ function sortFn() {
   } else {
     url.searchParams.set("sort", "-ratingsAverage");
   }
-
-  window.location.href = url;
+  if (priceFilter.includes("price[gte]"))
+    window.location.href = url + "&" + priceFilter;
+  else window.location.href = url;
 }
 function slideImage() {
   const displayWidth = document.querySelector(
