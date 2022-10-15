@@ -9,6 +9,7 @@ export const login = async (email, password, id) => {
     let res;
     if (!window.location.pathname.includes("seller")) {
       res = await axios({
+        
         method: "POST",
         url: "/api/v1/user/login",
         data: {

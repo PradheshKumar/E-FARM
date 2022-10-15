@@ -60,7 +60,7 @@ function slideImage() {
   }px)`;
 }
 function searchFn(e) {
-  if (!window.location.href.includes("farm"))
+  if (!window.location.pathname.includes("farm"))
     window.location.href = `/search/${e.target.value}`;
   else window.location.href = `/farmSearch/${e.target.value}`;
 }
