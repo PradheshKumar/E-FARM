@@ -7,6 +7,7 @@ const farmProductSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      dimensions: String,
       required: [true, "A Product must have a name"],
       trim: true,
       maxlength: [
