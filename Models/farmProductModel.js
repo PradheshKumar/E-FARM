@@ -7,7 +7,6 @@ const farmProductSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      dimensions: String,
       required: [true, "A Product must have a name"],
       trim: true,
       maxlength: [
@@ -33,7 +32,6 @@ const farmProductSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, "A Product must have a price"],
     },
     quantity: Number,
     summary: {
@@ -50,8 +48,8 @@ const farmProductSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "FarmSeller",
     },
-    type: { type: String, enum: ["seed", "tool", "tractor", "fertilizer"] },
-    stockLeft: { type: Number, required: [true, "Enter Remaining Stock"] },
+    type: { type: String, enum: ["seed", "tool", "tractor", "fertilizer","warehouse"] },
+    stockLeft: { type: Number },
     location: {
       // GeoJSON
       type: {

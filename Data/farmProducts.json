@@ -85,4 +85,22 @@
   "rentPrice":6000
 
 }
+{
+  "images": ["farm/warehouse.jpg", "farm/warehouse1.jpg", "farm/warehouse2.jpg"],
+  "name": "WareHouse",
+  "summary": "A large warehouse with a dimension of around 38,000 square fee. ",
+  "type": "warehouse",
+  "rent":true,
+  "rentPrice":5000
+
+}
+{
+  "images": ["farm/warehouseac.jpg", "farm/warehouseac1.jpg", "farm/warehouseac2.jpg"],
+  "name": "Air Conditioned WareHouse",
+  "summary": "A large Air Conditioned warehouse with a dimension of around 33,000 square feet",
+  "type": "warehouse",
+  "rent":true,
+  "rentPrice":7000
+
+}
 }

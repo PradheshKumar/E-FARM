@@ -40,12 +40,14 @@ block content
         .col-xl-7.col-lg-7.col-md-6
           .single-product-details
             h2= products[0].name
-            h5= `₹ ${products[0].price}`
+            if(products[0].type!="warehouse")
+              h5= `₹ ${products[0].price}`
             if(products[0].rent)
               h4 Rent Price:
               h5= `₹ ${products[0].rentPrice}  /day` 
-            p.available-stock
-              span= `${products[0].stockLeft} available in stock`
+            if(products[0].type!="warehouse")
+              p.available-stock
+                span= `${products[0].stockLeft} available in stock`
             p
             h4 Short Description:
             p= products[0].summary
@@ -113,7 +115,7 @@ block content
                     .box-img-hover
                       a(href=`/farmProduct/${prod.id}`)
                         img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
-                     
+                
       
       
       .row.my-5
@@ -131,8 +133,7 @@ block content
                         p.sale Rentable
                     img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
                    
-                        
-                      a.cart(href=`/farmProduct/${prod.id}`) Add to Cart
+              
                   .why-text
                     a(href=`/farmProduct/${prod.id}`)
                       h4= prod.name

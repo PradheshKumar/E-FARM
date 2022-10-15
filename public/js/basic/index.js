@@ -59,19 +59,19 @@ const cityBtn = document.querySelectorAll(".cityBtn");
 const tableLst = document.querySelectorAll(".tableLst");
 const chartImg = document.querySelectorAll(".chartImg");
 addMicListner();
-if(window.location.href.includes("weather")) renderWeather();
+if(window.location.pathname.includes("weather")) renderWeather();
 if (navItem) {
   navItem.forEach((el) => {
     el.classList.remove("active");
     // el.removeClass("active");
   });
-  if (window.location.href.includes("/overview")) {
+  if (window.location.pathname.includes("/overview")) {
     navItem[2].classList.add("active");
-  } else if (window.location.href.includes("/aboutUs"))
+  } else if (window.location.pathname.includes("/aboutUs"))
     navItem[1].classList.add("active");
   else if (window.location.pathname == "/") navItem[0].classList.add("active");
 }
-if (window.location.href.includes("productsWithin"))
+if (window.location.pathname.includes("productsWithin"))
   distValue.value = window.location.href.split(",")[2].split("?")[0];
 addListener();
 let distChange = false;
@@ -137,13 +137,13 @@ if (form) {
   });
 }
 if (
-  window.location.href.includes("seller") ||
-  window.location.href.includes("rent") ||
-  window.location.href.includes("Rents")
+  window.location.pathname.includes("seller") ||
+  window.location.pathname.includes("rent") ||
+  window.location.pathname.includes("Rents")
 ) {
   sellerSideHandle();
 }
-// if (window.location.href.includes("login"))
+// if (window.location.pathname.includes("login"))
 //   loginRedirectBtn.parentElement.parentElement.remove();
 if (loginBtn) {
   let id;

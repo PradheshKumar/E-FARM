@@ -7,7 +7,7 @@ export const login = async (email, password, id) => {
 
   try {
     let res;
-    if (!window.location.href.includes("seller")) {
+    if (!window.location.pathname.includes("seller")) {
       res = await axios({
         method: "POST",
         url: "/api/v1/user/login",
@@ -29,7 +29,7 @@ export const login = async (email, password, id) => {
     if (res.data.status === "success") {
       showAlert("success", "Logged in successfully!");
       window.setTimeout(() => {
-        if (!window.location.href.includes("seller")) {
+        if (!window.location.pathname.includes("seller")) {
           if (window.location.search.includes("prod"))
             location.assign(`/product/${window.location.search.slice(6)}`);
           else location.assign("/");
@@ -49,7 +49,7 @@ export const login = async (email, password, id) => {
 export const signUp = async (name, email, password, passwordConfirm, id) => {
   const input = document.querySelectorAll(".validate-input");
   try {
-    if (!window.location.href.includes("seller")) {
+    if (!window.location.pathname.includes("seller")) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         const lat = position.coords.latitude;
         const long = position.coords.longitude;
@@ -131,7 +131,7 @@ export const addToCart = async (prodId) => {
       const res = await axios({
         method: "POST",
         url: `/api/v1/${
-          window.location.href.includes("farm") ? "seller" : "buyer"
+          window.location.pathname.includes("farm") ? "seller" : "buyer"
         }/addCart/${prodId}/${qty}`,
       });
       if (res.data.status === "success") {
@@ -247,7 +247,7 @@ export const forgPassFn = async () => {
 
   try {
     let res;
-    if (!window.location.href.includes("seller")) {
+    if (!window.location.pathname.includes("seller")) {
       res = await axios({
         method: "POST",
         url: "api/v1/buyer/forgotPassword",
@@ -278,7 +278,7 @@ export const updateDetails = async (name) => {
   const input = document.querySelectorAll(".validate-input");
   try {
     let res;
-    if (!window.location.href.includes("seller")) {
+    if (!window.location.pathname.includes("seller")) {
       res = await axios({
         method: "PATCH",
         url: "api/v1/buyer/updateMe",
@@ -313,7 +313,7 @@ export const updatePassword = async (
   const input = document.querySelectorAll(".validate-input");
   try {
     let res;
-    if (!window.location.href.includes("seller")) {
+    if (!window.location.pathname.includes("seller")) {
       res = await axios({
         method: "PATCH",
         url: "api/v1/buyer/updateMyPassword",
@@ -346,7 +346,7 @@ export const resetPassFn = async (token, password, passwordConfirm) => {
 
   try {
     let res;
-    if (!window.location.href.includes("seller")) {
+    if (!window.location.pathname.includes("seller")) {
       res = await axios({
         method: "PATCH",
         url: `/api/v1/buyer/resetPassword/${token}`,
@@ -366,7 +366,7 @@ export const resetPassFn = async (token, password, passwordConfirm) => {
       });
     }
     if (res.data.status === "success") {
-      if (!window.location.href.includes("seller"))
+      if (!window.location.pathname.includes("seller"))
         window.location.href = "/login";
       else window.location.href = "/seller-login";
     }
@@ -419,10 +419,10 @@ export const logout = async () => {
       ];
 
       const hasUrl = url.map((e) => {
-        return window.location.href.includes(e);
+        return window.location.pathname.includes(e);
       });
       if (hasUrl.includes(true)) window.location.href = "/";
-      else if (!window.location.href.includes("seller-login"))
+      else if (!window.location.pathname.includes("seller-login"))
         location.reload();
     }
   } catch (err) {
@@ -445,7 +445,7 @@ export const filterPrice = async (start, end) => {
 };
 export const withinDistance = async (dist) => {
   navigator.geolocation.getCurrentPosition((position) => {
-    if (!window.location.href.includes("farm"))
+    if (!window.location.pathname.includes("farm"))
       window.location.href = `/productsWithin/${position.coords.latitude},${position.coords.longitude},${dist}`;
     else
       window.location.href = `/farmProductsWithin/${position.coords.latitude},${position.coords.longitude},${dist}`;

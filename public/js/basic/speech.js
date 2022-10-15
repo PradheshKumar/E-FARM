@@ -50,7 +50,7 @@ let apiUrl = `https://api.mymemory.translated.net/get?q=${data1}&langpair=hi|en`
           
         const res = await axios({
           method: "GET",
-          url:  `/api/v1/${window.location.href.includes("farm")?"farmProduct":"product"}`,
+          url:  `/api/v1/${window.location.pathname.includes("farm")?"farmProduct":"product"}`,
         });
         let searchData =[]
         
@@ -71,7 +71,7 @@ let apiUrl = `https://api.mymemory.translated.net/get?q=${data1}&langpair=hi|en`
               return el.includes(transTxt);
           })
             if(available.includes(true)){
-                if(window.location.href.includes("farm")) window.location.href=`/farmSearch/${searchData[available.indexOf(true)]}`
+                if(window.location.pathname.includes("farm")) window.location.href=`/farmSearch/${searchData[available.indexOf(true)]}`
                 else window.location.href= `/search/${searchData[available.indexOf(true)]}`
             }
             else{location.reload(); 
