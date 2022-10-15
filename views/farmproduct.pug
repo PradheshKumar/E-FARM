@@ -65,7 +65,7 @@ block content
                 .price-box-bar
                   .cart-and-bay-btn
                     if(user)
-                      if(products.type!="warehouse")
+                      if(products.type=="warehouse")
                         button.btn.hvr-hover.cartBtn(data-fancybox-close='') Add to cart
                       if(products[0].rent)
                         a(href=`/rent/${products[0].id}` style="margin-left: 20px").btn.hvr-hover Take For Rent  
@@ -138,7 +138,7 @@ block content
                   .why-text
                     a(href=`/farmProduct/${prod.id}`)
                       h4= prod.name
-                      if(products.type!="warehouse")
+                      if(prod.type!="warehouse")
                         h5= `₹ ${prod.price}`
                       else 
                         h5= `₹ ${prod.rentPrice} /day`
