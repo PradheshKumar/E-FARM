@@ -64,6 +64,10 @@ block content
                                     h3 Shipping Method
                                 .mb-4
                                 .custom-control.custom-radio
+                                    input#shippingOption0.custom-control-input.delToggle(name='shipping-option' checked='checked' type='radio' data-id="0")
+                                    label.custom-control-label(for='shippingOption0') Self Pickup
+                                    span.float-right.font-weight-bold FREE
+                                .custom-control.custom-radio
                                     input#shippingOption1.custom-control-input.delToggle(name='shipping-option' checked='checked' type='radio' data-id="1")
                                     label.custom-control-label(for='shippingOption1') Standard Delivery
                                     span.float-right.font-weight-bold FREE
@@ -86,7 +90,7 @@ block content
                                     each prod,i in user.cart
                                         .media.mb-2.border-bottom
                                             .media-body
-                                                a(href=`/product/${prod.id}` data-id=prod.id data-qty=user.cartQty[i] data-buyer=user.id).prodName= prod.name
+                                                a(href=`/${user.role=="seller"?"farmProduct":"product"}/${prod.id}` data-id=prod.id data-qty=user.cartQty[i] data-buyer=user.id data-role=user.role).prodName= prod.name
                                                 .small.text-muted
                                                     | Price: ₹#{prod.price}.00` 
                                                     span.mx-2 |

@@ -1,7 +1,8 @@
 extends base
 
 block content 
- 
+  
+
   // Start All Title Box
   .all-title-box
     .container
@@ -23,7 +24,7 @@ block content
               .col-12.col-sm-8.text-center.text-sm-left
                 .toolbar-sorter-right
                   span Sort by 
-                  select#basic.selectpicker.show-tick.form-control.sortDropDown(data-placeholder='$ USD')
+                  select#basic.show-tick.form-control.sortDropDown(data-placeholder='$ USD')
                     option(data-display='Select' value ="1") Default
                     option(value='2') High Price &rarr; Low Price
                     option(value='3') Low Price &rarr; High Price
@@ -48,17 +49,9 @@ block content
                         .products-single.fix
                           .box-img-hover
                             .type-lb
-                            if(prod.img=="")
-                              img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo`)
-                            else 
-                              img.img-fluid(src=`data:image/png;base64,${prod.img[0]}` alt=`${prod.name} photo`) 
-                            .mask-icon
-                              ul
-                                li
-                                  a(href=`/product/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
-                                    i.fas.fa-eye
+                            img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
+                      
                                 
-                              a.cart(href=`/product/${prod.id}`) Add to Cart
                           .why-text
                             a(href=`/product/${prod.id}`)
                               h4= prod.name
@@ -73,17 +66,9 @@ block content
                           .products-single.fix
                             .box-img-hover
                               .type-lb
-                              if(prod.img=="")
-                                img.img-fluid(src=`./../img/${prod.images[0]}` alt='Image')
-                              else 
-                                img.img-fluid(src=`data:image/png;base64,${prod.img[0]}` alt='Image') 
+                              img.img-fluid(src=`./../img/${prod.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'")
                               
-                              .mask-icon
-                                ul
-                                  li
-                                    a(href=`/product/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
-                                      i.fas.fa-eye
-                                  
+                            
                         .col-sm-6.col-md-6.col-lg-8.col-xl-8
                           a(href=`/product/${prod.id}`)
                             .why-text.full-width

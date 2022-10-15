@@ -1,9 +1,11 @@
 #slides {
   position: relative;
 }
+
 #slides .slides-container {
   display: none;
 }
+
 #slides .scrollable {
   *zoom: 1;
   position: relative;
@@ -13,6 +15,7 @@
   -webkit-overflow-scrolling: touch;
   height: 100%;
 }
+
 #slides .scrollable:after {
   content: "";
   display: table;
@@ -26,13 +29,16 @@
   top: 46%;
   width: 100%;
 }
+
 .slides-navigation a {
   position: absolute;
   display: block;
 }
+
 .slides-navigation a.prev {
   left: 0;
 }
+
 .slides-navigation a.next {
   right: 0;
 }
@@ -44,11 +50,12 @@
   text-align: center;
   width: 100%;
 }
+
 .slides-pagination a {
   border: 2px solid #222;
   border-radius: 0px;
-  width: 30px;
-  height: 30px;
+  width: 15px;
+  height: 15px;
   display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
@@ -61,6 +68,7 @@
   text-indent: -99999px;
   text-align: center;
 }
+
 .slides-pagination a.current {
   background: #222;
 }

@@ -1,0 +1,74 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+            .row
+                .col-lg-12
+                    h2 Rent Checkout
+                    ul.breadcrumb
+                        li.breadcrumb-item
+                            a(href='/farmOverview') Shop
+                        li.breadcrumb-item.active Rent Checkout
+    // End All Title Box
+    // Start Cart
+    .cart-box-main
+        .container
+            .row
+                .col-sm-6.col-lg-6.mb-3
+                    .checkout-address
+                    .title-left
+                        h3 Billing address
+                    form.needs-validation(novalidate='')
+                        .row
+                            .col-md-6.mb-3
+                                label(for='fullName') Full name *
+                                input#firstName.form-control(type='text' placeholder='' value=user.name required='')
+                                .invalid-feedback  Valid name is required. 
+                        .mb-3
+                            label(for='username') Username *
+                            .input-group
+                                a#username.form-control(type='text' placeholder='' required='')= user.name
+                                .invalid-feedback(style='width: 100%;')  Your username is required. 
+                        .mb-3
+                            label(for='email') Email Address *
+                            a#email.form-control(type='email' placeholder='')= user.email
+                            .invalid-feedback  Please enter a valid email address for shipping updates. 
+                        
+                        .row
+                             
+                            .col-md-3.mb-3
+                                label(for='pincode') PinCode *
+                                input#zip.form-control(type='text' placeholder='' required='' maxlength=6  pattern="^[0-9]{6}$" title="Enter Valid Pin Code")
+                                .invalid-feedback  Pin code required. 
+                  
+                     
+                        
+                    hr.mb-1
+                .col-sm-6.col-lg-6.mb-3
+                    .row
+                        .col-md-12.col-lg-12
+                            .shipping-method-box
+                                .title-left
+                                    h3 Shipping Method
+                                .mb-4
+                                .custom-control.custom-radio
+                                    input#shippingOption0.custom-control-input(name='shipping-option' checked='checked' type='radio')
+                                    label.custom-control-label(for='shippingOption0')= `Self Pickup Only (`
+                                    i(style="padding:0rem 1rem;color:#35b440").fa.fa-map-pin
+                                    a(href = `https://www.google.com/maps/place/${product.location.coordinates[1]},${product.location.coordinates[0]}` target="_blank" ) Click to View Pickup Location )
+                        .col-md-12.col-lg-12
+                            .odr-box
+                                .title-left
+                                    h3 Product
+                                .rounded.p-2.bg-light
+                                    .media.mb-2.border-bottom
+                                        .media-body
+                                            a(href=`/${user.role=="seller"?"farmProduct":"product"}/${product.id}`)= product.name
+                                            .small.text-muted
+                                                | Rent: ₹#{product.rentPrice}.00  /day` 
+                                                span.mx-2 |
+                                                |  Advance: ₹#{product.rentPrice}
+                        .col-12.d-flex.shopping-box
+                            a.ml-auto.btn.hvr-hover.plRent(href='#' style="margin-top:6rem" data-id=product.id data-buyer=user.id data-seller=product.seller.id) Place Order
+                    

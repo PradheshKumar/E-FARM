@@ -1,0 +1,140 @@
+extends base
+
+block content 
+ 
+  // Start All Title Box
+  .all-title-box
+    .container
+      .row
+        .col-lg-12
+          h2 Shop
+          ul.breadcrumb
+            li.breadcrumb-item
+              a(href='/') Home
+            li.breadcrumb-item.active Shop
+  // End All Title Box
+  // Start Shop Page
+  .shop-box-inner
+    .container
+      .row
+        .col-xl-9.col-lg-9.col-sm-12.col-xs-12.shop-content-right
+          .right-product-box
+            .product-item-filter.row
+              .col-12.col-sm-8.text-center.text-sm-left
+                .toolbar-sorter-right
+                  span Sort by 
+                  select#basic.show-tick.form-control.sortDropDown(data-placeholder='$ USD')
+                    option(data-display='Select' value ="1") Default
+                    option(value='2') High Price &rarr; Low Price
+                    option(value='3') Low Price &rarr; High Price
+                    option(value='4') Alphabetical Order
+                    option(value='5') Avg Review
+                p= `Showing all ${products.length} results`
+                
+              .col-12.col-sm-4.text-center.text-sm-right
+                ul.nav.nav-tabs.ml-auto
+                  li
+                    a.nav-link.active(href='#grid-view' data-toggle='tab')
+                      i.fa.fa-th
+                  li
+                    a.nav-link(href='#list-view' data-toggle='tab')
+                      i.fa.fa-list-ul
+            .product-categorie-box
+              .tab-content
+                #grid-view.tab-pane.fade.show.active(role='tabpanel')
+                  .row
+                    each prod in products
+                      .col-sm-6.col-md-6.col-lg-4.col-xl-4
+                        .products-single.fix
+                          .box-img-hover
+                            if(prod.rent)
+                              .type-lb
+                                p.sale Rentable
+                            img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
+                            .mask-icon
+                              ul
+                                li
+                                  a(href=`/farmProduct/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
+                                    i.fas.fa-eye
+                                
+                              a.cart(href=`/farmProduct/${prod.id}`) Add to Cart
+                          .why-text
+                            a(href=`/farmProduct/${prod.id}`)
+                              h4= prod.name
+                              h5= `₹ ${prod.price}`
+                if(products.length==0)
+                  h1 No products found. Try changing filter Options
+                #list-view.tab-pane.fade(role='tabpanel')
+                  each prod in products
+                    .list-view-box
+                      .row
+                        .col-sm-6.col-md-6.col-lg-4.col-xl-4
+                          .products-single.fix
+                            .box-img-hover
+                              if(prod.rent)
+                                .type-lb
+                                  p.sale Rentable
+                              img.img-fluid(src=`./../img/${prod.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'")
+                              
+                              .mask-icon
+                                ul
+                                  li
+                                    a(href=`/farmProduct/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
+                                      i.fas.fa-eye
+                                  
+                        .col-sm-6.col-md-6.col-lg-8.col-xl-8
+                          a(href=`/farmProduct/${prod.id}`)
+                            .why-text.full-width
+                            
+                              h4= prod.name
+                              h5= `₹ ${prod.price}`
+                              h6= prod.summary
+                              a.btn.hvr-hover(href=`/farmProduct/${prod.id}`) Add to Cart
+
+        .col-xl-3.col-lg-3.col-sm-12.col-xs-12.sidebar-shop-left
+          .product-categori
+            .search-product
+              
+                input.searchInput.form-control(placeholder='Search here...' type='text')
+                button(type='submit')
+                  i.fa.fa-search
+            .filter-sidebar-left
+              .title-left
+                h3 Categories
+              #list-group-men.list-group.list-group-collapse.list-group-sm.list-group-tree(data-children='.sub-men')
+                                                    
+                a.list-group-item.list-group-item-action(href='/farmOverview')
+                  | All  
+                a.list-group-item.list-group-item-action(href='?type=seed')
+                  | Seeds  
+                a.list-group-item.list-group-item-action(href='?type=tool')
+                  | Tools 
+                a.list-group-item.list-group-item-action(href='?type=tractor')
+                  | Tractor 
+                a.list-group-item.list-group-item-action(href='?type=fertilizer')
+                  | Fertilizer 
+                a.list-group-item.list-group-item-action(href='?rent=true')
+                  | Rentable 
+            
+                  
+            .filter-price-left
+              .title-left
+                h3 Distance(in km)
+              .price-box-slider
+                //- #slider-range-dist
+                p
+                  input.c-input-text.distValue(type='number' size='4' placeHolder="Enter Distance" min =0 step='10')
+                  //- input#dist.priceTxtOverview(type='text' readonly='' )
+                  button.filterBtn.btn.hvr-hover(type='submit') Filter
+  
+  // ALL PLUGINS
+  script(src='./../js/jquery-3.2.1.min.js')
+  script(src='./../js/jquery.superslides.min.js')
+  script(src='./../js/inewsticker.js')
+  script(src='./../js/images-loded.min.js')
+  script(src='./../js/owl.carousel.min.js')
+  script(src='./../js/baguetteBox.min.js')
+  script(src='./../js/jquery-ui.js')
+  script(src='./../js/custom.js')
+           
+  

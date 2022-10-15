@@ -32,12 +32,9 @@ block content
                                         p= i+1
                                       td.thumbnail-img
                                           a(href='#')
-                                              if(prod.img=="")
-                                                  img.img-fluid(src=`./../img/${prod.images[0]}` alt='')
-                                              else 
-                                                  img.img-fluid(src=`data:image/png;base64,${prod.img[0]}` alt='') 
+                                            img.img-fluid(src=`./../img/${prod.images[0]}` alt='' onError="this.src = './../img/default.jpg'") 
                                       td.name-pr
-                                          a(href=`/product/${prod.id}`)= prod.name
+                                          a(href=`/${user.role=="seller"?"farmProduct":"product"} /${prod.id}`)= prod.name
                                       td.price-pr
                                           p= `₹ ${prod.price}`
                                       td.quantity-box
@@ -70,15 +67,8 @@ block content
                 .box-img-hover
                   .type-lb
                     p.sale Sale
-                  if(product.img=="")
-                    img.img-fluid(src=`./../img/${product.images[0]}` alt='Image')
-                  else 
-                    img.img-fluid(src=`data:image/png;base64,${product.img[0]}` alt='Image') 
-                  .mask-icon
-                    ul
-                      li
-                        a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
-                          i.fas.fa-eye
+                  img.img-fluid(src=`./../img/${product.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'")
+                
                       
                     a.cart(href=`/product/${product.id}`) Add to Cart
                 .why-text
@@ -91,85 +81,13 @@ block content
                 .box-img-hover
                   .type-lb
                     p.sale Sale
-                  if(product.img=="")
-                    img.img-fluid(src=`./../img/${product.images[0]}` alt='Image')
-                  else 
-                    img.img-fluid(src=`data:image/png;base64,${product.img[0]}` alt='Image') 
-                  .mask-icon
-                    ul
-                      li
-                        a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
-                          i.fas.fa-eye
+                  img.img-fluid(src=`./../img/${product.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'") 
+            
                       
                     a.cart(href=`/product/${product.id}`) Add to Cart
                 .why-text
                   a(href=`/product/${product.id}` )
                     h4= product.name
                     h5=`₹ ${product.price} per ${product.costPer} `
-  
-  // End Blog
-  // Start Instagram Feed
-  .instagram-box
-    .main-instagram.owl-carousel.owl-theme
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-01.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-02.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-03.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-04.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-05.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-06.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-07.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-08.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-09.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='./../images/instagram-img-05.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-  
+
   

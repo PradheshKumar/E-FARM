@@ -36,26 +36,40 @@ block content
               .service-desc
                 h4 Edit Details
                 p Edit email, name
-        .col-lg-4.col-md-12
-          .account-box
-            .service-box
-              .service-icon
-                if(user.negotiations.length != 0)
-                  if(user.role!="seller")
-                    a(href='/negotiate')
-                      i.fa.fa-location-arrow
-                  else 
-                    a(href='/seller_negotiate')
-                      i.fa.fa-location-arrow
-                else
-                  a(href='#')
-                    i.fa.fa-location-arrow 
-              .service-desc
-                if(user.negotiations.length != 0)
-                  h4 Your Pending Negotiations
-                  p Accept,reply,cancel your negotiations
-                else
-                  h4 You Dont Have Pending Negotiations
+        if(user.role != "farmSeller")
+          .col-lg-4.col-md-12
+            .account-box
+              .service-box
+                .service-icon
+                  if(user.negotiations.length != 0)
+                    if(user.role!="seller")
+                      a(href='/negotiate')
+                        i.fa.fa-location-arrow
+                    else 
+                      a(href='/seller_negotiate')
+                        i.fa.fa-location-arrow
+                  else
+                    a(href='#')
+                      i.fa.fa-location-arrow 
+                .service-desc
+                  if(user.negotiations.length != 0)
+                    h4 Your Pending Negotiations
+                    p Accept,reply,cancel your negotiations
+                  else
+                    h4 You Dont Have Pending Negotiations
+        else 
+          .col-lg-4.col-md-12
+            .account-box
+              .service-box
+                .service-icon
+                  a(href='/MyRents')
+                    i.fa.fa-location-arrow
+                .service-desc
+                  if(user.rents.length != 0)
+                    h4 Your Rents
+                    p Manage your Rents
+                  else
+                    h4 You Dont Have Any Rents
         if(user.role == "seller")
           .col-lg-4.col-md-12
             .account-box
@@ -75,5 +89,14 @@ block content
                 .service-desc
                   h4 Sell a New Product
                   p Add a new Product
+          .col-lg-4.col-md-12
+            .account-box
+              .service-box
+                .service-icon
+                  a(href='/demand')
+                    i.fa.fa-chart-bar
+                .service-desc
+                  h4 Product Demands
+                  p Check the current demands for the products
         
       

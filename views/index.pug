@@ -4,7 +4,7 @@ block content
   
   // End Top Search
   // Start Slider
-  #slides-shop.cover-slides
+  #slides-shop.cover-slides(style="height:500.6px")
     ul.slides-container
       li.text-center
         img(src='images/banner-01.jpg' alt='')
@@ -13,15 +13,11 @@ block content
             .col-md-12
               h1.m-b-20
                 strong
-                  | Welcome To 
-                  br
-                  |  E-FARM
+                  | Welcome To E-FARM
               p.m-b-40
                 | Experience buying farm fresh products directly from the farmers.
                 br
                 |  Empowering Farmers
-              p
-                a.btn.hvr-hover(href='/overview') Shop Now
       li.text-center
         img(src='images/banner-02.jpg' alt='')
         .container
@@ -29,16 +25,11 @@ block content
             .col-md-12
               h1.m-b-20
                 strong
-                  | Welcome To 
-                  br
-                  |  E-FARM
+                  | Experience Quality Products
               p.m-b-40
                 | Experience buying farm fresh products directly from the farmers. 
                 br
-                |  Empowering Farmers
-              
-              p
-                a.btn.hvr-hover(href='/overview') Shop Now
+
       li.text-center
         img(src='images/banner-03.jpg' alt='')
         .container
@@ -46,16 +37,10 @@ block content
             .col-md-12
               h1.m-b-20
                 strong
-                  | Welcome To 
-                  br
-                  |  E-FARM
+                  | Quality Products Delivered To you
               p.m-b-40
-                | Experience buying farm fresh products directly from the farmers.
-                br
-                |  Empowering Farmers
+                | Get Products Delivered to your Doorstep
               
-              p
-                a.btn.hvr-hover(href='/overview') Shop Now
     .slides-navigation
       a.next(href='#')
         i.fa.fa-angle-right(aria-hidden='true')
@@ -68,15 +53,15 @@ block content
       .row
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .shop-cat-box
-            img.img-fluid(src='images/categories_img_01.jpg' alt='')
+            img.img-fluid(src='images/categories_img_01.jpg' alt='' onError="this.src = './../img/default.jpg'")
             a.btn.hvr-hover(href='/overview/?type=vegetable') Fresh Vegetables
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .shop-cat-box
-            img.img-fluid(src='images/categories_img_02.jpg' alt='')
+            img.img-fluid(src='images/categories_img_02.jpg' alt='' onError="this.src = './../img/default.jpg'")
             a.btn.hvr-hover(href='/overview/?type=fruit') Fresh Fruits
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .shop-cat-box
-            img.img-fluid(src='images/categories_img_03.jpg' alt='')
+            img.img-fluid(src='images/categories_img_03.jpg' alt='' onError="this.src = './../img/default.jpg'")
             a.btn.hvr-hover(href='/overview/?type=leaf') Fresh Leafs
   // End Categories
   
@@ -87,102 +72,36 @@ block content
         .col-lg-12
           .title-all.text-center
             h1 Fruits &amp; Vegetables
-            p
-              | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.
+          
       .row
         .col-lg-12
           .special-menu.text-center
             .button-group.filter-button-group
-              button.active(data-filter='*') All
-              button(data-filter='.top-featured') Top featured
-              button(data-filter='.best-seller') Best seller
+              button.btn-filter.active(data-filter='*') All
+              button.btn-filter(data-filter='.top-featured') Top featured
+              button.btn-filter(data-filter='.best-seller') Best seller
       .row.special-list
         each product,i in products
           if(i%2 ==0)
             .col-lg-3.col-md-6.special-grid.top-featured
               .products-single.fix
-                .box-img-hover
-                  .type-lb
-                    p.sale Sale
-                  if(product.img=="")
-                    img.img-fluid(src=`./../img/${product.images[0]}` alt='Image')
-                  else 
-                    img.img-fluid(src=`data:image/png;base64,${product.img[0]}` alt='Image') 
-                  .mask-icon
-                    ul
-                      li
-                        a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
-                          i.fas.fa-eye
-                      
-                    a.cart(href=`/product/${product.id}`) Add to Cart
-                .why-text
-                  a(href=`/product/${product.id}` )
+                a(href=`/product/${product.id}` )
+                  .box-img-hover
+                    img.img-fluid(src=`./../img/${product.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'")
+                  
+                        
+                  .why-text
                     h4= product.name
                     h5=`₹ ${product.price} per ${product.costPer} `
           else 
             .col-lg-3.col-md-6.special-grid.best-seller
               .products-single.fix
-                .box-img-hover
-                  .type-lb
-                    p.sale Sale
-                  if(product.img=="")
-                    img.img-fluid(src=`./../img/${product.images[0]}` alt='Image')
-                  else 
-                    img.img-fluid(src=`data:image/png;base64,${product.img[0]}` alt='Image') 
-                  .mask-icon
-                    ul
-                      li
-                        a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
-                          i.fas.fa-eye
-                      
-                    a.cart(href=`/product/${product.id}`) Add to Cart
-                .why-text
-                  a(href=`/product/${product.id}` )
-                    h4= product.name
-                    h5=`₹ ${product.price} per ${product.costPer} `
-  
-  // End Blog
-  // Start Instagram Feed
-  .instagram-box
-    .main-instagram.owl-carousel.owl-theme
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-01.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-02.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-03.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-04.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-05.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-06.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-07.jpg' alt='')
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-08.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-09.jpg' alt='')
-          
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-05.jpg' alt='')
-          
-  
-  
+                a(href=`/product/${product.id}` )
+                  .box-img-hover
+                    img.img-fluid(src=`./../img/${product.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'")
+                  
+                  .why-text
+                    a(href=`/product/${product.id}` )
+                      h4= product.name
+                      h5=`₹ ${product.price} per ${product.costPer} `
+    

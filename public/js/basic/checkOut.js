@@ -6,18 +6,19 @@ if (price) price = Number(price.innerHTML.replace("₹", ""));
 const placeOrderBtn = document.querySelector(".plOrder");
 const priceTxt = document.querySelector(".finalPrice");
 const products = document.querySelectorAll(".prodName");
-
 import { showCheckout } from "./stripe.js";
 let finalPrice = price;
 let prodId = [],
   prodQty = [],
   pay = 1,
   buyer,
+  role,
   delTime = 400000000;
 if (products.length != 0) {
   products.forEach((e) => prodId.push(e.dataset.id));
   products.forEach((e) => prodQty.push(e.dataset.qty));
   buyer = products[0].dataset.buyer;
+  role = products[0].dataset.role;
 }
 export const addListener = () => {
   if (delToggle) {
@@ -32,6 +33,9 @@ export const addListener = () => {
         } else if (e.dataset.id == 3) {
           delTime = 100000000;
           priceTxt.innerHTML = `₹ ${price + 100}`;
+        } else if (e.dataset.id == 0) {
+          delTime = 0;
+          priceTxt.innerHTML = `₹ ${price}`;
         }
 
         finalPrice = Number(
@@ -66,7 +70,7 @@ const placeOrder = async (delTime) => {
   try {
     const res = await axios({
       method: "POST",
-      url: `/api/v1/order/newOrder`,
+      url: `/api/v1/${role == "seller" ? "farmOrder" : "order"}/newOrder`,
       data: {
         products: prodId,
         buyer,
@@ -76,7 +80,7 @@ const placeOrder = async (delTime) => {
       },
     });
     if (res.data.status === "success") {
-      if (pay == 1) showCheckout(res.data.data.data._id);
+      if (pay == 1) showCheckout(res.data.data.data._id, role);
       else window.location.href = `/order_placed/${res.data.data.data._id}`;
     }
   } catch (err) {

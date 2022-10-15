@@ -1,0 +1,42 @@
+extends base
+
+block content
+    style.
+        .gradient-custom {
+        /* fallback for old browsers */
+        background: #ffffff;
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: -webkit-linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 236, 210, 1));
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 236, 210, 1))
+        }
+        .carousel-indicators li {
+        background-color: #282828;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        }
+    
+    section.vh-100(style='background-color: #C1CFEA;')
+        .container.py-5.h-100
+            .row.d-flex.justify-content-center.align-items-center.h-100(style='color: #282828;')
+                .col-md-9.col-lg-7.col-xl-5
+                    .card.mb-4.gradient-custom(style='border-radius: 25px;')
+                        .card-body
+                            #demo1.carousel.slide(data-ride='carousel')
+                            // Carousel inner
+                            .carousel-inner
+                                .carousel-item.active
+                                    .d-flex.justify-content-between.mb-4.pb-2.todayWeatherCont
+                                        
+
+                    .card.mb-4.gradient-custom(style='border-radius: 25px;')
+                        
+                        .card(style='border-radius: 25px;')
+                            .card-body
+                                #demo3.carousel.slide(data-ride='carousel')
+                                // Carousel inner
+                                .carousel-inner
+                                    .carousel-item.active
+                                        .d-flex.justify-content-around.text-center.mb-4.pb-3.pt-2.weatherCont(data-city=user.location.city)
+                                        

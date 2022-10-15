@@ -30,40 +30,7 @@ exports.searchProduct = catchAsync(async (req, res, next) => {
 // Do NOT update passwords with this!
 exports.updateProduct = factory.updateOne(Product);
 exports.deleteProduct = factory.deleteOne(Product);
-exports.uploadImages = (req, res, next) => {
-  const imgNames = fs.readdirSync(req.filePath);
-  // cp.copy(img.toString("base64"));
-  const imgId = imgNames.map((img) => {
-    const image = fs.readFileSync(path.join(req.filePath, img));
-    // cp.copy(image.toString("base64"));
-  });
-  res.status(201).json({
-    status: "success",
-    data: {},
-  });
-  // next();
-};
 const multerStorage = multer.memoryStorage();
-
-exports.resizeImage = catchAsync(async (req, res, next) => {
-  if (!req.files) return next();
-
-  await Promise.all(
-    req.files.map(async (file, i) => {
-      const filename = `tour-${Date.now()}-${i + 1}.jpeg`;
-
-      await sharp(file.buffer)
-        .resize(300, 300)
-        .toFormat("jpeg")
-        .jpeg({ quality: 80 })
-        .toFile(`public/img/products/${filename}`);
-      req.filePath = path.join(__dirname, `../public/img/products/`);
-      // req.body.images.push(filename);
-    })
-  );
-
-  next();
-});
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
@@ -71,10 +38,64 @@ const multerFilter = (req, file, cb) => {
     cb(new AppError("Not an image! Please upload only images.", 400), false);
   }
 };
-
 const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
+});
+exports.uploadImages = upload.array("images", 3);
+
+exports.resizeImage = catchAsync(async (req, res, next) => {
+  // if (!req.files) return next();
+  req.body.images = [];
+  await Promise.all(
+    req.files.map(async (file, i) => {
+      const filename = `Product-${Date.now()}-${i + 1}.jpg`;
+
+      await sharp(file.buffer)
+        .resize(370, 370)
+        .toFormat("jpeg")
+        .jpeg({ quality: 80 })
+        .toFile(`public/img/${filename}`);
+      req.filePath = path.join(__dirname, `../public/img/`);
+      req.body.images.push(filename);
+    })
+  );
+  next();
+});
+
+exports.addProduct = factory.createOne(Product, true);
+exports.addLocation = catchAsync(async (req, res, next) => {
+  req.body.location = res.locals.user.location;
+  req.body.seller = res.locals.user.id;
+
+  next();
+});
+exports.addProductSeller = catchAsync(async (req, res, next) => {
+  const seller = await Seller.findById(res.locals.user.id);
+  if (seller.productSold)
+    await Seller.findByIdAndUpdate(res.locals.user.id, {
+      productSold: seller.productSold + 1,
+    });
+  else
+    await Seller.findByIdAndUpdate(res.locals.user.id, {
+      productSold: 1,
+    });
+
+  next();
+});
+exports.ProductToSeller = catchAsync(async (req, res, next) => {
+  try {
+    const seller = await Seller.findById(res.locals.user.id);
+    const sellerProds = [...seller._doc.products, req.body.id];
+    const s = await Seller.findByIdAndUpdate(res.locals.user.id, {
+      products: sellerProds,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  res.status(201).json({
+    status: "success",
+  });
 });
 exports.getProductsWithin = catchAsync(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;

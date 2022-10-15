@@ -48,6 +48,16 @@ const buyerSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  location: {
+    // GeoJSON
+    type: {
+      type: String,
+      default: "Point",
+      enum: ["Point"],
+    },
+    coordinates: [Number],
+    city: String,
+  },
   cart: [
     {
       type: mongoose.Schema.ObjectId,

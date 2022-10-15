@@ -1,0 +1,65 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+            .row
+                .col-lg-12
+                    h2 Demand
+                    ul.breadcrumb
+                        li.breadcrumb-item
+                            a(href='#') Home
+                        li.breadcrumb-item.active Demand
+
+    .cart-box-main
+        .container 
+            .row 
+                each el,i in demand
+                    a.btn.hvr-hover.cityBtn(style="margin:20px" data-id= `${i}`)= el.city
+            .row
+                -a = []
+                .col-lg-12
+                    .table-main.table-responsive
+                        table.table.tableLst(data-id= `${i}`)
+                            thead
+                                tr
+                                    
+                                    th= a
+                                    th Sold this Month(in Kgs)
+                            tbody
+
+                                each prod,i in demand[0].productName
+                                    tr.cartProducts
+                                        -a.push(prod)
+                                        td.name-pr
+                                            a= prod
+                                        td.price-pr 
+                                            a= `${demand[0].sales[i]} `
+                                tr 
+                                    td
+                                        img.chartImg(data-id=`${i}` src=`https://quickchart.io/chart?width=400&height=200&chart={type:'bar',data:{labels:['Products'], datasets:[${a.toString().split(",").map((el,i)=>{return `{label:'${el}',data:[${demand[0].sales[i]}]}`})}]}}`)
+                        each el,i in demand
+                            -a =[]
+                            if(i!=0)
+                                table.table.tableLst(data-id=`${i}`).hidden
+                                    thead
+                                        tr
+                                            th Product Name 
+                                            th Sold this Month(in Kgs)
+                                    tbody
+
+                                        each prod,j in el.productName
+                                            tr.cartProducts
+                                                td.name-pr
+                                                    -a.push(prod)
+                                                    a= prod
+                                                td.price-pr
+                                                    a= `${el.sales[j]}`
+                                        tr 
+                                            td
+                                                    img.chartImg(data-id=`${i}` style="display:none" src=`https://quickchart.io/chart?width=400&height=200&chart={type:'bar',data:{labels:['Products'], datasets:[${a.toString().split(",").map((el1,j)=>{return `{label:'${el1}',data:[${el.sales[j]}]}`})}]}}`)
+            
+    
+
+      
+

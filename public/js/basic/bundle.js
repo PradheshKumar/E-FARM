@@ -4594,7 +4594,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var addCartBtn = document.querySelector(".cartBtn");
 
 var login = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(email, password) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(email, password, id) {
     var input, res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
@@ -4627,7 +4627,7 @@ var login = /*#__PURE__*/function () {
             _context.next = 10;
             return (0, _axios.default)({
               method: "POST",
-              url: "/api/v1/seller/login",
+              url: "/api/v1/".concat(id == 0 ? "farmSeller" : "seller", "/login"),
               data: {
                 email: email,
                 password: password
@@ -4644,7 +4644,7 @@ var login = /*#__PURE__*/function () {
                 if (!window.location.href.includes("seller")) {
                   if (window.location.search.includes("prod")) location.assign("/product/".concat(window.location.search.slice(6)));else location.assign("/");
                 } else {
-                  location.assign("/seller_products");
+                  location.assign("/farmOverview");
                 }
               }, 200);
             }
@@ -4670,7 +4670,7 @@ var login = /*#__PURE__*/function () {
     }, _callee, null, [[1, 14]]);
   }));
 
-  return function login(_x, _x2) {
+  return function login(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -4678,92 +4678,155 @@ var login = /*#__PURE__*/function () {
 exports.login = login;
 
 var signUp = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(name, email, password, passwordConfirm) {
-    var input, res, _res;
-
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(name, email, password, passwordConfirm, id) {
+    var input;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
             input = document.querySelectorAll(".validate-input");
-            _context2.prev = 1;
+            _context4.prev = 1;
 
-            if (window.location.href.includes("seller")) {
-              _context2.next = 9;
-              break;
+            if (!window.location.href.includes("seller")) {
+              navigator.geolocation.getCurrentPosition( /*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(position) {
+                  var lat, long, res1, res;
+                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          lat = position.coords.latitude;
+                          long = position.coords.longitude;
+                          _context2.next = 4;
+                          return (0, _axios.default)({
+                            method: "GET",
+                            url: "https://api.opencagedata.com/geocode/v1/json?q=".concat(lat, "+").concat(long, "&key=00a0febcd96b4f22aa5b755c3ef62fc3")
+                          });
+
+                        case 4:
+                          res1 = _context2.sent;
+                          console.log(res1);
+                          _context2.next = 8;
+                          return (0, _axios.default)({
+                            method: "POST",
+                            url: "/api/v1/user/signup",
+                            data: {
+                              name: name,
+                              email: email,
+                              password: password,
+                              passwordConfirm: passwordConfirm,
+                              location: {
+                                coordinates: [long, lat],
+                                city: res1.data.results[0].components.city
+                              }
+                            }
+                          });
+
+                        case 8:
+                          res = _context2.sent;
+
+                          if (res.data.status === "success") {
+                            (0, _alerts.showAlert)("success", "SignedUp successfully!");
+                            window.setTimeout(function () {
+                              location.assign("/");
+                            }, 200);
+                          }
+
+                        case 10:
+                        case "end":
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2);
+                }));
+
+                return function (_x9) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+            } else {
+              navigator.geolocation.getCurrentPosition( /*#__PURE__*/function () {
+                var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(position) {
+                  var lat, long, res1, res;
+                  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                    while (1) {
+                      switch (_context3.prev = _context3.next) {
+                        case 0:
+                          lat = position.coords.latitude;
+                          long = position.coords.longitude;
+                          _context3.next = 4;
+                          return (0, _axios.default)({
+                            method: "GET",
+                            url: "https://api.opencagedata.com/geocode/v1/json?q=".concat(lat, "+").concat(long, "&key=00a0febcd96b4f22aa5b755c3ef62fc3")
+                          });
+
+                        case 4:
+                          res1 = _context3.sent;
+                          _context3.next = 7;
+                          return (0, _axios.default)({
+                            method: "POST",
+                            url: "/api/v1/".concat(id == 0 ? "farmSeller" : "seller", "/signup"),
+                            data: {
+                              name: name,
+                              email: email,
+                              password: password,
+                              passwordConfirm: passwordConfirm,
+                              location: {
+                                coordinates: [long, lat],
+                                city: res1.data.results[0].components.city
+                              }
+                            }
+                          });
+
+                        case 7:
+                          res = _context3.sent;
+
+                          if (res.data.status === "success") {
+                            (0, _alerts.showAlert)("success", "SignedUp successfully!");
+                            if (id == 0) window.setTimeout(function () {
+                              location.assign("/MyRents");
+                            }, 200);else window.setTimeout(function () {
+                              location.assign("/seller_products");
+                            }, 200);
+                          }
+
+                        case 9:
+                        case "end":
+                          return _context3.stop();
+                      }
+                    }
+                  }, _callee3);
+                }));
+
+                return function (_x10) {
+                  return _ref4.apply(this, arguments);
+                };
+              }());
             }
 
-            _context2.next = 5;
-            return (0, _axios.default)({
-              method: "POST",
-              url: "/api/v1/user/signup",
-              data: {
-                name: name,
-                email: email,
-                password: password,
-                passwordConfirm: passwordConfirm
-              }
-            });
+            _context4.next = 11;
+            break;
 
           case 5:
-            res = _context2.sent;
-
-            if (res.data.status === "success") {
-              (0, _alerts.showAlert)("success", "SignedUp successfully!");
-              window.setTimeout(function () {
-                location.assign("/");
-              }, 200);
-            }
-
-            _context2.next = 13;
-            break;
-
-          case 9:
-            _context2.next = 11;
-            return (0, _axios.default)({
-              method: "POST",
-              url: "/api/v1/seller/signup",
-              data: {
-                name: name,
-                email: email,
-                password: password,
-                passwordConfirm: passwordConfirm
-              }
-            });
+            _context4.prev = 5;
+            _context4.t0 = _context4["catch"](1);
+            showValidate(input[0]);
+            console.log(_context4.t0);
+            input[0].dataset.validate = _context4.t0.response.data.message;
+            return _context4.abrupt("return", false);
 
           case 11:
-            _res = _context2.sent;
+            return _context4.abrupt("return", true);
 
-            if (_res.data.status === "success") {
-              (0, _alerts.showAlert)("success", "SignedUp successfully!");
-              window.setTimeout(function () {
-                location.assign("/seller_products");
-              }, 200);
-            }
-
-          case 13:
-            _context2.next = 20;
-            break;
-
-          case 15:
-            _context2.prev = 15;
-            _context2.t0 = _context2["catch"](1);
-            showValidate(input[0]);
-            input[0].dataset.validate = _context2.t0.response.data.message;
-            return _context2.abrupt("return", false);
-
-          case 20:
-            return _context2.abrupt("return", true);
-
-          case 21:
+          case 12:
           case "end":
-            return _context2.stop();
+            return _context4.stop();
         }
       }
-    }, _callee2, null, [[1, 15]]);
+    }, _callee4, null, [[1, 5]]);
   }));
 
-  return function signUp(_x3, _x4, _x5, _x6) {
+  return function signUp(_x4, _x5, _x6, _x7, _x8) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -4771,117 +4834,117 @@ var signUp = /*#__PURE__*/function () {
 exports.signUp = signUp;
 
 var addToCart = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(prodId) {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(prodId) {
     var qty, res;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
             qty = document.getElementById("qtyBox").value;
 
             if (!(qty != 0)) {
-              _context3.next = 12;
+              _context5.next = 12;
               break;
             }
 
-            _context3.prev = 2;
-            _context3.next = 5;
+            _context5.prev = 2;
+            _context5.next = 5;
             return (0, _axios.default)({
               method: "POST",
-              url: "/api/v1/buyer/addCart/".concat(prodId, "/").concat(qty)
+              url: "/api/v1/".concat(window.location.href.includes("farm") ? "seller" : "buyer", "/addCart/").concat(prodId, "/").concat(qty)
             });
 
           case 5:
-            res = _context3.sent;
+            res = _context5.sent;
 
             if (res.data.status === "success") {
               addCartBtn.parentElement.innerHTML = "ADDED";
               location.reload();
             }
 
-            _context3.next = 12;
+            _context5.next = 12;
             break;
 
           case 9:
-            _context3.prev = 9;
-            _context3.t0 = _context3["catch"](2);
-            console.log("ERRRRORR", _context3.t0); // showAlert("error", err.response.data.message);
+            _context5.prev = 9;
+            _context5.t0 = _context5["catch"](2);
+            console.log("ERRRRORR", _context5.t0); // showAlert("error", err.response.data.message);
 
           case 12:
-            return _context3.abrupt("return", true);
+            return _context5.abrupt("return", true);
 
           case 13:
           case "end":
-            return _context3.stop();
+            return _context5.stop();
         }
       }
-    }, _callee3, null, [[2, 9]]);
+    }, _callee5, null, [[2, 9]]);
   }));
 
-  return function addToCart(_x7) {
-    return _ref3.apply(this, arguments);
+  return function addToCart(_x11) {
+    return _ref5.apply(this, arguments);
   };
 }();
 
 exports.addToCart = addToCart;
 
 var rmCart = /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(id) {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(id, role) {
     var res, cart;
-    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
-            _context4.prev = 0;
-            _context4.next = 3;
+            _context6.prev = 0;
+            _context6.next = 3;
             return (0, _axios.default)({
               method: "PATCH",
-              url: "/api/v1/buyer/rmCart/".concat(id)
+              url: "/api/v1/".concat(role, "/rmCart/").concat(id)
             });
 
           case 3:
-            res = _context4.sent;
+            res = _context6.sent;
 
             if (res.data.status === "success") {
               cart = document.querySelector(".cartProducts");
               if (cart) location.reload();else window.location.href = "/overview";
             }
 
-            _context4.next = 10;
+            _context6.next = 10;
             break;
 
           case 7:
-            _context4.prev = 7;
-            _context4.t0 = _context4["catch"](0);
-            console.log("ERRRRORR", _context4.t0); // showAlert("error", err.response.data.message);
+            _context6.prev = 7;
+            _context6.t0 = _context6["catch"](0);
+            console.log("ERRRRORR", _context6.t0); // showAlert("error", err.response.data.message);
 
           case 10:
-            return _context4.abrupt("return", true);
+            return _context6.abrupt("return", true);
 
           case 11:
           case "end":
-            return _context4.stop();
+            return _context6.stop();
         }
       }
-    }, _callee4, null, [[0, 7]]);
+    }, _callee6, null, [[0, 7]]);
   }));
 
-  return function rmCart(_x8) {
-    return _ref4.apply(this, arguments);
+  return function rmCart(_x12, _x13) {
+    return _ref6.apply(this, arguments);
   };
 }();
 
 exports.rmCart = rmCart;
 
 var addNego = /*#__PURE__*/function () {
-  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(id, buyer, price, qty) {
-    var res;
-    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(id, buyer, price, qty) {
+    var res, cart;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            _context5.prev = 0;
-            _context5.next = 3;
+            _context7.prev = 0;
+            _context7.next = 3;
             return (0, _axios.default)({
               method: "POST",
               url: "/api/v1/negotiation/placeBid/",
@@ -4895,110 +4958,11 @@ var addNego = /*#__PURE__*/function () {
             });
 
           case 3:
-            res = _context5.sent;
-
-            if (res.data.status === "success") {// const cart = document.querySelector(".cartProducts");
-              // if (cart) location.reload();
-              // else window.location.href = "/overview";
-            }
-
-            _context5.next = 10;
-            break;
-
-          case 7:
-            _context5.prev = 7;
-            _context5.t0 = _context5["catch"](0);
-            console.log("ERRRRORR", _context5.t0); // showAlert("error", err.response.data.message);
-
-          case 10:
-            return _context5.abrupt("return", true);
-
-          case 11:
-          case "end":
-            return _context5.stop();
-        }
-      }
-    }, _callee5, null, [[0, 7]]);
-  }));
-
-  return function addNego(_x9, _x10, _x11, _x12) {
-    return _ref5.apply(this, arguments);
-  };
-}();
-
-exports.addNego = addNego;
-
-var acceptNego = /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(negoId) {
-    var res;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            _context6.prev = 0;
-            _context6.next = 3;
-            return (0, _axios.default)({
-              method: "POST",
-              url: "/api/v1/negotiation/acceptBid/".concat(negoId)
-            });
-
-          case 3:
-            res = _context6.sent;
-            console.log(res);
-
-            if (res.data.status === "success") {
-              // const cart = document.querySelector(".cartProducts");
-              // if (cart) location.reload();
-              window.location.href = "/order_placed/".concat(res.data.data.data._id);
-            }
-
-            _context6.next = 11;
-            break;
-
-          case 8:
-            _context6.prev = 8;
-            _context6.t0 = _context6["catch"](0);
-            console.log("ERRRRORR", _context6.t0); // showAlert("error", err.response.data.message);
-
-          case 11:
-            return _context6.abrupt("return", true);
-
-          case 12:
-          case "end":
-            return _context6.stop();
-        }
-      }
-    }, _callee6, null, [[0, 8]]);
-  }));
-
-  return function acceptNego(_x13) {
-    return _ref6.apply(this, arguments);
-  };
-}();
-
-exports.acceptNego = acceptNego;
-
-var cancelNego = /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(negoId) {
-    var res, nego;
-    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-      while (1) {
-        switch (_context7.prev = _context7.next) {
-          case 0:
-            _context7.prev = 0;
-            _context7.next = 3;
-            return (0, _axios.default)({
-              method: "POST",
-              url: "/api/v1/negotiation/cancelBid/".concat(negoId)
-            });
-
-          case 3:
             res = _context7.sent;
 
             if (res.data.status === "success") {
-              console.log("REMOVED");
-              nego = document.querySelector(".negoRow");
-              if (nego) location.reload();else window.location.href = "/";
+              cart = document.querySelector(".cartProds");
+              if (cart) location.reload();else window.location.href = "/negotiate";
             }
 
             _context7.next = 10;
@@ -5020,15 +4984,15 @@ var cancelNego = /*#__PURE__*/function () {
     }, _callee7, null, [[0, 7]]);
   }));
 
-  return function cancelNego(_x14) {
+  return function addNego(_x14, _x15, _x16, _x17) {
     return _ref7.apply(this, arguments);
   };
 }();
 
-exports.cancelNego = cancelNego;
+exports.addNego = addNego;
 
-var replyNego = /*#__PURE__*/function () {
-  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(negoId, replyPrice) {
+var acceptNego = /*#__PURE__*/function () {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(negoId) {
     var res;
     return _regeneratorRuntime().wrap(function _callee8$(_context8) {
       while (1) {
@@ -5038,20 +5002,16 @@ var replyNego = /*#__PURE__*/function () {
             _context8.next = 3;
             return (0, _axios.default)({
               method: "POST",
-              url: "/api/v1/negotiation/replyBid/".concat(negoId),
-              data: {
-                replyPrice: replyPrice
-              }
+              url: "/api/v1/negotiation/acceptBid/".concat(negoId)
             });
 
           case 3:
             res = _context8.sent;
 
-            if (res.data.status === "success") {// location.reload();
-              // const nego = document.querySelector(".negoRow");
-              // console.log(nego);
-              // if (nego) location.reload();
-              // else window.location.href = "/";
+            if (res.data.status === "success") {
+              // const cart = document.querySelector(".cartProducts");
+              // if (cart) location.reload();
+              window.location.href = "/order_placed/".concat(res.data.data.data._id);
             }
 
             _context8.next = 10;
@@ -5073,31 +5033,133 @@ var replyNego = /*#__PURE__*/function () {
     }, _callee8, null, [[0, 7]]);
   }));
 
-  return function replyNego(_x15, _x16) {
+  return function acceptNego(_x18) {
     return _ref8.apply(this, arguments);
+  };
+}();
+
+exports.acceptNego = acceptNego;
+
+var cancelNego = /*#__PURE__*/function () {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(negoId) {
+    var res, nego;
+    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            _context9.prev = 0;
+            _context9.next = 3;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "/api/v1/negotiation/cancelBid/".concat(negoId)
+            });
+
+          case 3:
+            res = _context9.sent;
+
+            if (res.data.status === "success") {
+              nego = document.querySelector(".negoRow");
+              console.log(nego);
+              if (nego) location.reload();else window.location.href = "/";
+            }
+
+            _context9.next = 10;
+            break;
+
+          case 7:
+            _context9.prev = 7;
+            _context9.t0 = _context9["catch"](0);
+            console.log("ERRRRORR", _context9.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context9.abrupt("return", true);
+
+          case 11:
+          case "end":
+            return _context9.stop();
+        }
+      }
+    }, _callee9, null, [[0, 7]]);
+  }));
+
+  return function cancelNego(_x19) {
+    return _ref9.apply(this, arguments);
+  };
+}();
+
+exports.cancelNego = cancelNego;
+
+var replyNego = /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(negoId, replyPrice) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            _context10.prev = 0;
+            _context10.next = 3;
+            return (0, _axios.default)({
+              method: "POST",
+              url: "/api/v1/negotiation/replyBid/".concat(negoId),
+              data: {
+                replyPrice: replyPrice
+              }
+            });
+
+          case 3:
+            res = _context10.sent;
+
+            if (res.data.status === "success") {
+              location.reload(); // const nego = document.querySelector(".negoRow");
+              // console.log(nego);
+              // if (nego) location.reload();
+              // else window.location.href = "/";
+            }
+
+            _context10.next = 10;
+            break;
+
+          case 7:
+            _context10.prev = 7;
+            _context10.t0 = _context10["catch"](0);
+            console.log("ERRRRORR", _context10.t0); // showAlert("error", err.response.data.message);
+
+          case 10:
+            return _context10.abrupt("return", true);
+
+          case 11:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10, null, [[0, 7]]);
+  }));
+
+  return function replyNego(_x20, _x21) {
+    return _ref10.apply(this, arguments);
   };
 }();
 
 exports.replyNego = replyNego;
 
 var forgPassFn = /*#__PURE__*/function () {
-  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
     var emailInput, email, input, res;
-    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
       while (1) {
-        switch (_context9.prev = _context9.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
             emailInput = document.querySelector(".emailInpt");
             email = emailInput.value;
             input = document.querySelectorAll(".validate-input");
-            _context9.prev = 3;
+            _context11.prev = 3;
 
             if (window.location.href.includes("seller")) {
-              _context9.next = 10;
+              _context11.next = 10;
               break;
             }
 
-            _context9.next = 7;
+            _context11.next = 7;
             return (0, _axios.default)({
               method: "POST",
               url: "api/v1/buyer/forgotPassword",
@@ -5107,13 +5169,12 @@ var forgPassFn = /*#__PURE__*/function () {
             });
 
           case 7:
-            res = _context9.sent;
-            _context9.next = 14;
+            res = _context11.sent;
+            _context11.next = 13;
             break;
 
           case 10:
-            console.log(email);
-            _context9.next = 13;
+            _context11.next = 12;
             return (0, _axios.default)({
               method: "POST",
               url: "api/v1/seller/forgotPassword",
@@ -5122,203 +5183,46 @@ var forgPassFn = /*#__PURE__*/function () {
               }
             });
 
-          case 13:
-            res = _context9.sent;
+          case 12:
+            res = _context11.sent;
 
-          case 14:
+          case 13:
             if (res.data.status === "success") {
               location.reload();
             }
 
-            _context9.next = 22;
+            _context11.next = 21;
             break;
 
-          case 17:
-            _context9.prev = 17;
-            _context9.t0 = _context9["catch"](3);
+          case 16:
+            _context11.prev = 16;
+            _context11.t0 = _context11["catch"](3);
             showValidate(input[0]);
-            input[0].dataset.validate = _context9.t0.response.data.message;
-            return _context9.abrupt("return", false);
+            input[0].dataset.validate = _context11.t0.response.data.message;
+            return _context11.abrupt("return", false);
 
-          case 22:
-            console.log("sendmail");
-
-          case 23:
+          case 21:
           case "end":
-            return _context9.stop();
+            return _context11.stop();
         }
       }
-    }, _callee9, null, [[3, 17]]);
+    }, _callee11, null, [[3, 16]]);
   }));
 
   return function forgPassFn() {
-    return _ref9.apply(this, arguments);
+    return _ref11.apply(this, arguments);
   };
 }();
 
 exports.forgPassFn = forgPassFn;
 
 var updateDetails = /*#__PURE__*/function () {
-  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(name) {
-    var input, res;
-    return _regeneratorRuntime().wrap(function _callee10$(_context10) {
-      while (1) {
-        switch (_context10.prev = _context10.next) {
-          case 0:
-            input = document.querySelectorAll(".validate-input");
-            _context10.prev = 1;
-
-            if (window.location.href.includes("seller")) {
-              _context10.next = 8;
-              break;
-            }
-
-            _context10.next = 5;
-            return (0, _axios.default)({
-              method: "PATCH",
-              url: "api/v1/buyer/updateMe",
-              data: {
-                name: name
-              }
-            });
-
-          case 5:
-            res = _context10.sent;
-            _context10.next = 11;
-            break;
-
-          case 8:
-            _context10.next = 10;
-            return (0, _axios.default)({
-              method: "PATCH",
-              url: "api/v1/seller/updateMe",
-              data: {
-                name: name
-              }
-            });
-
-          case 10:
-            res = _context10.sent;
-
-          case 11:
-            if (res.data.status === "success") {
-              location.reload();
-            }
-
-            _context10.next = 19;
-            break;
-
-          case 14:
-            _context10.prev = 14;
-            _context10.t0 = _context10["catch"](1);
-            showValidate(input[0]);
-            input[0].dataset.validate = _context10.t0.response.data.message;
-            return _context10.abrupt("return", false);
-
-          case 19:
-          case "end":
-            return _context10.stop();
-        }
-      }
-    }, _callee10, null, [[1, 14]]);
-  }));
-
-  return function updateDetails(_x17) {
-    return _ref10.apply(this, arguments);
-  };
-}();
-
-exports.updateDetails = updateDetails;
-
-var updatePassword = /*#__PURE__*/function () {
-  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(passwordCurrent, password, passwordConfirm) {
-    var input, res;
-    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
-      while (1) {
-        switch (_context11.prev = _context11.next) {
-          case 0:
-            input = document.querySelectorAll(".validate-input");
-            _context11.prev = 1;
-
-            if (window.location.href.includes("seller")) {
-              _context11.next = 8;
-              break;
-            }
-
-            _context11.next = 5;
-            return (0, _axios.default)({
-              method: "PATCH",
-              url: "api/v1/buyer/updateMyPassword",
-              data: {
-                passwordCurrent: passwordCurrent,
-                password: password,
-                passwordConfirm: passwordConfirm
-              }
-            });
-
-          case 5:
-            res = _context11.sent;
-            _context11.next = 11;
-            break;
-
-          case 8:
-            _context11.next = 10;
-            return (0, _axios.default)({
-              method: "PATCH",
-              url: "api/v1/seller/updateMyPassword",
-              data: {
-                passwordCurrent: passwordCurrent,
-                password: password,
-                passwordConfirm: passwordConfirm
-              }
-            });
-
-          case 10:
-            res = _context11.sent;
-
-          case 11:
-            if (res.data.status === "success") {
-              (0, _alerts.showAlert)("success", "Password Changed successfully!");
-              window.setTimeout(function () {
-                location.reload();
-              }, 300);
-            }
-
-            _context11.next = 20;
-            break;
-
-          case 14:
-            _context11.prev = 14;
-            _context11.t0 = _context11["catch"](1);
-            console.log(_context11.t0.response.data);
-            showValidate(input[1]);
-            input[1].dataset.validate = _context11.t0.response.data.message;
-            return _context11.abrupt("return", false);
-
-          case 20:
-          case "end":
-            return _context11.stop();
-        }
-      }
-    }, _callee11, null, [[1, 14]]);
-  }));
-
-  return function updatePassword(_x18, _x19, _x20) {
-    return _ref11.apply(this, arguments);
-  };
-}();
-
-exports.updatePassword = updatePassword;
-
-var resetPassFn = /*#__PURE__*/function () {
-  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(token, password, passwordConfirm) {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(name) {
     var input, res;
     return _regeneratorRuntime().wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
-            // const emailInput = document.querySelector(".emailInpt");
-            // const email = emailInput.value;
             input = document.querySelectorAll(".validate-input");
             _context12.prev = 1;
 
@@ -5330,6 +5234,159 @@ var resetPassFn = /*#__PURE__*/function () {
             _context12.next = 5;
             return (0, _axios.default)({
               method: "PATCH",
+              url: "api/v1/buyer/updateMe",
+              data: {
+                name: name
+              }
+            });
+
+          case 5:
+            res = _context12.sent;
+            _context12.next = 11;
+            break;
+
+          case 8:
+            _context12.next = 10;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "api/v1/seller/updateMe",
+              data: {
+                name: name
+              }
+            });
+
+          case 10:
+            res = _context12.sent;
+
+          case 11:
+            if (res.data.status === "success") {
+              location.reload();
+            }
+
+            _context12.next = 19;
+            break;
+
+          case 14:
+            _context12.prev = 14;
+            _context12.t0 = _context12["catch"](1);
+            showValidate(input[0]);
+            input[0].dataset.validate = _context12.t0.response.data.message;
+            return _context12.abrupt("return", false);
+
+          case 19:
+          case "end":
+            return _context12.stop();
+        }
+      }
+    }, _callee12, null, [[1, 14]]);
+  }));
+
+  return function updateDetails(_x22) {
+    return _ref12.apply(this, arguments);
+  };
+}();
+
+exports.updateDetails = updateDetails;
+
+var updatePassword = /*#__PURE__*/function () {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(passwordCurrent, password, passwordConfirm) {
+    var input, res;
+    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+      while (1) {
+        switch (_context13.prev = _context13.next) {
+          case 0:
+            input = document.querySelectorAll(".validate-input");
+            _context13.prev = 1;
+
+            if (window.location.href.includes("seller")) {
+              _context13.next = 8;
+              break;
+            }
+
+            _context13.next = 5;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "api/v1/buyer/updateMyPassword",
+              data: {
+                passwordCurrent: passwordCurrent,
+                password: password,
+                passwordConfirm: passwordConfirm
+              }
+            });
+
+          case 5:
+            res = _context13.sent;
+            _context13.next = 11;
+            break;
+
+          case 8:
+            _context13.next = 10;
+            return (0, _axios.default)({
+              method: "PATCH",
+              url: "api/v1/seller/updateMyPassword",
+              data: {
+                passwordCurrent: passwordCurrent,
+                password: password,
+                passwordConfirm: passwordConfirm
+              }
+            });
+
+          case 10:
+            res = _context13.sent;
+
+          case 11:
+            if (res.data.status === "success") {
+              (0, _alerts.showAlert)("success", "Password Changed successfully!");
+              window.setTimeout(function () {
+                location.reload();
+              }, 300);
+            }
+
+            _context13.next = 19;
+            break;
+
+          case 14:
+            _context13.prev = 14;
+            _context13.t0 = _context13["catch"](1);
+            showValidate(input[1]);
+            input[1].dataset.validate = _context13.t0.response.data.message;
+            return _context13.abrupt("return", false);
+
+          case 19:
+          case "end":
+            return _context13.stop();
+        }
+      }
+    }, _callee13, null, [[1, 14]]);
+  }));
+
+  return function updatePassword(_x23, _x24, _x25) {
+    return _ref13.apply(this, arguments);
+  };
+}();
+
+exports.updatePassword = updatePassword;
+
+var resetPassFn = /*#__PURE__*/function () {
+  var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(token, password, passwordConfirm) {
+    var input, res;
+    return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+      while (1) {
+        switch (_context14.prev = _context14.next) {
+          case 0:
+            // const emailInput = document.querySelector(".emailInpt");
+            // const email = emailInput.value;
+            input = document.querySelectorAll(".validate-input");
+            _context14.prev = 1;
+
+            if (window.location.href.includes("seller")) {
+              _context14.next = 8;
+              break;
+            }
+
+            _context14.next = 5;
+            return (0, _axios.default)({
+              method: "PATCH",
               url: "/api/v1/buyer/resetPassword/".concat(token),
               data: {
                 password: password,
@@ -5338,13 +5395,12 @@ var resetPassFn = /*#__PURE__*/function () {
             });
 
           case 5:
-            res = _context12.sent;
-            _context12.next = 12;
+            res = _context14.sent;
+            _context14.next = 11;
             break;
 
           case 8:
-            console.log(email);
-            _context12.next = 11;
+            _context14.next = 10;
             return (0, _axios.default)({
               method: "PATCH",
               url: "/api/v1/seller/resetPassword/".concat(token),
@@ -5354,151 +5410,147 @@ var resetPassFn = /*#__PURE__*/function () {
               }
             });
 
-          case 11:
-            res = _context12.sent;
+          case 10:
+            res = _context14.sent;
 
-          case 12:
+          case 11:
             if (res.data.status === "success") {
-              console.log("SUCCESS");
               if (!window.location.href.includes("seller")) window.location.href = "/login";else window.location.href = "/seller-login";
             }
 
-            _context12.next = 20;
+            _context14.next = 19;
             break;
 
-          case 15:
-            _context12.prev = 15;
-            _context12.t0 = _context12["catch"](1);
+          case 14:
+            _context14.prev = 14;
+            _context14.t0 = _context14["catch"](1);
             showValidate(input[0]); // if (err.response.data.message.includes("Cast to string failed"))
 
-            input[0].dataset.validate = _context12.t0.response.data.message;
-            return _context12.abrupt("return", false);
+            input[0].dataset.validate = _context14.t0.response.data.message;
+            return _context14.abrupt("return", false);
 
-          case 20:
-            console.log("sendmail");
-
-          case 21:
+          case 19:
           case "end":
-            return _context12.stop();
+            return _context14.stop();
         }
       }
-    }, _callee12, null, [[1, 15]]);
+    }, _callee14, null, [[1, 14]]);
   }));
 
-  return function resetPassFn(_x21, _x22, _x23) {
-    return _ref12.apply(this, arguments);
+  return function resetPassFn(_x26, _x27, _x28) {
+    return _ref14.apply(this, arguments);
   };
 }();
 
 exports.resetPassFn = resetPassFn;
 
 function showValidate(input) {
+  console.log(input);
   var thisAlert = $(input);
+  console.log(thisAlert);
   $(thisAlert).addClass("alert-validate");
 }
 
 var updateCart = /*#__PURE__*/function () {
-  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(prodId, qty) {
+  var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(prodId, qty, role) {
     var res;
-    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+    return _regeneratorRuntime().wrap(function _callee15$(_context15) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context15.prev = _context15.next) {
           case 0:
-            _context13.prev = 0;
-            _context13.next = 3;
+            _context15.prev = 0;
+            _context15.next = 3;
             return (0, _axios.default)({
               method: "PATCH",
-              url: "/api/v1/buyer/updateCart/".concat(prodId, "/").concat(qty)
+              url: "/api/v1/".concat(role, "/updateCart/").concat(prodId, "/").concat(qty)
             });
 
           case 3:
-            res = _context13.sent;
+            res = _context15.sent;
 
             if (res.data.status === "success") {// addCartBtn.parentElement.innerHTML = "ADDED";
               // location.reload();
             }
 
-            _context13.next = 10;
+            _context15.next = 9;
             break;
 
           case 7:
-            _context13.prev = 7;
-            _context13.t0 = _context13["catch"](0);
-            console.log("ERRRRORR", _context13.t0); // showAlert("error", err.response.data.message);
+            _context15.prev = 7;
+            _context15.t0 = _context15["catch"](0);
+
+          case 9:
+            return _context15.abrupt("return", true);
 
           case 10:
-            return _context13.abrupt("return", true);
-
-          case 11:
           case "end":
-            return _context13.stop();
+            return _context15.stop();
         }
       }
-    }, _callee13, null, [[0, 7]]);
+    }, _callee15, null, [[0, 7]]);
   }));
 
-  return function updateCart(_x24, _x25) {
-    return _ref13.apply(this, arguments);
+  return function updateCart(_x29, _x30, _x31) {
+    return _ref15.apply(this, arguments);
   };
 }();
 
 exports.updateCart = updateCart;
 
 var logout = /*#__PURE__*/function () {
-  var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
+  var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
     var res, url, hasUrl;
-    return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+    return _regeneratorRuntime().wrap(function _callee16$(_context16) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
-            _context14.prev = 0;
-            _context14.next = 3;
+            _context16.prev = 0;
+            _context16.next = 3;
             return (0, _axios.default)({
               method: "GET",
               url: "/api/v1/user/logout"
             });
 
           case 3:
-            res = _context14.sent;
+            res = _context16.sent;
 
             if (res.data.status = "success") {
-              url = ["account", "myCart", "checkOut", "editAccount", "myOrders", "negotiate", "seller_products"];
+              url = ["account", "myCart", "checkOut", "editAccount", "myOrders", "negotiate", "seller_products", "order_placed"];
               hasUrl = url.map(function (e) {
                 return window.location.href.includes(e);
               });
               if (hasUrl.includes(true)) window.location.href = "/";else if (!window.location.href.includes("seller-login")) location.reload();
             }
 
-            _context14.next = 11;
+            _context16.next = 10;
             break;
 
           case 7:
-            _context14.prev = 7;
-            _context14.t0 = _context14["catch"](0);
-            console.log(_context14.t0.response);
+            _context16.prev = 7;
+            _context16.t0 = _context16["catch"](0);
             (0, _alerts.showAlert)("error", "Error logging out! Try again.");
 
-          case 11:
+          case 10:
           case "end":
-            return _context14.stop();
+            return _context16.stop();
         }
       }
-    }, _callee14, null, [[0, 7]]);
+    }, _callee16, null, [[0, 7]]);
   }));
 
   return function logout() {
-    return _ref14.apply(this, arguments);
+    return _ref16.apply(this, arguments);
   };
 }();
 
 exports.logout = logout;
 
 var filterPrice = /*#__PURE__*/function () {
-  var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(start, end) {
+  var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(start, end) {
     var url;
-    return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+    return _regeneratorRuntime().wrap(function _callee17$(_context17) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context17.prev = _context17.next) {
           case 0:
             url = window.location;
             if (!url.search) url = url.search + "?price[gte]=".concat(start, "&price[lte]=").concat(end);else if (url.search.includes("type") && url.search.includes("price[gte]")) {
@@ -5509,44 +5561,363 @@ var filterPrice = /*#__PURE__*/function () {
 
           case 3:
           case "end":
-            return _context15.stop();
+            return _context17.stop();
         }
       }
-    }, _callee15);
+    }, _callee17);
   }));
 
-  return function filterPrice(_x26, _x27) {
-    return _ref15.apply(this, arguments);
+  return function filterPrice(_x32, _x33) {
+    return _ref17.apply(this, arguments);
   };
 }();
 
 exports.filterPrice = filterPrice;
 
 var withinDistance = /*#__PURE__*/function () {
-  var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(dist) {
-    return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+  var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(dist) {
+    return _regeneratorRuntime().wrap(function _callee18$(_context18) {
       while (1) {
-        switch (_context16.prev = _context16.next) {
+        switch (_context18.prev = _context18.next) {
           case 0:
             navigator.geolocation.getCurrentPosition(function (position) {
-              window.location.href = "/productsWithin/".concat(position.coords.latitude, ",").concat(position.coords.longitude, ",").concat(dist, "?sort=-price&price[gte]=20&price[lte]=60");
+              if (!window.location.href.includes("farm")) window.location.href = "/productsWithin/".concat(position.coords.latitude, ",").concat(position.coords.longitude, ",").concat(dist);else window.location.href = "/farmProductsWithin/".concat(position.coords.latitude, ",").concat(position.coords.longitude, ",").concat(dist);
             });
 
           case 1:
           case "end":
-            return _context16.stop();
+            return _context18.stop();
         }
       }
-    }, _callee16);
+    }, _callee18);
   }));
 
-  return function withinDistance(_x28) {
-    return _ref16.apply(this, arguments);
+  return function withinDistance(_x34) {
+    return _ref18.apply(this, arguments);
   };
 }();
 
 exports.withinDistance = withinDistance;
-},{"axios":"../../../node_modules/axios/index.js","./alerts":"alerts.js"}],"loginForm.js":[function(require,module,exports) {
+},{"axios":"../../../node_modules/axios/index.js","./alerts":"alerts.js"}],"weather.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.renderWeather = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var weatherCont = document.querySelector(".weatherCont");
+var todayWeatherCont = document.querySelector(".todayWeatherCont");
+var weatherData = [{
+  "code": 1000,
+  "day": "Sunny",
+  "night": "Clear",
+  "icon": 113
+}, {
+  "code": 1003,
+  "day": "Partly cloudy",
+  "night": "Partly cloudy",
+  "icon": 116
+}, {
+  "code": 1006,
+  "day": "Cloudy",
+  "night": "Cloudy",
+  "icon": 119
+}, {
+  "code": 1009,
+  "day": "Overcast",
+  "night": "Overcast",
+  "icon": 122
+}, {
+  "code": 1030,
+  "day": "Mist",
+  "night": "Mist",
+  "icon": 143
+}, {
+  "code": 1063,
+  "day": "Patchy rain possible",
+  "night": "Patchy rain possible",
+  "icon": 176
+}, {
+  "code": 1066,
+  "day": "Patchy snow possible",
+  "night": "Patchy snow possible",
+  "icon": 179
+}, {
+  "code": 1069,
+  "day": "Patchy sleet possible",
+  "night": "Patchy sleet possible",
+  "icon": 182
+}, {
+  "code": 1072,
+  "day": "Patchy freezing drizzle possible",
+  "night": "Patchy freezing drizzle possible",
+  "icon": 185
+}, {
+  "code": 1087,
+  "day": "Thundery outbreaks possible",
+  "night": "Thundery outbreaks possible",
+  "icon": 200
+}, {
+  "code": 1114,
+  "day": "Blowing snow",
+  "night": "Blowing snow",
+  "icon": 227
+}, {
+  "code": 1117,
+  "day": "Blizzard",
+  "night": "Blizzard",
+  "icon": 230
+}, {
+  "code": 1135,
+  "day": "Fog",
+  "night": "Fog",
+  "icon": 248
+}, {
+  "code": 1147,
+  "day": "Freezing fog",
+  "night": "Freezing fog",
+  "icon": 260
+}, {
+  "code": 1150,
+  "day": "Patchy light drizzle",
+  "night": "Patchy light drizzle",
+  "icon": 263
+}, {
+  "code": 1153,
+  "day": "Light drizzle",
+  "night": "Light drizzle",
+  "icon": 266
+}, {
+  "code": 1168,
+  "day": "Freezing drizzle",
+  "night": "Freezing drizzle",
+  "icon": 281
+}, {
+  "code": 1171,
+  "day": "Heavy freezing drizzle",
+  "night": "Heavy freezing drizzle",
+  "icon": 284
+}, {
+  "code": 1180,
+  "day": "Patchy light rain",
+  "night": "Patchy light rain",
+  "icon": 293
+}, {
+  "code": 1183,
+  "day": "Light rain",
+  "night": "Light rain",
+  "icon": 296
+}, {
+  "code": 1186,
+  "day": "Moderate rain at times",
+  "night": "Moderate rain at times",
+  "icon": 299
+}, {
+  "code": 1189,
+  "day": "Moderate rain",
+  "night": "Moderate rain",
+  "icon": 302
+}, {
+  "code": 1192,
+  "day": "Heavy rain at times",
+  "night": "Heavy rain at times",
+  "icon": 305
+}, {
+  "code": 1195,
+  "day": "Heavy rain",
+  "night": "Heavy rain",
+  "icon": 308
+}, {
+  "code": 1198,
+  "day": "Light freezing rain",
+  "night": "Light freezing rain",
+  "icon": 311
+}, {
+  "code": 1201,
+  "day": "Moderate or heavy freezing rain",
+  "night": "Moderate or heavy freezing rain",
+  "icon": 314
+}, {
+  "code": 1204,
+  "day": "Light sleet",
+  "night": "Light sleet",
+  "icon": 317
+}, {
+  "code": 1207,
+  "day": "Moderate or heavy sleet",
+  "night": "Moderate or heavy sleet",
+  "icon": 320
+}, {
+  "code": 1210,
+  "day": "Patchy light snow",
+  "night": "Patchy light snow",
+  "icon": 323
+}, {
+  "code": 1213,
+  "day": "Light snow",
+  "night": "Light snow",
+  "icon": 326
+}, {
+  "code": 1216,
+  "day": "Patchy moderate snow",
+  "night": "Patchy moderate snow",
+  "icon": 329
+}, {
+  "code": 1219,
+  "day": "Moderate snow",
+  "night": "Moderate snow",
+  "icon": 332
+}, {
+  "code": 1222,
+  "day": "Patchy heavy snow",
+  "night": "Patchy heavy snow",
+  "icon": 335
+}, {
+  "code": 1225,
+  "day": "Heavy snow",
+  "night": "Heavy snow",
+  "icon": 338
+}, {
+  "code": 1237,
+  "day": "Ice pellets",
+  "night": "Ice pellets",
+  "icon": 350
+}, {
+  "code": 1240,
+  "day": "Light rain shower",
+  "night": "Light rain shower",
+  "icon": 353
+}, {
+  "code": 1243,
+  "day": "Moderate or heavy rain shower",
+  "night": "Moderate or heavy rain shower",
+  "icon": 356
+}, {
+  "code": 1246,
+  "day": "Torrential rain shower",
+  "night": "Torrential rain shower",
+  "icon": 359
+}, {
+  "code": 1249,
+  "day": "Light sleet showers",
+  "night": "Light sleet showers",
+  "icon": 362
+}, {
+  "code": 1252,
+  "day": "Moderate or heavy sleet showers",
+  "night": "Moderate or heavy sleet showers",
+  "icon": 365
+}, {
+  "code": 1255,
+  "day": "Light snow showers",
+  "night": "Light snow showers",
+  "icon": 368
+}, {
+  "code": 1258,
+  "day": "Moderate or heavy snow showers",
+  "night": "Moderate or heavy snow showers",
+  "icon": 371
+}, {
+  "code": 1261,
+  "day": "Light showers of ice pellets",
+  "night": "Light showers of ice pellets",
+  "icon": 374
+}, {
+  "code": 1264,
+  "day": "Moderate or heavy showers of ice pellets",
+  "night": "Moderate or heavy showers of ice pellets",
+  "icon": 377
+}, {
+  "code": 1273,
+  "day": "Patchy light rain with thunder",
+  "night": "Patchy light rain with thunder",
+  "icon": 386
+}, {
+  "code": 1276,
+  "day": "Moderate or heavy rain with thunder",
+  "night": "Moderate or heavy rain with thunder",
+  "icon": 389
+}, {
+  "code": 1279,
+  "day": "Patchy light snow with thunder",
+  "night": "Patchy light snow with thunder",
+  "icon": 392
+}, {
+  "code": 1282,
+  "day": "Moderate or heavy snow with thunder",
+  "night": "Moderate or heavy snow with thunder",
+  "icon": 395
+}];
+
+var renderWeather = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var res, imgUrl;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return (0, _axios.default)({
+              method: "GET",
+              url: "http://api.weatherapi.com/v1/forecast.json?key=2fa85d9eb3ec44fb87f45808221410&q=".concat(weatherCont.dataset.city, "&days=7&alerts=yes")
+            });
+
+          case 3:
+            res = _context.sent;
+            weatherData.forEach(function (el) {
+              if (res.data.forecast.forecastday[0].day.condition.text == el.day) imgUrl = "./../images/weather/".concat(el.icon, ".png");
+            });
+            todayWeatherCont.innerHTML = "<div>\n    <h4 class=\"display-2\"><strong> ".concat(((res.data.forecast.forecastday[0].day.maxtemp_c + res.data.forecast.forecastday[0].day.mintemp_c) / 2).toFixed(2), "&deg;C</strong></h4>\n    <p class=\"text-muted mb-0\"> ").concat(res.data.location.name, " , ").concat(res.data.location.country, " </p></div>\n<div>\n    <img src='").concat(imgUrl, "' width='150px'/></div>");
+            res.data.forecast.forecastday.forEach(function (el, i) {
+              if (i != 0) {
+                weatherData.forEach(function (el1, j) {
+                  if (el.day.condition.text == el1.day) {
+                    weatherCont.innerHTML += "<div class=\"flex-column\">\n  <p class=\"small\"><strong>".concat(((el.day.maxtemp_c + el.day.mintemp_c) / 2).toFixed(2), "&deg;C</strong></p><img src=\"./../images/weather/").concat(el1.icon, ".png\" width=\"60px\"/>\n  <p class=\"mb-0\"><strong>").concat(findDay(new Date().getDay() + i), "</strong></p>\n</div>");
+                  }
+                });
+              }
+            });
+            _context.next = 12;
+            break;
+
+          case 9:
+            _context.prev = 9;
+            _context.t0 = _context["catch"](0);
+            console.log("ERRRRORR", _context.t0); // showAlert("error", err.response.data.message);
+
+          case 12:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[0, 9]]);
+  }));
+
+  return function renderWeather() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.renderWeather = renderWeather;
+
+function findDay(dayNo) {
+  if (dayNo == 1 || dayNo == 8 || dayNo == 15) return "Sun";else if (dayNo == 2 || dayNo == 9) return "Mon";else if (dayNo == 3 || dayNo == 10) return "Tue";else if (dayNo == 4 || dayNo == 11) return "Wed";else if (dayNo == 5 || dayNo == 12) return "Thu";else if (dayNo == 6 || dayNo == 13) return "Fri";else if (dayNo == 7 || dayNo == 14) return "Sat";
+}
+},{"axios":"../../../node_modules/axios/index.js"}],"loginForm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5557,13 +5928,25 @@ exports.signUpForm = exports.forgotPasswordForm = void 0;
 var _ApiCalls = require("./ApiCalls.js");
 
 var loginForm = document.querySelector(".login100-form");
-var input;
-var signUpmarkup = "<span class=\"login100-form-title p-b-53\">Sign Up </span>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
+var input, id;
+var signUpmarkup = "\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
+var signUp1markup = "<div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Name</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"User Name is required\">\n    <input class=\"input100\" type=\"text\" name=\"username\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\"> \n    <input class=\"input100\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"pass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"p-t-13 p-b-9\"><span class=\"txt1\">Confirm Password</span>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Password is required\">\n    <input class=\"input100\" type=\"password\" name=\"ConfirmPass\" autocomplete=\"on\"/><span class=\"focus-input100\"></span>\n  </div>\n  <div class=\"container-login100-form-btn m-t-17 signupBtn\">\n    <button type=\"button\" class=\"login100-form-btn signupBtn\" >Sign Up</button>\n  </div>";
 var forgotMarkup = "<span class=\"login100-form-title p-b-53\">Forgot Password </span>\n \n  <div class=\"p-t-31 p-b-9\"><span class=\"txt1\">Email Address</span></div>\n  <div class=\"wrap-input100 validate-input\" data-validate=\"Email Id is required\">\n    <input class=\"input100 emailInpt\" type=\"text\" name=\"email\"/><span class=\"focus-input100\"></span>\n  </div>\n  \n  <div class=\"container-login100-form-btn m-t-17 \">\n    <button type=\"button\" class=\"login100-form-btn forgotPassword\" >Send Mail</button>\n  </div>";
 
 var signUpForm = function signUpForm(e) {
   e.preventDefault();
-  loginForm.innerHTML = signUpmarkup;
+  document.querySelector(".signUpName").innerHTML = "Sign Up";
+  var sellProd = document.querySelectorAll(".sellProd");
+  if (window.location.href.includes("seller")) loginForm.innerHTML = signUp1markup;else loginForm.innerHTML = signUpmarkup;
+
+  if (sellProd) {
+    sellProd.forEach(function (el) {
+      el.addEventListener("click", function () {
+        id = el.dataset.id;
+      });
+    });
+  } else id = 3;
+
   input = document.querySelectorAll(".validate-input .input100");
   document.querySelector(".signupBtn").addEventListener("click", signUpFn);
   input.forEach(function (el) {
@@ -5585,14 +5968,13 @@ var signUpFn = function signUpFn(e) {
       check = false;
     }
   });
-  console.log("SIGNUP");
 
   if (check) {
     var name = input[0].value;
     var email = input[1].value;
     var password = input[2].value;
     var Cpassword = input[3].value;
-    (0, _ApiCalls.signUp)(name, email, password, Cpassword);
+    (0, _ApiCalls.signUp)(name, email, password, Cpassword, id);
   } else {
     return false;
   }
@@ -5663,7 +6045,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 // const stripe = Stripe("pk_test_BUkd0ZXAj6m0q0jMyRgBxNns00PPtgvjjr");
 var showCheckout = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId, role) {
     var session;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
@@ -5671,7 +6053,7 @@ var showCheckout = /*#__PURE__*/function () {
           case 0:
             _context.prev = 0;
             _context.next = 3;
-            return (0, _axios.default)("/api/v1/order/checkOutPage/".concat(orderId));
+            return (0, _axios.default)("/api/v1/".concat(role == "seller" ? "farmOrder" : "order", "/checkOutPage/").concat(orderId));
 
           case 3:
             session = _context.sent;
@@ -5697,7 +6079,7 @@ var showCheckout = /*#__PURE__*/function () {
     }, _callee, null, [[0, 7]]);
   }));
 
-  return function showCheckout(_x) {
+  return function showCheckout(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -5737,6 +6119,7 @@ var prodId = [],
     prodQty = [],
     pay = 1,
     buyer,
+    role,
     delTime = 400000000;
 
 if (products.length != 0) {
@@ -5747,6 +6130,7 @@ if (products.length != 0) {
     return prodQty.push(e.dataset.qty);
   });
   buyer = products[0].dataset.buyer;
+  role = products[0].dataset.role;
 }
 
 var addListener = function addListener() {
@@ -5762,6 +6146,9 @@ var addListener = function addListener() {
         } else if (e.dataset.id == 3) {
           delTime = 100000000;
           priceTxt.innerHTML = "\u20B9 ".concat(price + 100);
+        } else if (e.dataset.id == 0) {
+          delTime = 0;
+          priceTxt.innerHTML = "\u20B9 ".concat(price);
         }
 
         finalPrice = Number(document.querySelector(".finalPrice").innerHTML.replace("₹", ""));
@@ -5804,7 +6191,7 @@ var placeOrder = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: "POST",
-              url: "/api/v1/order/newOrder",
+              url: "/api/v1/".concat(role == "seller" ? "farmOrder" : "order", "/newOrder"),
               data: {
                 products: prodId,
                 buyer: buyer,
@@ -5818,7 +6205,7 @@ var placeOrder = /*#__PURE__*/function () {
             res = _context.sent;
 
             if (res.data.status === "success") {
-              if (pay == 1) (0, _stripe.showCheckout)(res.data.data.data._id);else window.location.href = "/order_placed/".concat(res.data.data.data._id);
+              if (pay == 1) (0, _stripe.showCheckout)(res.data.data.data._id, role);else window.location.href = "/order_placed/".concat(res.data.data.data._id);
             }
 
             _context.next = 10;
@@ -5878,6 +6265,9 @@ var prodImages = document.querySelector(".prodImage");
 var prodImageLabel = document.querySelector(".prodImagelabel");
 var addProdBtn = document.querySelector(".prodBtn");
 var addProdInput = document.querySelectorAll(".prodInput");
+var addRent = document.querySelector(".plRent");
+var pckProd = document.querySelectorAll(".pckProd");
+var rtnProd = document.querySelectorAll(".rtnProd");
 var price = [],
     stock = [],
     products = [],
@@ -5908,6 +6298,7 @@ var sellerSideHandle = function sellerSideHandle() {
   if (addProdBtn) {
     addProdBtn.addEventListener("click", function (e) {
       e.preventDefault();
+      addProduct();
       var flag = 0;
       addProdInput.forEach(function (el) {
         if (!el.value) {
@@ -5917,54 +6308,19 @@ var sellerSideHandle = function sellerSideHandle() {
         }
       });
       if (flag == 1) return;
-      addProduct();
     });
   }
 
   if (prodImages) {
     // let images = [/];
     prodImages.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var getBase64, j;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (prodImages.files.length != 0) prodImageLabel.innerHTML = "".concat(prodImages.files.length, " files uploaded");else prodImageLabel.innerHTML = "No File Choosen"; // for (let i = 0; i < prodImages.files.length; i++)
-              //   images.push(prodImages.files.item(i));
-              // console.log(document.querySelector("input[type=file]")["files"][0]);
-              // var file = document.querySelector("input[type=file]")["files"][0];
-              // const file = images;
+              if (prodImages.files.length != 0) prodImageLabel.innerHTML = "".concat(prodImages.files.length, " files uploaded");else prodImageLabel.innerHTML = "No File Choosen";
 
-              getBase64 = function getBase64(file) {
-                return new Promise(function (resolve, reject) {
-                  var reader = new FileReader();
-                  reader.readAsDataURL(file);
-
-                  reader.onload = function () {
-                    return resolve(reader.result);
-                  };
-
-                  reader.onerror = function (err) {
-                    return reject(err);
-                  };
-                });
-              }; // const images = await Promise.all(
-
-
-              for (j = 0; j < prodImages.files.length; j++) {
-                img.push(getBase64(prodImages.files[j]));
-              }
-
-              _context.next = 5;
-              return Promise.all(img);
-
-            case 5:
-              img = _context.sent;
-              img = img.map(function (el) {
-                return el.split(",")[1];
-              }); // );
-
-            case 7:
+            case 1:
             case "end":
               return _context.stop();
           }
@@ -5972,61 +6328,159 @@ var sellerSideHandle = function sellerSideHandle() {
       }, _callee);
     })));
   }
+
+  if (addRent) {
+    addRent.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var res;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return (0, _axios.default)({
+                method: "POST",
+                url: "/api/v1/rent/createRent",
+                data: {
+                  product: addRent.dataset.id,
+                  buyer: addRent.dataset.buyer,
+                  seller: addRent.dataset.seller
+                }
+              });
+
+            case 2:
+              res = _context2.sent;
+
+              if (res.data.status === "success") {
+                window.location.href = "/MyRents";
+              }
+
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    })));
+  }
+
+  if (pckProd) {
+    pckProd.forEach(function (el) {
+      el.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var res;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return (0, _axios.default)({
+                  method: "PATCH",
+                  url: "/api/v1/rent/startRentDate/".concat(el.dataset.id)
+                });
+
+              case 2:
+                res = _context3.sent;
+
+                if (res.data.status === "success") {
+                  window.location.reload();
+                }
+
+              case 4:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      })));
+    });
+  }
+
+  if (rtnProd) {
+    rtnProd.forEach(function (el) {
+      el.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var res;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return (0, _axios.default)({
+                  method: "PATCH",
+                  url: "/api/v1/rent/endRentDate/".concat(el.dataset.id)
+                });
+
+              case 2:
+                res = _context4.sent;
+
+                if (res.data.status === "success") {
+                  window.location.reload();
+                }
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      })));
+    });
+  }
 };
 
 exports.sellerSideHandle = sellerSideHandle;
 
 var addProduct = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-    var res;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var form, res;
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
-            _context2.next = 2;
+            form = new FormData();
+            form.append("name", prodName.value);
+            form.append("price", prodPrice.value);
+            form.append("costPer", prodCostPer.value);
+            form.append("summary", prodSummary.value);
+            form.append("images", prodImages.files[0]);
+            if (prodImages.files[1]) form.append("images", prodImages.files[1]);
+            if (prodImages.files[2]) form.append("images", prodImages.files[2]);
+            form.append("type", prodType.value);
+            form.append("stockLeft", prodStockLeft.value);
+            _context5.next = 12;
             return (0, _axios.default)({
               method: "POST",
-              url: "/api/v1/seller/addProduct",
-              data: {
-                name: prodName.value,
-                price: prodPrice.value,
-                costPer: prodCostPer.value,
-                summary: prodSummary.value,
-                img: img,
-                type: prodType.value,
-                stockLeft: prodStockLeft.value
-              }
+              url: "/api/v1/product/addProduct",
+              data: form
             });
 
-          case 2:
-            res = _context2.sent;
+          case 12:
+            res = _context5.sent;
 
             if (res.data.status === "success") {
-              window.location.href("/seller_products");
+              window.location.href = "/seller_products";
             }
 
-          case 4:
+          case 14:
           case "end":
-            return _context2.stop();
+            return _context5.stop();
         }
       }
-    }, _callee2);
+    }, _callee5);
   }));
 
   return function addProduct() {
-    return _ref2.apply(this, arguments);
+    return _ref5.apply(this, arguments);
   };
 }();
 
 var updateProducts = function updateProducts() {
   products.forEach( /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(el, i) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(el, i) {
       var res;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
-              _context3.next = 2;
+              _context6.next = 2;
               return (0, _axios.default)({
                 method: "PATCH",
                 url: "/api/v1/product/".concat(el),
@@ -6037,7 +6491,7 @@ var updateProducts = function updateProducts() {
               });
 
             case 2:
-              res = _context3.sent;
+              res = _context6.sent;
 
               if (res.data.status === "success") {
                 location.reload();
@@ -6045,33 +6499,33 @@ var updateProducts = function updateProducts() {
 
             case 4:
             case "end":
-              return _context3.stop();
+              return _context6.stop();
           }
         }
-      }, _callee3);
+      }, _callee6);
     }));
 
     return function (_x, _x2) {
-      return _ref3.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }());
 };
 
 var removeProd = /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(id) {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(id) {
     var res;
-    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            _context4.next = 2;
+            _context7.next = 2;
             return (0, _axios.default)({
               method: "DELETE",
               url: "/api/v1/product/".concat(id)
             });
 
           case 2:
-            res = _context4.sent;
+            res = _context7.sent;
 
             if (res.data.status === "success") {
               location.reload();
@@ -6079,26 +6533,804 @@ var removeProd = /*#__PURE__*/function () {
 
           case 4:
           case "end":
-            return _context4.stop();
+            return _context7.stop();
         }
       }
-    }, _callee4);
+    }, _callee7);
   }));
 
   return function removeProd(_x3) {
-    return _ref4.apply(this, arguments);
+    return _ref7.apply(this, arguments);
   };
 }();
-},{"axios":"../../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
+},{"axios":"../../../node_modules/axios/index.js"}],"speech.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.addMicListner = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.lang = "hi-IN";
+var listening = false;
+
+recognition.onresult = function (event) {
+  var interim_transcript = '';
+  var final_transcript = '';
+
+  for (var i = event.resultIndex; i < event.results.length; ++i) {
+    if (event.results[i].isFinal) {
+      final_transcript += event.results[i][0].transcript; //  document.getElementById('transcript').value = final_transcript;
+
+      trans(final_transcript);
+      toggle();
+    } else {
+      interim_transcript += event.results[i][0].transcript;
+      document.querySelector(".inputTxtHolder").value = interim_transcript;
+    }
+  }
+};
+
+var addMicListner = function addMicListner() {
+  document.querySelector(".mic").addEventListener("click", toggle);
+};
+
+exports.addMicListner = addMicListner;
+
+function toggle() {
+  if (listening) {
+    recognition.stop();
+    listening = false;
+    document.querySelector(".micSearch").classList.remove("search");
+    document.querySelector(".mic").addEventListener("click", toggle);
+  } else {
+    recognition.start();
+    listening = true;
+    document.querySelector(".mic").addEventListener("click", toggle);
+    document.querySelector(".micSearch").classList.remove("search");
+    document.getElementById('transcript').value = "Listening...";
+  }
+}
+
+var trans = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data1) {
+    var apiUrl;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            apiUrl = "https://api.mymemory.translated.net/get?q=".concat(data1, "&langpair=hi|en");
+            fetch(apiUrl).then(function (res) {
+              return res.json();
+            }).then( /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
+                var transTxt, res, searchData, available;
+                return _regeneratorRuntime().wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        transTxt = data.responseData.translatedText.toLowerCase();
+                        document.querySelector(".inputTxtHolder").value = transTxt;
+                        document.querySelector(".inputTxtHolder").value = "Processing...   " + transTxt;
+                        _context.next = 5;
+                        return (0, _axios.default)({
+                          method: "GET",
+                          url: "/api/v1/".concat(window.location.href.includes("farm") ? "farmProduct" : "product")
+                        });
+
+                      case 5:
+                        res = _context.sent;
+                        searchData = [];
+                        res.data.data.data.forEach(function (el) {
+                          searchData.push(el.name.toLowerCase());
+                        });
+                        console.log(searchData, transTxt);
+                        if (transTxt.includes("order")) window.location.href = "/myOrders";else if (transTxt.includes("product")) window.location.href = "/seller_products";else if (transTxt.includes("demand")) window.location.href = "/demand";else if (transTxt.includes("weather")) window.location.href = "/weather";else if (transTxt.includes("detail") || transTxt.includes("description")) window.location.href = "/editAccount";else if (data1 == "टमाटर") window.location.href = "/search/tomato";else {
+                          available = searchData.map(function (el) {
+                            console.log(el, transTxt);
+                            if (transTxt.includes(el)) return transTxt.includes(el);else return el.includes(transTxt);
+                          });
+
+                          if (available.includes(true)) {
+                            if (window.location.href.includes("farm")) window.location.href = "/farmSearch/".concat(searchData[available.indexOf(true)]);else window.location.href = "/search/".concat(searchData[available.indexOf(true)]);
+                          } else {
+                            location.reload();
+                            document.querySelector(".inputTxtHolder").value = "Could Not Recognize ,Try Again!!";
+                          }
+                        }
+
+                      case 10:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee);
+              }));
+
+              return function (_x2) {
+                return _ref2.apply(this, arguments);
+              };
+            }());
+
+          case 2:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function trans(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+},{"axios":"../../../node_modules/axios/index.js"}],"../../../node_modules/express-rate-limit/dist/index.mjs":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.rateLimit = exports.default = exports.MemoryStore = void 0;
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+// source/memory-store.ts
+var calculateNextResetTime = function calculateNextResetTime(windowMs) {
+  var resetTime = new Date();
+  resetTime.setMilliseconds(resetTime.getMilliseconds() + windowMs);
+  return resetTime;
+};
+
+var MemoryStore = /*#__PURE__*/function () {
+  function MemoryStore() {
+    _classCallCheck(this, MemoryStore);
+  }
+
+  _createClass(MemoryStore, [{
+    key: "init",
+    value: function init(options) {
+      var _this = this;
+
+      this.windowMs = options.windowMs;
+      this.resetTime = calculateNextResetTime(this.windowMs);
+      this.hits = {};
+      var interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this.resetAll();
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      })), this.windowMs);
+
+      if (interval.unref) {
+        interval.unref();
+      }
+    }
+  }, {
+    key: "increment",
+    value: function () {
+      var _increment = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(key) {
+        var _a, totalHits;
+
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                totalHits = ((_a = this.hits[key]) != null ? _a : 0) + 1;
+                this.hits[key] = totalHits;
+                return _context2.abrupt("return", {
+                  totalHits: totalHits,
+                  resetTime: this.resetTime
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function increment(_x) {
+        return _increment.apply(this, arguments);
+      }
+
+      return increment;
+    }()
+  }, {
+    key: "decrement",
+    value: function () {
+      var _decrement = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(key) {
+        var current;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                current = this.hits[key];
+
+                if (current) {
+                  this.hits[key] = current - 1;
+                }
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function decrement(_x2) {
+        return _decrement.apply(this, arguments);
+      }
+
+      return decrement;
+    }()
+  }, {
+    key: "resetKey",
+    value: function () {
+      var _resetKey = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(key) {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                delete this.hits[key];
+
+              case 1:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function resetKey(_x3) {
+        return _resetKey.apply(this, arguments);
+      }
+
+      return resetKey;
+    }()
+  }, {
+    key: "resetAll",
+    value: function () {
+      var _resetAll = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                this.hits = {};
+                this.resetTime = calculateNextResetTime(this.windowMs);
+
+              case 2:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function resetAll() {
+        return _resetAll.apply(this, arguments);
+      }
+
+      return resetAll;
+    }()
+  }]);
+
+  return MemoryStore;
+}(); // source/lib.ts
+
+
+exports.MemoryStore = MemoryStore;
+
+var isLegacyStore = function isLegacyStore(store) {
+  return typeof store.incr === "function" && typeof store.increment !== "function";
+};
+
+var promisifyStore = function promisifyStore(passedStore) {
+  if (!isLegacyStore(passedStore)) {
+    return passedStore;
+  }
+
+  var legacyStore = passedStore;
+
+  var PromisifiedStore = /*#__PURE__*/function () {
+    function PromisifiedStore() {
+      _classCallCheck(this, PromisifiedStore);
+    }
+
+    _createClass(PromisifiedStore, [{
+      key: "increment",
+      value: function () {
+        var _increment2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(key) {
+          return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+            while (1) {
+              switch (_context6.prev = _context6.next) {
+                case 0:
+                  return _context6.abrupt("return", new Promise(function (resolve, reject) {
+                    legacyStore.incr(key, function (error, totalHits, resetTime) {
+                      if (error) reject(error);
+                      resolve({
+                        totalHits: totalHits,
+                        resetTime: resetTime
+                      });
+                    });
+                  }));
+
+                case 1:
+                case "end":
+                  return _context6.stop();
+              }
+            }
+          }, _callee6);
+        }));
+
+        function increment(_x4) {
+          return _increment2.apply(this, arguments);
+        }
+
+        return increment;
+      }()
+    }, {
+      key: "decrement",
+      value: function () {
+        var _decrement2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(key) {
+          return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+            while (1) {
+              switch (_context7.prev = _context7.next) {
+                case 0:
+                  return _context7.abrupt("return", legacyStore.decrement(key));
+
+                case 1:
+                case "end":
+                  return _context7.stop();
+              }
+            }
+          }, _callee7);
+        }));
+
+        function decrement(_x5) {
+          return _decrement2.apply(this, arguments);
+        }
+
+        return decrement;
+      }()
+    }, {
+      key: "resetKey",
+      value: function () {
+        var _resetKey2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(key) {
+          return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+            while (1) {
+              switch (_context8.prev = _context8.next) {
+                case 0:
+                  return _context8.abrupt("return", legacyStore.resetKey(key));
+
+                case 1:
+                case "end":
+                  return _context8.stop();
+              }
+            }
+          }, _callee8);
+        }));
+
+        function resetKey(_x6) {
+          return _resetKey2.apply(this, arguments);
+        }
+
+        return resetKey;
+      }()
+    }, {
+      key: "resetAll",
+      value: function () {
+        var _resetAll2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+          return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+            while (1) {
+              switch (_context9.prev = _context9.next) {
+                case 0:
+                  if (!(typeof legacyStore.resetAll === "function")) {
+                    _context9.next = 2;
+                    break;
+                  }
+
+                  return _context9.abrupt("return", legacyStore.resetAll());
+
+                case 2:
+                case "end":
+                  return _context9.stop();
+              }
+            }
+          }, _callee9);
+        }));
+
+        function resetAll() {
+          return _resetAll2.apply(this, arguments);
+        }
+
+        return resetAll;
+      }()
+    }]);
+
+    return PromisifiedStore;
+  }();
+
+  return new PromisifiedStore();
+};
+
+var parseOptions = function parseOptions(passedOptions) {
+  var _a, _b, _c;
+
+  var notUndefinedOptions = omitUndefinedOptions(passedOptions);
+
+  var config = _objectSpread(_objectSpread({
+    windowMs: 60 * 1e3,
+    max: 5,
+    message: "Too many requests, please try again later.",
+    statusCode: 429,
+    legacyHeaders: (_a = passedOptions.headers) != null ? _a : true,
+    standardHeaders: (_b = passedOptions.draft_polli_ratelimit_headers) != null ? _b : false,
+    requestPropertyName: "rateLimit",
+    skipFailedRequests: false,
+    skipSuccessfulRequests: false,
+    requestWasSuccessful: function requestWasSuccessful(_request, response) {
+      return response.statusCode < 400;
+    },
+    skip: function skip(_request, _response) {
+      return false;
+    },
+    keyGenerator: function keyGenerator(request, _response) {
+      if (!request.ip) {
+        console.error("WARN | `express-rate-limit` | `request.ip` is undefined. You can avoid this by providing a custom `keyGenerator` function, but it may be indicative of a larger issue.");
+      }
+
+      return request.ip;
+    },
+    handler: function handler(_request, response, _next, _optionsUsed) {
+      response.status(config.statusCode).send(config.message);
+    },
+    onLimitReached: function onLimitReached(_request, _response, _optionsUsed) {}
+  }, notUndefinedOptions), {}, {
+    store: promisifyStore((_c = notUndefinedOptions.store) != null ? _c : new MemoryStore())
+  });
+
+  if (typeof config.store.increment !== "function" || typeof config.store.decrement !== "function" || typeof config.store.resetKey !== "function" || typeof config.store.resetAll !== "undefined" && typeof config.store.resetAll !== "function" || typeof config.store.init !== "undefined" && typeof config.store.init !== "function") {
+    throw new TypeError("An invalid store was passed. Please ensure that the store is a class that implements the `Store` interface.");
+  }
+
+  return config;
+};
+
+var handleAsyncErrors = function handleAsyncErrors(fn) {
+  return /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(request, response, next) {
+      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              _context10.prev = 0;
+              _context10.next = 3;
+              return Promise.resolve(fn(request, response, next)).catch(next);
+
+            case 3:
+              _context10.next = 8;
+              break;
+
+            case 5:
+              _context10.prev = 5;
+              _context10.t0 = _context10["catch"](0);
+              next(_context10.t0);
+
+            case 8:
+            case "end":
+              return _context10.stop();
+          }
+        }
+      }, _callee10, null, [[0, 5]]);
+    }));
+
+    return function (_x7, _x8, _x9) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+};
+
+var rateLimit = function rateLimit(passedOptions) {
+  var options = parseOptions(passedOptions != null ? passedOptions : {});
+  if (typeof options.store.init === "function") options.store.init(options);
+  var middleware = handleAsyncErrors( /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(request, response, next) {
+      var skip, augmentedRequest, key, _yield$options$store$, totalHits, resetTime, retrieveQuota, maxHits, deltaSeconds, decremented, decrementKey;
+
+      return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+        while (1) {
+          switch (_context16.prev = _context16.next) {
+            case 0:
+              _context16.next = 2;
+              return options.skip(request, response);
+
+            case 2:
+              skip = _context16.sent;
+
+              if (!skip) {
+                _context16.next = 6;
+                break;
+              }
+
+              next();
+              return _context16.abrupt("return");
+
+            case 6:
+              augmentedRequest = request;
+              _context16.next = 9;
+              return options.keyGenerator(request, response);
+
+            case 9:
+              key = _context16.sent;
+              _context16.next = 12;
+              return options.store.increment(key);
+
+            case 12:
+              _yield$options$store$ = _context16.sent;
+              totalHits = _yield$options$store$.totalHits;
+              resetTime = _yield$options$store$.resetTime;
+              retrieveQuota = typeof options.max === "function" ? options.max(request, response) : options.max;
+              _context16.next = 18;
+              return retrieveQuota;
+
+            case 18:
+              maxHits = _context16.sent;
+              augmentedRequest[options.requestPropertyName] = {
+                limit: maxHits,
+                current: totalHits,
+                remaining: Math.max(maxHits - totalHits, 0),
+                resetTime: resetTime
+              };
+
+              if (options.legacyHeaders && !response.headersSent) {
+                response.setHeader("X-RateLimit-Limit", maxHits);
+                response.setHeader("X-RateLimit-Remaining", augmentedRequest[options.requestPropertyName].remaining);
+
+                if (resetTime instanceof Date) {
+                  response.setHeader("Date", new Date().toUTCString());
+                  response.setHeader("X-RateLimit-Reset", Math.ceil(resetTime.getTime() / 1e3));
+                }
+              }
+
+              if (options.standardHeaders && !response.headersSent) {
+                response.setHeader("RateLimit-Limit", maxHits);
+                response.setHeader("RateLimit-Remaining", augmentedRequest[options.requestPropertyName].remaining);
+
+                if (resetTime) {
+                  deltaSeconds = Math.ceil((resetTime.getTime() - Date.now()) / 1e3);
+                  response.setHeader("RateLimit-Reset", Math.max(0, deltaSeconds));
+                }
+              }
+
+              if (options.skipFailedRequests || options.skipSuccessfulRequests) {
+                decremented = false;
+
+                decrementKey = /*#__PURE__*/function () {
+                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+                    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+                      while (1) {
+                        switch (_context11.prev = _context11.next) {
+                          case 0:
+                            if (decremented) {
+                              _context11.next = 4;
+                              break;
+                            }
+
+                            _context11.next = 3;
+                            return options.store.decrement(key);
+
+                          case 3:
+                            decremented = true;
+
+                          case 4:
+                          case "end":
+                            return _context11.stop();
+                        }
+                      }
+                    }, _callee11);
+                  }));
+
+                  return function decrementKey() {
+                    return _ref4.apply(this, arguments);
+                  };
+                }();
+
+                if (options.skipFailedRequests) {
+                  response.on("finish", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
+                    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+                      while (1) {
+                        switch (_context12.prev = _context12.next) {
+                          case 0:
+                            if (options.requestWasSuccessful(request, response)) {
+                              _context12.next = 3;
+                              break;
+                            }
+
+                            _context12.next = 3;
+                            return decrementKey();
+
+                          case 3:
+                          case "end":
+                            return _context12.stop();
+                        }
+                      }
+                    }, _callee12);
+                  })));
+                  response.on("close", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
+                    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+                      while (1) {
+                        switch (_context13.prev = _context13.next) {
+                          case 0:
+                            if (response.writableEnded) {
+                              _context13.next = 3;
+                              break;
+                            }
+
+                            _context13.next = 3;
+                            return decrementKey();
+
+                          case 3:
+                          case "end":
+                            return _context13.stop();
+                        }
+                      }
+                    }, _callee13);
+                  })));
+                  response.on("error", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
+                    return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+                      while (1) {
+                        switch (_context14.prev = _context14.next) {
+                          case 0:
+                            _context14.next = 2;
+                            return decrementKey();
+
+                          case 2:
+                          case "end":
+                            return _context14.stop();
+                        }
+                      }
+                    }, _callee14);
+                  })));
+                }
+
+                if (options.skipSuccessfulRequests) {
+                  response.on("finish", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
+                    return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+                      while (1) {
+                        switch (_context15.prev = _context15.next) {
+                          case 0:
+                            if (!options.requestWasSuccessful(request, response)) {
+                              _context15.next = 3;
+                              break;
+                            }
+
+                            _context15.next = 3;
+                            return decrementKey();
+
+                          case 3:
+                          case "end":
+                            return _context15.stop();
+                        }
+                      }
+                    }, _callee15);
+                  })));
+                }
+              }
+
+              if (maxHits && totalHits === maxHits + 1) {
+                options.onLimitReached(request, response, options);
+              }
+
+              if (!(maxHits && totalHits > maxHits)) {
+                _context16.next = 28;
+                break;
+              }
+
+              if ((options.legacyHeaders || options.standardHeaders) && !response.headersSent) {
+                response.setHeader("Retry-After", Math.ceil(options.windowMs / 1e3));
+              }
+
+              options.handler(request, response, next, options);
+              return _context16.abrupt("return");
+
+            case 28:
+              next();
+
+            case 29:
+            case "end":
+              return _context16.stop();
+          }
+        }
+      }, _callee16);
+    }));
+
+    return function (_x10, _x11, _x12) {
+      return _ref3.apply(this, arguments);
+    };
+  }());
+  middleware.resetKey = options.store.resetKey.bind(options.store);
+  return middleware;
+};
+
+var omitUndefinedOptions = function omitUndefinedOptions(passedOptions) {
+  var omittedOptions = {};
+
+  for (var _i = 0, _Object$keys = Object.keys(passedOptions); _i < _Object$keys.length; _i++) {
+    var k = _Object$keys[_i];
+    var key = k;
+
+    if (passedOptions[key] !== void 0) {
+      omittedOptions[key] = passedOptions[key];
+    }
+  }
+
+  return omittedOptions;
+};
+
+var lib_default = rateLimit;
+exports.rateLimit = exports.default = lib_default;
+},{}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _ApiCalls = require("./ApiCalls.js");
+
+var _weather = require("./weather.js");
 
 var _loginForm = require("./loginForm.js");
 
 var _checkOut = require("./checkOut.js");
 
 var _sellerSide = require("./sellerSide.js");
+
+var _speech = require("./speech.js");
+
+var _expressRateLimit = _interopRequireDefault(require("express-rate-limit"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var input = document.querySelectorAll(".validate-input .input100");
 var form = document.querySelector(".validate-form");
@@ -6130,9 +7362,34 @@ var confirmPassInput = document.querySelector(".confirmPassUpdate");
 var updatePassBtn = document.querySelector(".updatePassBtn");
 var negoIds = document.querySelectorAll(".negoId");
 var filterBtn = document.querySelector(".filterBtn");
-var distValue = document.querySelector(".distValue"); // const filterBtn = document.querySelectorAll(".filterBtn");
+var distValue = document.querySelector(".distValue");
+var sellProd = document.querySelectorAll(".sellProd");
+var navItem = document.querySelectorAll(".nav-item");
+var cityBtn = document.querySelectorAll(".cityBtn");
+var tableLst = document.querySelectorAll(".tableLst");
+var chartImg = document.querySelectorAll(".chartImg");
+(0, _speech.addMicListner)();
+if (window.location.href.includes("weather")) (0, _weather.renderWeather)();
 
+if (navItem) {
+  navItem.forEach(function (el) {
+    el.classList.remove("active"); // el.removeClass("active");
+  });
+
+  if (window.location.href.includes("/overview")) {
+    navItem[2].classList.add("active");
+  } else if (window.location.href.includes("/aboutUs")) navItem[1].classList.add("active");else if (window.location.pathname == "/") navItem[0].classList.add("active");
+}
+
+if (window.location.href.includes("productsWithin")) distValue.value = window.location.href.split(",")[2].split("?")[0];
 (0, _checkOut.addListener)();
+var distChange = false;
+
+if (distValue) {
+  distValue.addEventListener("change", function () {
+    distChange = true;
+  });
+}
 
 function showNotification(name, bid, negoStage) {
   var notification = new Notification(" New bid for your Negotiation  ", {
@@ -6155,8 +7412,6 @@ if (negoIds) {
     });
   });
   socket.on("wel", function (arg) {
-    console.log(negoIds[0].dataset.user, arg.negoStage);
-
     if (negoIds[0].dataset.user == "buyer" && arg.negoStage % 2 != 0) {
       if (localStorage.getItem("notify")) showNotification(arg.name, arg.bid, arg.negoStage);else Notification.requestPermission().then(function (permission) {
         if (permission == "granted") {
@@ -6179,7 +7434,7 @@ var a = document.querySelector("#amount");
 
 if (filterBtn) {
   filterBtn.addEventListener("click", function () {
-    if (distValue.value) (0, _ApiCalls.withinDistance)(distValue.value);else (0, _ApiCalls.filterPrice)(a.dataset.startprice, a.dataset.endprice);
+    if (distValue.value && distChange) (0, _ApiCalls.withinDistance)(distValue.value);else (0, _ApiCalls.filterPrice)(a.dataset.startprice, a.dataset.endprice);
   });
 }
 
@@ -6189,13 +7444,23 @@ if (form) {
   });
 }
 
-if (window.location.href.includes("seller")) {
+if (window.location.href.includes("seller") || window.location.href.includes("rent") || window.location.href.includes("Rents")) {
   (0, _sellerSide.sellerSideHandle)();
-}
+} // if (window.location.href.includes("login"))
+//   loginRedirectBtn.parentElement.parentElement.remove();
 
-if (window.location.href.includes("login")) loginRedirectBtn.parentElement.parentElement.remove();
 
 if (loginBtn) {
+  var id;
+
+  if (sellProd) {
+    sellProd.forEach(function (el) {
+      el.addEventListener("click", function () {
+        id = el.dataset.id;
+      });
+    });
+  } else id = 3;
+
   loginBtn.addEventListener("click", function () {
     if (window.location.href.includes("seller")) (0, _ApiCalls.logout)();
     var check = true;
@@ -6209,14 +7474,12 @@ if (loginBtn) {
     if (check) {
       var email = input[0].value;
       var password = input[1].value;
-      (0, _ApiCalls.login)(email, password);
+      (0, _ApiCalls.login)(email, password, id);
     } else {
       return false;
     }
   });
 }
-
-console.log(logoutBtn);
 
 if (logoutBtn) {
   logoutBtn.addEventListener("click", _ApiCalls.logout);
@@ -6253,7 +7516,7 @@ if (qtyInput) {
       subTotal.innerHTML = "\u20B9 ".concat(sum);
       tax.innerHTML = "\u20B9 ".concat(Math.floor(sum * 0.05));
       grandTotal.innerHTML = "\u20B9 ".concat(sum + Math.floor(sum * 0.05));
-      (0, _ApiCalls.updateCart)(e.dataset.prodid, e.value);
+      (0, _ApiCalls.updateCart)(e.dataset.prodid, e.value, e.dataset.role);
     });
   });
 }
@@ -6261,8 +7524,8 @@ if (qtyInput) {
 if (rmBtn) {
   rmBtn.forEach(function (el, i) {
     el.addEventListener("click", function () {
+      (0, _ApiCalls.rmCart)(i, el.parentElement.childNodes[3].childNodes[0].dataset.role);
       el.parentElement.remove();
-      (0, _ApiCalls.rmCart)(i);
     });
   });
 }
@@ -6310,7 +7573,6 @@ if (negoPgcancel) {
 
 if (resetPassBtn) {
   resetPassBtn.addEventListener("click", function () {
-    console.log("Click");
     (0, _ApiCalls.resetPassFn)(passConfirmReset.dataset.token, passwordReset.value, passConfirmReset.value);
   });
 }
@@ -6324,6 +7586,22 @@ if (updateNameBtn) {
 if (updatePassBtn) {
   updatePassBtn.addEventListener("click", function () {
     if (!oldPassInput.value) showValidate(oldPassInput);else if (!newPassInput.value) showValidate(newPassInput);else if (!confirmPassInput.value) showValidate(confirmPassInput);else (0, _ApiCalls.updatePassword)(oldPassInput.value, newPassInput.value, confirmPassInput.value);
+  });
+}
+
+if (cityBtn) {
+  cityBtn.forEach(function (el) {
+    el.addEventListener("click", function () {
+      tableLst.forEach(function (tab) {
+        tab.classList.add("hidden");
+        console.log(tab.childNodes);
+      });
+      tableLst[el.dataset.id].classList.remove("hidden");
+      chartImg.forEach(function (img) {
+        img.style.display = "none";
+      });
+      chartImg[el.dataset.id].style.display = "";
+    });
   });
 }
 
@@ -6353,8 +7631,20 @@ function showValidate(input) {
 function hideValidate(input) {
   var thisAlert = $(input).parent();
   $(thisAlert).removeClass("alert-validate");
-}
-},{"./ApiCalls.js":"ApiCalls.js","./loginForm.js":"loginForm.js","./checkOut.js":"checkOut.js","./sellerSide.js":"sellerSide.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+} // import axios from "axios";
+// const demo = async()=>{
+//  try {
+//       const res = await axios({
+//         method: "GET",
+//         url: `http://api.weatherapi.com/v1/forecast.json?key=2fa85d9eb3ec44fb87f45808221410&q=chennai&days=7&alerts=yes`,
+//       });
+//       console.log(res)
+//     } catch (err) {
+//       console.log("ERRRRORR", err);
+//       // showAlert("error", err.response.data.message);
+//     }}
+//     demo();
+},{"./ApiCalls.js":"ApiCalls.js","./weather.js":"weather.js","./loginForm.js":"loginForm.js","./checkOut.js":"checkOut.js","./sellerSide.js":"sellerSide.js","./speech.js":"speech.js","express-rate-limit":"../../../node_modules/express-rate-limit/dist/index.mjs"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -6382,7 +7672,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60799" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64059" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

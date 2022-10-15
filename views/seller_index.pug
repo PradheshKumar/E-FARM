@@ -108,15 +108,15 @@ block content
       .row
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .shop-cat-box
-            img.img-fluid(src='images/categories_img_01.jpg' alt='')
+            img.img-fluid(src='images/categories_img_01.jpg' alt='' onError="this.src = './../img/default.jpg'")
             a.btn.hvr-hover(href='/overview/?type=vegetable') Fresh Vegetables
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .shop-cat-box
-            img.img-fluid(src='images/categories_img_02.jpg' alt='')
+            img.img-fluid(src='images/categories_img_02.jpg' alt='' onError="this.src = './../img/default.jpg'")
             a.btn.hvr-hover(href='/overview/?type=fruit') Fresh Fruits
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .shop-cat-box
-            img.img-fluid(src='images/categories_img_03.jpg' alt='')
+            img.img-fluid(src='images/categories_img_03.jpg' alt='' onError="this.src = './../img/default.jpg'")
             a.btn.hvr-hover(href='/overview/?type=leaf') Fresh Leafs
   // End Categories
   
@@ -143,15 +143,8 @@ block content
               .box-img-hover
                 .type-lb
                   p.sale Sale
-                if(product.img=="")
-                  img.img-fluid(src=`./../img/${product.images[0]}` alt=`${product.name} photo`)
-                else 
-                  img.img-fluid(src=`data:image/png;base64,${product.img[0]}` alt=`${product.name} photo`)
-                .mask-icon
-                  ul
-                    li
-                      a(href=`/product/${product.id}` data-toggle='tooltip' data-placement='right' title='View')
-                        i.fas.fa-eye
+                img.img-fluid(src=`./../img/${product.images[0]}` alt=`${product.name} photo` onError="this.src = './../img/default.jpg'")
+               
                     
                   a.cart(href=`/product/${product.id}`) Add to Cart
               .why-text
@@ -170,7 +163,7 @@ block content
         .col-md-6.col-lg-4.col-xl-4
           .blog-box
             .blog-img
-              img.img-fluid(src='images/blog-img.jpg' alt='')
+              img.img-fluid(src='images/blog-img.jpg' alt='' onError="this.src = './../img/default.jpg'")
             .blog-content
               .title-blog
                 h3 Fusce in augue non nisi fringilla
@@ -189,7 +182,7 @@ block content
         .col-md-6.col-lg-4.col-xl-4
           .blog-box
             .blog-img
-              img.img-fluid(src='images/blog-img-01.jpg' alt='')
+              img.img-fluid(src='images/blog-img-01.jpg' alt='' onError="this.src = './../img/default.jpg'")
             .blog-content
               .title-blog
                 h3 Fusce in augue non nisi fringilla
@@ -208,7 +201,7 @@ block content
         .col-md-6.col-lg-4.col-xl-4
           .blog-box
             .blog-img
-              img.img-fluid(src='images/blog-img-02.jpg' alt='')
+              img.img-fluid(src='images/blog-img-02.jpg' alt='' onError="this.src = './../img/default.jpg'")
             .blog-content
               .title-blog
                 h3 Fusce in augue non nisi fringilla
@@ -224,69 +217,3 @@ block content
                 li
                   a(href='#')
                     i.far.fa-comments
-  // End Blog
-  // Start Instagram Feed
-  .instagram-box
-    .main-instagram.owl-carousel.owl-theme
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-01.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-02.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-03.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-04.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-05.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-06.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-07.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-08.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-09.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-      .item
-        .ins-inner-box
-          img(src='images/instagram-img-05.jpg' alt='')
-          .hov-in
-            a(href='#')
-              i.fab.fa-instagram
-  
-  

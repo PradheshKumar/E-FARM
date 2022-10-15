@@ -15,7 +15,17 @@ router.get(
   "/productsWithin/:distance/center/:latlng",
   productController.getProductsWithin
 );
-
+router.post("/addImages");
+router.post(
+  "/addProduct",
+  authController.isLoggedIn,
+  productController.addProductSeller,
+  productController.uploadImages,
+  productController.resizeImage,
+  productController.addLocation,
+  productController.addProduct,
+  productController.ProductToSeller
+);
 router.get("/search/:key", productController.searchProduct);
 // Protect all routes after this middleware
 router.use(authController.protect);

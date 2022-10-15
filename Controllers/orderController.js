@@ -6,6 +6,8 @@ const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
 const AppError = require("../utils/appError");
 const mongoose = require("mongoose");
+const Demand =  require("../Models/demandModel")
+const demandController = require("../Controllers/demandController");
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 exports.placeOrder = catchAsync(async (req, res, next) => {
@@ -28,7 +30,6 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
     cart: [],
     cartQty: [],
   });
-
   // // //Reduce Stock of Product
   products.forEach(async (el, i) => {
     let stockLeft = el.stockLeft;
@@ -44,13 +45,15 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
       currentOrders: sellerOrders,
     });
   });
-
-  res.status(201).json({
-    status: "success",
-    data: {
-      data: doc,
-    },
-  });
+  demandController.newDemand(products,buyer,req.body.productsQty);
+  
+      res.status(201).json({
+        status: "success",
+        data: {
+          data: doc,
+        },
+      });
+  
 });
 exports.getAllOrders = catchAsync(async (req, res, next) => {
   const doc = await Order.find();

@@ -36,10 +36,7 @@ block content
                                     each nego in negos
                                         tr.negoRow
                                             td.thumbnail-img
-                                                if(nego.product.img=="")
-                                                    img.img-fluid(src=`./../img/${nego.product.images[0]}` alt='')
-                                                else 
-                                                    img.img-fluid(src=`data:image/png;base64,${nego.product.img[0]}` alt='') 
+                                                img.img-fluid(src=`./../img/${nego.product.images[0]}` alt='' onError="this.src = './../img/default.jpg'") 
                                                 
                                             td.name-pr
                                                 a(href=`/product/${nego.product.id}`)= nego.product.name
@@ -57,7 +54,7 @@ block content
                                             if( Number(nego.negoStage)%2 ==0)
                                                 td.remove-pr
                                                     a(href='#')
-                                                    i.fas.negoPgBtn.fa-reply(data-id=nego.id).replyNegoBtn
+                                                    i.fas.negoPgBtn.fa-reply-all(data-id=nego.id).replyNegoBtn
                                                 td.remove-pr
                                                     a(href='#')
                                                     i.fas.negoPgBtn.fa-check(data-id=nego.id).acceptNegoBtn

@@ -44,8 +44,8 @@ orderSchema.pre(/^find/, function (next) {
     select: "name _id email",
   });
   this.populate({
-    path: "product",
-    select: "name _id photos",
+    path: "products",
+    select: "name _id images price",
   });
   next();
 });

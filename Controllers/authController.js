@@ -3,13 +3,16 @@ const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 const Buyer = require("../Models/buyerModel");
 const Seller = require("../Models/sellerModel");
+const FarmSeller = require("../Models/farmSellerModel");
 const Product = require("../Models/productModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Email = require("../utils/email");
 let User;
 const setUser = (res) => {
-  User = res.locals.user == "buyer" ? Buyer : Seller;
+  if (res.locals.user == "buyer") User = Buyer;
+  else if (res.locals.user == "seller") User = Seller;
+  else User = FarmSeller;
 };
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -42,11 +45,13 @@ const createSendToken = (user, statusCode, req, res) => {
 
 exports.signup = catchAsync(async (req, res, next) => {
   setUser(res);
+
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+    location: req.body.location,
   });
 
   const url = `${req.protocol}://${req.get("host")}/`;
@@ -107,7 +112,6 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError("You are not logged in! Please log in to get access.", 401)
     );
   }
-
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
@@ -148,7 +152,11 @@ exports.isLoggedIn = async (req, res, next) => {
       );
 
       // 2) Check if user still exists
-      let currentUser = await Seller.findById(decoded.id);
+      let currentUser = await FarmSeller.findById(decoded.id).populate({
+        path: "rents",
+        select:
+          "id products productsQty totalPrice createdAt estimateDelivery startDate endDate totalDays rentAmount",
+      });
       if (!currentUser) {
         currentUser = await Buyer.findById(decoded.id)
           .populate({
@@ -191,9 +199,23 @@ exports.isLoggedIn = async (req, res, next) => {
       // 2) Check if user still exists
       let currentUser = await Seller.findById(decoded.id)
         .populate({
+          path: "cart",
+          select: "name -seller price images img costPer stockLeft",
+        })
+        .populate({
           path: "currentOrders",
           select:
             "id products productsQty totalPrice -buyer createdAt estimateDelivery",
+        })
+        .populate({
+          path: "farmOrders",
+          select:
+            "id products productsQty totalPrice -buyer createdAt estimateDelivery",
+        })
+        .populate({
+          path: "rents",
+          select:
+            "id products productsQty totalPrice createdAt estimateDelivery startDate endDate totalDays rentAmount",
         })
         .populate({
           path: "negotiations",
@@ -250,7 +272,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     const resetURL = `${req.protocol}://${req.get(
       "host"
     )}/resetPassword/${resetToken}`;
-    console.log(user);
     await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({

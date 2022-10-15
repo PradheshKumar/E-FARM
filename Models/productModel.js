@@ -61,7 +61,6 @@ const productSchema = new mongoose.Schema(
     },
     type: { type: String, enum: ["vegetable", "fruit", "leaf", "crop"] },
     stockLeft: { type: Number, required: [true, "Enter Remaining Stock"] },
-    img: [String],
     location: {
       // GeoJSON
       type: {
@@ -84,13 +83,6 @@ productSchema.index({ price: 1, ratingsAverage: -1 });
 productSchema.index({ slug: 1 });
 productSchema.index({ location: "2dsphere" });
 
-// Virtual populate
-// productSchema.virtual('reviews', {
-//   ref: 'Review',
-//   foreignField: 'product',
-//   localField: '_id',
-// });
-
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 productSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
@@ -102,7 +94,7 @@ productSchema.pre("save", function (next) {
 productSchema.pre(/^find/, function (next) {
   this.populate({
     path: "seller",
-    select: "-__v -passwordChangedAt -role -photo -email",
+    select: "-__v -passwordChangedAt -role -photo",
   });
 
   next();

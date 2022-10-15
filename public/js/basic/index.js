@@ -16,9 +16,12 @@ import {
   filterPrice,
   withinDistance,
 } from "./ApiCalls.js";
+import { renderWeather } from "./weather.js";
 import { signUpForm, forgotPasswordForm } from "./loginForm.js";
 import { addListener } from "./checkOut.js";
 import { sellerSideHandle } from "./sellerSide.js";
+import { addMicListner } from "./speech.js";
+import dist from "express-rate-limit";
 const input = document.querySelectorAll(".validate-input .input100");
 const form = document.querySelector(".validate-form");
 const loginBtn = document.querySelector(".loginBtn");
@@ -50,8 +53,33 @@ const updatePassBtn = document.querySelector(".updatePassBtn");
 const negoIds = document.querySelectorAll(".negoId");
 const filterBtn = document.querySelector(".filterBtn");
 const distValue = document.querySelector(".distValue");
-// const filterBtn = document.querySelectorAll(".filterBtn");
+const sellProd = document.querySelectorAll(".sellProd");
+const navItem = document.querySelectorAll(".nav-item");
+const cityBtn = document.querySelectorAll(".cityBtn");
+const tableLst = document.querySelectorAll(".tableLst");
+const chartImg = document.querySelectorAll(".chartImg");
+addMicListner();
+if(window.location.href.includes("weather")) renderWeather();
+if (navItem) {
+  navItem.forEach((el) => {
+    el.classList.remove("active");
+    // el.removeClass("active");
+  });
+  if (window.location.href.includes("/overview")) {
+    navItem[2].classList.add("active");
+  } else if (window.location.href.includes("/aboutUs"))
+    navItem[1].classList.add("active");
+  else if (window.location.pathname == "/") navItem[0].classList.add("active");
+}
+if (window.location.href.includes("productsWithin"))
+  distValue.value = window.location.href.split(",")[2].split("?")[0];
 addListener();
+let distChange = false;
+if (distValue) {
+  distValue.addEventListener("change", () => {
+    distChange = true;
+  });
+}
 function showNotification(name, bid, negoStage) {
   var notification = new Notification(" New bid for your Negotiation  ", {
     body: `New bid for The product(${name}) : ₹${bid} `,
@@ -71,7 +99,6 @@ if (negoIds) {
     socket.emit("join", { id: el.dataset.id });
   });
   socket.on("wel", (arg) => {
-    console.log(negoIds[0].dataset.user, arg.negoStage);
     if (negoIds[0].dataset.user == "buyer" && arg.negoStage % 2 != 0) {
       if (localStorage.getItem("notify"))
         showNotification(arg.name, arg.bid, arg.negoStage);
@@ -98,7 +125,7 @@ if (negoIds) {
 const a = document.querySelector("#amount");
 if (filterBtn) {
   filterBtn.addEventListener("click", () => {
-    if (distValue.value) withinDistance(distValue.value);
+    if (distValue.value && distChange) withinDistance(distValue.value);
     else filterPrice(a.dataset.startprice, a.dataset.endprice);
   });
 }
@@ -109,12 +136,24 @@ if (form) {
     // return check;
   });
 }
-if (window.location.href.includes("seller")) {
+if (
+  window.location.href.includes("seller") ||
+  window.location.href.includes("rent") ||
+  window.location.href.includes("Rents")
+) {
   sellerSideHandle();
 }
-if (window.location.href.includes("login"))
-  loginRedirectBtn.parentElement.parentElement.remove();
+// if (window.location.href.includes("login"))
+//   loginRedirectBtn.parentElement.parentElement.remove();
 if (loginBtn) {
+  let id;
+  if (sellProd) {
+    sellProd.forEach((el) => {
+      el.addEventListener("click", () => {
+        id = el.dataset.id;
+      });
+    });
+  } else id = 3;
   loginBtn.addEventListener("click", () => {
     if (window.location.href.includes("seller")) logout();
     let check = true;
@@ -127,13 +166,12 @@ if (loginBtn) {
     if (check) {
       const email = input[0].value;
       const password = input[1].value;
-      login(email, password);
+      login(email, password, id);
     } else {
       return false;
     }
   });
 }
-console.log(logoutBtn);
 if (logoutBtn) {
   logoutBtn.addEventListener("click", logout);
 }
@@ -166,15 +204,15 @@ if (qtyInput) {
       subTotal.innerHTML = `₹ ${sum}`;
       tax.innerHTML = `₹ ${Math.floor(sum * 0.05)}`;
       grandTotal.innerHTML = `₹ ${sum + Math.floor(sum * 0.05)}`;
-      updateCart(e.dataset.prodid, e.value);
+      updateCart(e.dataset.prodid, e.value, e.dataset.role);
     });
   });
 }
 if (rmBtn) {
   rmBtn.forEach((el, i) => {
     el.addEventListener("click", () => {
+      rmCart(i, el.parentElement.childNodes[3].childNodes[0].dataset.role);
       el.parentElement.remove();
-      rmCart(i);
     });
   });
 }
@@ -222,7 +260,6 @@ if (negoPgcancel) {
 }
 if (resetPassBtn) {
   resetPassBtn.addEventListener("click", () => {
-    console.log("Click");
     resetPassFn(
       passConfirmReset.dataset.token,
       passwordReset.value,
@@ -248,6 +285,20 @@ if (updatePassBtn) {
       );
   });
 }
+if (cityBtn) {
+  cityBtn.forEach((el) => {
+    el.addEventListener("click", () => {
+      tableLst.forEach((tab) => {
+        tab.classList.add("hidden");
+        console.log(tab.childNodes)
+      });
+      tableLst[el.dataset.id].classList.remove("hidden");
+      chartImg.forEach((img)=>{img.style.display="none";})
+      chartImg[el.dataset.id].style.display="";
+    });
+  });
+}
+
 $(".validate-form .input100").each(function () {
   $(this).focus(function () {
     hideValidate(this);
@@ -273,6 +324,7 @@ function validate(input) {
   }
 }
 
+
 function showValidate(input) {
   var thisAlert = $(input).parent();
   $(thisAlert).addClass("alert-validate");
@@ -283,3 +335,16 @@ function hideValidate(input) {
 
   $(thisAlert).removeClass("alert-validate");
 }
+// import axios from "axios";
+// const demo = async()=>{
+//  try {
+//       const res = await axios({
+//         method: "GET",
+//         url: `http://api.weatherapi.com/v1/forecast.json?key=2fa85d9eb3ec44fb87f45808221410&q=chennai&days=7&alerts=yes`,
+//       });
+//       console.log(res)
+//     } catch (err) {
+//       console.log("ERRRRORR", err);
+//       // showAlert("error", err.response.data.message);
+//     }}
+//     demo();

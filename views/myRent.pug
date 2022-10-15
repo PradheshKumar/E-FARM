@@ -1,0 +1,78 @@
+extends base
+
+block content
+    .all-title-box
+        .container
+         .row
+             .col-lg-12
+                h2 My Rents
+                ul.breadcrumb
+                    li.breadcrumb-item
+                        a(href='/') Home
+                    li.breadcrumb-item.active Rents
+
+    .cart-box-main
+        .container
+            .row
+                .col-lg-12
+                    .table-main.table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th Order No
+                                    th Order Placed On
+                                    th Image
+                                    th Rent 
+                                    th Start Date                             
+                                    th End Date
+                                    th Total Days                             
+                                    th Total Price         
+                                    if(user.role =="farmSeller")
+                                        th Status                    
+                            tbody
+                                each order,i in user.rents
+                                    tr.cartProducts
+                                        td.thumbnail-img
+                                            p= i+1
+                                        td.thumbnail-img
+                                            p= (order.createdAt).toString().slice(4,16)
+                                        td.thumbnail-img
+                                          a(href=`/farmProduct/${order.product.id}`)
+                                            img.img-fluid(src=`./../img/${order.product.images[0]}` alt='' onError="this.src = './../img/default.jpg'")
+                                        td.thumbnail-img
+                                                p= `₹ ${order.product.rentPrice}`
+                                        if(order.startDate)   
+                                            td.thumbnail-img
+                                                p= order.startDate .toString().slice(4,16)
+                                            if(order.endDate)
+                                                td.thumbnail-img
+                                                    p= order.endDate .toString().slice(4,16)
+                                                td.thumbnail-img
+                                                    p= order.totalDays
+                                                td.thumbnail-img
+                                                    p= `₹ ${order.totalDays* order.rentAmount}`
+                                            else 
+                                                td.thumbnail-img
+                                                    p Yet To be returned
+                                        else 
+                                            td.thumbnail-img
+                                                p Yet To be Picked Up
+                                        if(user.role =="farmSeller")
+                                            if(order.startDate)   
+                                                if(order.endDate)
+                                                    td.thumbnail-img
+                                                        p ENDED
+                                                else
+                                                    td 
+                                                    td
+                                                    td.thumbnail-img
+                                                        button.btn.hvr-hover.cartBtn.rtnProd(data-id=order.id) RETURN
+                                            else 
+                                                td 
+                                                td 
+                                                td
+                                                td.thumbnail-img
+                                                    button.btn.hvr-hover.cartBtn.pckProd(data-id=order.id) PICK UP
+                                       
+
+                

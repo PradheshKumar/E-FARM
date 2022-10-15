@@ -30,10 +30,8 @@ block content
                                     tr.cartProducts
                                         td.thumbnail-img
                                             a(href='#')
-                                                if(prod.img=="")
-                                                    img.img-fluid(src=`./../img/${prod.images[0]}` alt='')
-                                                else 
-                                                    img.img-fluid(src=`data:image/png;base64,${prod.img[0]}` alt='') 
+                                                img.img-fluid(src=`./../img/${prod.images[0]}` alt='' onError="this.src = './../img/default.jpg'")
+                                                 
                                         td.name-pr
                                             a(href=`/product/${prod.id}`)= prod.name
                                         td.quantity-box
@@ -51,3 +49,5 @@ block content
                
                 .col-12.d-flex.shopping-box
                     a.ml-auto.btn.hvr-hover.updateBtnSel(href='#') Update Details
+                .shopping-box.text-center
+                    a.ml-auto.btn.hvr-hover(href='/seller_addProduct') Add New Product    

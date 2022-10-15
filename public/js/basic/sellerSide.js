@@ -13,6 +13,10 @@ const prodImages = document.querySelector(".prodImage");
 const prodImageLabel = document.querySelector(".prodImagelabel");
 const addProdBtn = document.querySelector(".prodBtn");
 const addProdInput = document.querySelectorAll(".prodInput");
+const addRent = document.querySelector(".plRent");
+
+const pckProd = document.querySelectorAll(".pckProd");
+const rtnProd = document.querySelectorAll(".rtnProd");
 let price = [],
   stock = [],
   products = [],
@@ -40,6 +44,7 @@ export const sellerSideHandle = () => {
   if (addProdBtn) {
     addProdBtn.addEventListener("click", (e) => {
       e.preventDefault();
+      addProduct();
       let flag = 0;
       addProdInput.forEach((el) => {
         if (!el.value) {
@@ -49,7 +54,6 @@ export const sellerSideHandle = () => {
         }
       });
       if (flag == 1) return;
-      addProduct();
     });
   }
   if (prodImages) {
@@ -58,47 +62,75 @@ export const sellerSideHandle = () => {
       if (prodImages.files.length != 0)
         prodImageLabel.innerHTML = `${prodImages.files.length} files uploaded`;
       else prodImageLabel.innerHTML = "No File Choosen";
-      // for (let i = 0; i < prodImages.files.length; i++)
-      //   images.push(prodImages.files.item(i));
-      // console.log(document.querySelector("input[type=file]")["files"][0]);
-      // var file = document.querySelector("input[type=file]")["files"][0];
-      // const file = images;
-      const getBase64 = (file) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (err) => reject(err);
-        });
-      // const images = await Promise.all(
-      for (let j = 0; j < prodImages.files.length; j++) {
-        img.push(getBase64(prodImages.files[j]));
-      }
-      img = await Promise.all(img);
-      img = img.map((el) => el.split(",")[1]);
+    });
+  }
+  if (addRent) {
+    addRent.addEventListener("click", async () => {
+      const res = await axios({
+        method: "POST",
+        url: `/api/v1/rent/createRent`,
+        data: {
+          product: addRent.dataset.id,
+          buyer: addRent.dataset.buyer,
+          seller: addRent.dataset.seller,
+        },
+      });
 
-      // );
+      if (res.data.status === "success") {
+        window.location.href = "/MyRents";
+      }
+    });
+  }
+  if (pckProd) {
+    pckProd.forEach((el) => {
+      el.addEventListener("click", async () => {
+        const res = await axios({
+          method: "PATCH",
+          url: `/api/v1/rent/startRentDate/${el.dataset.id}`,
+        });
+        if (res.data.status === "success") {
+          window.location.reload();
+        }
+      });
+    });
+  }
+  if (rtnProd) {
+    rtnProd.forEach((el) => {
+      el.addEventListener("click", async () => {
+        const res = await axios({
+          method: "PATCH",
+          url: `/api/v1/rent/endRentDate/${el.dataset.id}`,
+        });
+        if (res.data.status === "success") {
+          window.location.reload();
+        }
+      });
     });
   }
 };
 
 const addProduct = async () => {
+  const form = new FormData();
+
+  form.append("name", prodName.value);
+  form.append("price", prodPrice.value);
+  form.append("costPer", prodCostPer.value);
+  form.append("summary", prodSummary.value);
+
+  form.append("images", prodImages.files[0]);
+  if (prodImages.files[1]) form.append("images", prodImages.files[1]);
+  if (prodImages.files[2]) form.append("images", prodImages.files[2]);
+  form.append("type", prodType.value);
+  form.append("stockLeft", prodStockLeft.value);
+
   const res = await axios({
     method: "POST",
-    url: `/api/v1/seller/addProduct`,
-    data: {
-      name: prodName.value,
-      price: prodPrice.value,
-      costPer: prodCostPer.value,
-      summary: prodSummary.value,
-      img,
-      type: prodType.value,
-      stockLeft: prodStockLeft.value,
-    },
+    url: `/api/v1/product/addProduct`,
+    data: form,
   });
 
   if (res.data.status === "success") {
-    window.location.href("/seller_products");
+    window.location.href = "/seller_products";
   }
 };
 const updateProducts = () => {

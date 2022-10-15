@@ -1,0 +1,140 @@
+extends base
+
+block content 
+
+  .all-title-box
+    .container
+      .row
+        .col-lg-12
+          h2 Product Detail
+          ul.breadcrumb
+            li.breadcrumb-item
+              a(href='/overview') Shop
+            li.breadcrumb-item.active Product Detail 
+  .shop-detail-box-main
+    .container
+      .row
+        .col-xl-5.col-lg-5.col-md-6
+          #carousel-example-1.single-product-slider.carousel.slide(data-ride='carousel')
+            .carousel-inner(role='listbox')
+              .carousel-item.active
+                img.d-block.w-100(src=`./../img/${products[0].images[0]}` alt='First slide' onError="this.src = './../img/default.jpg'")
+              each img,i in products[0].images
+                if(i!=0)
+                  .carousel-item
+                    img.d-block.w-100(src=`./../img/${img}` alt=`${products[0].name} Image` onError="this.src = './../img/default.jpg'")
+            a.carousel-control-prev(href='#carousel-example-1' role='button' data-slide='prev')
+              i.fa.fa-angle-left(aria-hidden='true')
+              span.sr-only Previous
+            a.carousel-control-next(href='#carousel-example-1' role='button' data-slide='next')
+              i.fa.fa-angle-right(aria-hidden='true')
+              span.sr-only Next
+            ol.carousel-indicators
+              li.active(data-target='#carousel-example-1' data-slide-to='0')
+                img.d-block.w-100.img-fluid(src=`./../img/${products[0].images[0]}` alt='' onError="this.src = './../img/default.jpg'")
+              each img,i in products[0].images
+                if(i!=0)
+                  li(data-target='#carousel-example-1' data-slide-to= i)
+                    img.d-block.w-100.img-fluid(src=`./../img/${img}` alt='' onError="this.src = './../img/default.jpg'")
+         
+        .col-xl-7.col-lg-7.col-md-6
+          .single-product-details
+            h2= products[0].name
+            h5= `₹ ${products[0].price}`
+            if(products[0].rent)
+              h4 Rent Price:
+              h5= `₹ ${products[0].rentPrice}  /day` 
+            p.available-stock
+              span= `${products[0].stockLeft} available in stock`
+            p
+            h4 Short Description:
+            p= products[0].summary
+            ul
+              if(!user || user.role=="seller")
+                if(products[0].stockLeft !=0)
+                  li
+                    .form-group.quantity-box
+                      label.control-label Quantity
+                      input.form-control#qtyBox(value='0' min='0' max=products[0].stockLeft type='number')
+                else 
+                  p No stock available
+            if(!user || user.role=="seller")
+              if(products[0].stockLeft !=0)
+                .price-box-bar
+                  .cart-and-bay-btn
+                    if(user)
+                      button.btn.hvr-hover.cartBtn(data-fancybox-close='') Add to cart
+                      if(products[0].rent)
+                        a(href=`/rent/${products[0].id}` style="margin-left: 20px").btn.hvr-hover Take For Rent  
+                    else
+                      a(href=`/seller-login?prod=${products[0].id}`).btn.hvr-hover.cartBtn Login to add to Cart
+                      if(products[0].rent)
+                        a(href=`/seller-login?prod=${products[0].id}` style="margin-left: 20px").btn.hvr-hover Login to Rent
+            .product-rating
+              - var n = 0;
+              while n++<Math.floor(products[0].ratingsAverage)
+                i.fas.fa-star
+              if((products[0].ratingsAverage - Math.floor(products[0].ratingsAverage)) != 0 )
+                i.fas.fa-star-half-alt
+              
+              span= `${products[0].ratingsAverage}(${products[0].ratingsQuantity})`
+      .row.my-5
+        .col-lg-12
+          .aboutSeller.text-center
+            h1 About The Seller 
+            .sellerName.text-left
+              h3= `Name : ${products[0].seller.name}`
+            .product-rating.text-right.sellerRating
+              span Ratings :
+              - var n = 0;
+              while n++<Math.floor(Number(products[0].seller._doc.rating))
+                i.fas.fa-star
+              if((products[0].seller._doc.rating - Math.floor(products[0].seller._doc.rating)) != 0 )
+                i.fas.fa-star-half-alt
+              
+              span= ` ( ${products[0].seller._doc.rating?products[0].seller._doc.rating:"0"})`
+            .sellerMail.text-right 
+              i.fa.fa-address-card
+              span=  `  Contact : ${products[0].seller.email} `
+            .sellerLocation.text-left 
+              i.fa.fa-map-pin
+              a(href=`https://www.google.com/maps/place/${products[0].seller.location.coordinates[1]},${products[0].seller.location.coordinates[0]}` target="_blank")=  " "+ products[0].seller.location.city.toUpperCase()
+            .col-lg-12
+            .title-all.text-center
+              h1 Also Sells
+            
+            .featured-products-box.owl-carousel.owl-theme
+              each prod in products[0].seller._doc.products
+                .item
+                  .products-single.fix
+                    if(prod.rent)
+                      .type-lb
+                        p.sale Rentable
+                    .box-img-hover
+                      a(href=`/farmProduct/${prod.id}`)
+                        img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
+                     
+      
+      
+      .row.my-5
+        .col-lg-12
+          .title-all.text-center
+            h1 Featured Products
+           
+          .featured-products-box.owl-carousel.owl-theme
+            each prod in products[1]
+              .item
+                .products-single.fix
+                  .box-img-hover
+                    if(prod.rent)
+                      .type-lb
+                        p.sale Rentable
+                    img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
+                   
+                        
+                      a.cart(href=`/farmProduct/${prod.id}`) Add to Cart
+                  .why-text
+                    a(href=`/farmProduct/${prod.id}`)
+                      h4= prod.name
+                      h5= `₹ ${prod.price}`
+            

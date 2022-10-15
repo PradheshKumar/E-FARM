@@ -18,21 +18,11 @@ block content
           #carousel-example-1.single-product-slider.carousel.slide(data-ride='carousel')
             .carousel-inner(role='listbox')
               .carousel-item.active
-                if(products[0].img=="")
-                  img.d-block.w-100(src=`./../img/${products[0].images[0]}` alt='First slide')
-                else 
-                  img.d-block.w-100(src=`data:image/png;base64,${products[0].img[0]}` alt='First slide') 
-              if(products[0].img=="")
-                each img,i in products[0].images
-                  if(i!=0)
-                    .carousel-item
-                      img.d-block.w-100(src=`./../img/${img}` alt=`${products[0].name} Image`)
-              else 
-                each img,i in products[0].img
-                  if(i!=0)
-                    .carousel-item
-                      p= img
-                      img.d-block.w-100(src=`data:image/png;base64,${img}` alt=`${products[0].name} Image`)
+                img.d-block.w-100(src=`./../img/${products[0].images[0]}` alt='First slide' onError="this.src = './../img/default.jpg'")
+              each img,i in products[0].images
+                if(i!=0)
+                  .carousel-item
+                    img.d-block.w-100(src=`./../img/${img}` alt=`${products[0].name} Image` onError="this.src = './../img/default.jpg'")
             a.carousel-control-prev(href='#carousel-example-1' role='button' data-slide='prev')
               i.fa.fa-angle-left(aria-hidden='true')
               span.sr-only Previous
@@ -41,20 +31,11 @@ block content
               span.sr-only Next
             ol.carousel-indicators
               li.active(data-target='#carousel-example-1' data-slide-to='0')
-                if(products[0].img=="")
-                  img.d-block.w-100.img-fluid(src=`./../img/${products[0].images[0]}` alt='')
-                else 
-                  img.d-block.w-100.img-fluid(src=`data:image/png;base64,${products[0].img[0]}` alt='')
-              if(products[0].img=="")
-                each img,i in products[0].images
-                  if(i!=0)
-                    li(data-target='#carousel-example-1' data-slide-to= i)
-                      img.d-block.w-100.img-fluid(src=`./../img/${img}` alt='')
-              else
-                each img,i in products[0].img
-                  if(i!=0)
-                    li(data-target='#carousel-example-1' data-slide-to= i)
-                      img.d-block.w-100.img-fluid(src=`data:image/png;base64,${img}` alt='')
+                img.d-block.w-100.img-fluid(src=`./../img/${products[0].images[0]}` alt='' onError="this.src = './../img/default.jpg'")
+              each img,i in products[0].images
+                if(i!=0)
+                  li(data-target='#carousel-example-1' data-slide-to= i)
+                    img.d-block.w-100.img-fluid(src=`./../img/${img}` alt='' onError="this.src = './../img/default.jpg'")
          
         .col-xl-7.col-lg-7.col-md-6
           .single-product-details
@@ -93,9 +74,40 @@ block content
                 i.fas.fa-star-half-alt
               
               span= `${products[0].ratingsAverage}(${products[0].ratingsQuantity})`
-      .col-xl-7.col-lg-7.col-md-6
-        .single-product-details
-          h1= `This Product is From ${products[0].location.city}`
+      .row.my-5
+        .col-lg-12
+          .aboutSeller.text-center
+            h1 About The Seller 
+            .sellerName.text-left
+              h3= `Name : ${products[0].seller.name}`
+            .product-rating.text-right.sellerRating
+              span Ratings :
+              - var n = 0;
+              while n++<Math.floor(Number(products[0].seller._doc.rating))
+                i.fas.fa-star
+              if((products[0].seller._doc.rating - Math.floor(products[0].seller._doc.rating)) != 0 )
+                i.fas.fa-star-half-alt
+              
+              span= ` ( ${products[0].seller._doc.rating?products[0].seller._doc.rating:"0"})`
+            .sellerMail.text-right 
+              i.fa.fa-address-card
+              span=  `  Contact : ${products[0].seller.email} `
+            .sellerLocation.text-left 
+              i.fa.fa-map-pin
+              a(href=`https://www.google.com/maps/place/${products[0].seller.location.coordinates[1]},${products[0].seller.location.coordinates[0]}` target="_blank")=  " "+ products[0].seller.location.city.toUpperCase()
+            .col-lg-12
+            .title-all.text-center
+              h1 Also Sells
+            
+            .featured-products-box.owl-carousel.owl-theme
+              each prod in products[0].seller._doc.products
+                .item
+                  .products-single.fix
+                    .box-img-hover
+                      a(href=`/product/${prod.id}`)
+                        img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
+                     
+      
       
       .row.my-5
         .col-lg-12
@@ -107,17 +119,8 @@ block content
               .item
                 .products-single.fix
                   .box-img-hover
-                    if(prod.img=="")
-                      img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo`)
-                    else 
-                      img.img-fluid(src=`data:image/png;base64,${prod.img[0]}` alt=`${prod.name} photo`) 
-                    .mask-icon
-                      ul
-                        li
-                          a(href=`/product/${prod.id}` data-toggle='tooltip' data-placement='right' title='View')
-                            i.fas.fa-eye
-                        
-                      a.cart(href=`/product/${prod.id}`) Add to Cart
+                    img.img-fluid(src=`./../img/${prod.images[0]}` alt=`${prod.name} photo` onError="this.src = './../img/default.jpg'")
+                    
                   .why-text
                     a(href=`/product/${prod.id}`)
                       h4= prod.name

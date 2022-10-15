@@ -2,7 +2,7 @@
 import axios from "axios";
 import { showAlert } from "./alerts";
 const addCartBtn = document.querySelector(".cartBtn");
-export const login = async (email, password) => {
+export const login = async (email, password, id) => {
   const input = document.querySelectorAll(".validate-input");
 
   try {
@@ -19,7 +19,7 @@ export const login = async (email, password) => {
     } else {
       res = await axios({
         method: "POST",
-        url: "/api/v1/seller/login",
+        url: `/api/v1/${id == 0 ? "farmSeller" : "seller"}/login`,
         data: {
           email,
           password,
@@ -34,7 +34,7 @@ export const login = async (email, password) => {
             location.assign(`/product/${window.location.search.slice(6)}`);
           else location.assign("/");
         } else {
-          location.assign("/seller_products");
+          location.assign("/farmOverview");
         }
       }, 200);
     }
@@ -46,36 +46,78 @@ export const login = async (email, password) => {
   }
   return true;
 };
-export const signUp = async (name, email, password, passwordConfirm) => {
+export const signUp = async (name, email, password, passwordConfirm, id) => {
   const input = document.querySelectorAll(".validate-input");
   try {
     if (!window.location.href.includes("seller")) {
-      const res = await axios({
-        method: "POST",
-        url: "/api/v1/user/signup",
-        data: { name, email, password, passwordConfirm },
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const long = position.coords.longitude;
+        const res1 = await axios({
+          method: "GET",
+          url: `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${long}&key=00a0febcd96b4f22aa5b755c3ef62fc3`,
+        });
+        console.log(res1);
+        const res = await axios({
+          method: "POST",
+          url: "/api/v1/user/signup",
+          data: {
+            name,
+            email,
+            password,
+            passwordConfirm,
+            location: {
+              coordinates: [long, lat],
+              city: res1.data.results[0].components.city,
+            },
+          },
+        });
+        if (res.data.status === "success") {
+          showAlert("success", "SignedUp successfully!");
+          window.setTimeout(() => {
+            location.assign("/");
+          }, 200);
+        }
       });
-      if (res.data.status === "success") {
-        showAlert("success", "SignedUp successfully!");
-        window.setTimeout(() => {
-          location.assign("/");
-        }, 200);
-      }
     } else {
-      const res = await axios({
-        method: "POST",
-        url: "/api/v1/seller/signup",
-        data: { name, email, password, passwordConfirm },
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const long = position.coords.longitude;
+        const res1 = await axios({
+          method: "GET",
+          url: `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${long}&key=00a0febcd96b4f22aa5b755c3ef62fc3`,
+        });
+        const res = await axios({
+          method: "POST",
+          url: `/api/v1/${id == 0 ? "farmSeller" : "seller"}/signup`,
+          data: {
+            name,
+            email,
+            password,
+            passwordConfirm,
+            location: {
+              coordinates: [long, lat],
+              city: res1.data.results[0].components.city,
+            },
+          },
+        });
+        if (res.data.status === "success") {
+          showAlert("success", "SignedUp successfully!");
+
+          if (id == 0)
+            window.setTimeout(() => {
+              location.assign("/MyRents");
+            }, 200);
+          else
+            window.setTimeout(() => {
+              location.assign("/seller_products");
+            }, 200);
+        }
       });
-      if (res.data.status === "success") {
-        showAlert("success", "SignedUp successfully!");
-        window.setTimeout(() => {
-          location.assign("/seller_products");
-        }, 200);
-      }
     }
   } catch (err) {
     showValidate(input[0]);
+    console.log(err);
     input[0].dataset.validate = err.response.data.message;
     return false;
     // showAlert("error", err.response.data.message);
@@ -88,7 +130,9 @@ export const addToCart = async (prodId) => {
     try {
       const res = await axios({
         method: "POST",
-        url: `/api/v1/buyer/addCart/${prodId}/${qty}`,
+        url: `/api/v1/${
+          window.location.href.includes("farm") ? "seller" : "buyer"
+        }/addCart/${prodId}/${qty}`,
       });
       if (res.data.status === "success") {
         addCartBtn.parentElement.innerHTML = "ADDED";
@@ -100,11 +144,11 @@ export const addToCart = async (prodId) => {
     }
   return true;
 };
-export const rmCart = async (id) => {
+export const rmCart = async (id, role) => {
   try {
     const res = await axios({
       method: "PATCH",
-      url: `/api/v1/buyer/rmCart/${id}`,
+      url: `/api/v1/${role}/rmCart/${id}`,
     });
     if (res.data.status === "success") {
       const cart = document.querySelector(".cartProducts");
@@ -131,9 +175,9 @@ export const addNego = async (id, buyer, price, qty) => {
       },
     });
     if (res.data.status === "success") {
-      // const cart = document.querySelector(".cartProducts");
-      // if (cart) location.reload();
-      // else window.location.href = "/overview";
+      const cart = document.querySelector(".cartProds");
+      if (cart) location.reload();
+      else window.location.href = "/negotiate";
     }
   } catch (err) {
     console.log("ERRRRORR", err);
@@ -147,7 +191,6 @@ export const acceptNego = async (negoId) => {
       method: "POST",
       url: `/api/v1/negotiation/acceptBid/${negoId}`,
     });
-    console.log(res);
     if (res.data.status === "success") {
       // const cart = document.querySelector(".cartProducts");
       // if (cart) location.reload();
@@ -166,8 +209,8 @@ export const cancelNego = async (negoId) => {
       url: `/api/v1/negotiation/cancelBid/${negoId}`,
     });
     if (res.data.status === "success") {
-      console.log("REMOVED");
       const nego = document.querySelector(".negoRow");
+      console.log(nego);
       if (nego) location.reload();
       else window.location.href = "/";
     }
@@ -185,7 +228,7 @@ export const replyNego = async (negoId, replyPrice) => {
       data: { replyPrice },
     });
     if (res.data.status === "success") {
-      // location.reload();
+      location.reload();
       // const nego = document.querySelector(".negoRow");
       // console.log(nego);
       // if (nego) location.reload();
@@ -213,7 +256,6 @@ export const forgPassFn = async () => {
         },
       });
     } else {
-      console.log(email);
       res = await axios({
         method: "POST",
         url: "api/v1/seller/forgotPassword",
@@ -231,7 +273,6 @@ export const forgPassFn = async () => {
     return false;
     // showAlert("error", err.response.data.message);
   }
-  console.log("sendmail");
 };
 export const updateDetails = async (name) => {
   const input = document.querySelectorAll(".validate-input");
@@ -292,7 +333,6 @@ export const updatePassword = async (
       }, 300);
     }
   } catch (err) {
-    console.log(err.response.data);
     showValidate(input[1]);
     input[1].dataset.validate = err.response.data.message;
     return false;
@@ -316,7 +356,6 @@ export const resetPassFn = async (token, password, passwordConfirm) => {
         },
       });
     } else {
-      console.log(email);
       res = await axios({
         method: "PATCH",
         url: `/api/v1/seller/resetPassword/${token}`,
@@ -327,7 +366,6 @@ export const resetPassFn = async (token, password, passwordConfirm) => {
       });
     }
     if (res.data.status === "success") {
-      console.log("SUCCESS");
       if (!window.location.href.includes("seller"))
         window.location.href = "/login";
       else window.location.href = "/seller-login";
@@ -339,25 +377,24 @@ export const resetPassFn = async (token, password, passwordConfirm) => {
     return false;
     // showAlert("error", err.response.data.message);
   }
-  console.log("sendmail");
 };
 
-function showValidate(input) {
+function showValidate(input) {console.log(input)
   var thisAlert = $(input);
+  console.log(thisAlert)
   $(thisAlert).addClass("alert-validate");
 }
-export const updateCart = async (prodId, qty) => {
+export const updateCart = async (prodId, qty, role) => {
   try {
     const res = await axios({
       method: "PATCH",
-      url: `/api/v1/buyer/updateCart/${prodId}/${qty}`,
+      url: `/api/v1/${role}/updateCart/${prodId}/${qty}`,
     });
     if (res.data.status === "success") {
       // addCartBtn.parentElement.innerHTML = "ADDED";
       // location.reload();
     }
   } catch (err) {
-    console.log("ERRRRORR", err);
     // showAlert("error", err.response.data.message);
   }
   return true;
@@ -378,6 +415,7 @@ export const logout = async () => {
         "myOrders",
         "negotiate",
         "seller_products",
+        "order_placed"
       ];
 
       const hasUrl = url.map((e) => {
@@ -388,7 +426,6 @@ export const logout = async () => {
         location.reload();
     }
   } catch (err) {
-    console.log(err.response);
     showAlert("error", "Error logging out! Try again.");
   }
 };
@@ -408,6 +445,9 @@ export const filterPrice = async (start, end) => {
 };
 export const withinDistance = async (dist) => {
   navigator.geolocation.getCurrentPosition((position) => {
-    window.location.href = `/productsWithin/${position.coords.latitude},${position.coords.longitude},${dist}?sort=-price&price[gte]=20&price[lte]=60`;
+    if (!window.location.href.includes("farm"))
+      window.location.href = `/productsWithin/${position.coords.latitude},${position.coords.longitude},${dist}`;
+    else
+      window.location.href = `/farmProductsWithin/${position.coords.latitude},${position.coords.longitude},${dist}`;
   });
 };

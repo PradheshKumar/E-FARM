@@ -67,12 +67,12 @@ exports.placeBid = catchAsync(async (req, res, next) => {
       });
 
       // console.log(req.body.buyer);
-      res.status(201).json({
-        status: "success",
-        data: {
-          data: bid,
-        },
-      });
+      // res.status(201).json({
+      //   status: "success",
+      //   data: {
+      //     data: bid,
+      //   },
+      // });
     }
   } catch (e) {
     console.log(e);
@@ -180,10 +180,10 @@ exports.replyBid = catchAsync(async (req, res, next) => {
   } catch (e) {
     console.log(e);
   }
-  res.status(201).json({
-    status: "success",
-    data: {},
-  });
+  // res.status(201).json({
+  //   status: "success",
+  //   data: {},
+  // });
 });
 exports.addBuyerSeller = catchAsync(async (req, res, next) => {
   const bid = await Negotiation.findById(req.params.id);
@@ -215,41 +215,35 @@ const sendNegoMail = catchAsync(async (req, res, type) => {
   }
 
   // 3) Send it to user's email
-  try {
-    if (type == "new") {
-      const resetURL = `${req.protocol}://${req.get("host")}/seller_negotiate`;
-      await new Email(seller, resetURL).sendNewNego();
-    } else {
-      let resetURL;
-      if (bid.lastBidBy == "seller")
-        resetURL = `${req.protocol}://${req.get("host")}/negotiate`;
-      else resetURL = `${req.protocol}://${req.get("host")}/seller_negotiate`;
-      if (bid.lastBidBy == "seller")
-        await new Email(buyer, resetURL, nego).sendOldNego(
-          nego.currentBid,
-          "seller"
-        );
-      else
-        await new Email(seller, resetURL, nego).sendOldNego(
-          nego.currentBid,
-          "buyer"
-        );
-
-      console.log("SEndinfs");
-    }
-    res.status(201).json({
-      status: "success",
-      data: {
-        data: bid,
-      },
-    });
-  } catch (err) {
-    console.log(err);
-    // return next(
-    //   new AppError("There was an error sending the email. Try again later!"),
-    //   500
-    // );
+  if (type == "new") {
+    const resetURL = `${req.protocol}://${req.get("host")}/seller_negotiate`;
+    await new Email(seller, resetURL).sendNewNego();
+  } else {
+    let resetURL;
+    if (bid.lastBidBy == "seller")
+      resetURL = `${req.protocol}://${req.get("host")}/negotiate`;
+    else resetURL = `${req.protocol}://${req.get("host")}/seller_negotiate`;
+    if (bid.lastBidBy == "seller")
+      await new Email(buyer, resetURL, nego).sendOldNego(
+        nego.currentBid,
+        "seller"
+      );
+    else
+      await new Email(seller, resetURL, nego).sendOldNego(
+        nego.currentBid,
+        "buyer"
+      );
   }
+  res.status(201).json({
+    status: "success",
+    data: {
+      data: bid,
+    },
+  });
+  // return next(
+  //   new AppError("There was an error sending the email. Try again later!"),
+  //   500
+  // );
 });
 exports.redirectToReply = catchAsync(async (req, res, next) => {
   // 1) Get user based on the token

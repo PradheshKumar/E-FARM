@@ -1,5 +1,6 @@
 const Buyer = require("../Models/buyerModel");
 const Seller = require("../Models/sellerModel");
+const FarmSeller = require("../Models/farmSellerModel");
 const Product = require("../Models/productModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -8,7 +9,9 @@ const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
 let User;
 const setUser = (res) => {
-  User = res.locals.user == "buyer" ? Buyer : Seller;
+  if (res.locals.user == "buyer") User = Buyer;
+  else if (res.locals.user == "seller") User = Seller;
+  else User = FarmSeller;
 };
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -41,15 +44,16 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   let updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     runValidators: true,
   });
-  const temp = req.body.location.coordinates[0];
-  req.body.location.coordinates[0] = req.body.location.coordinates[1];
-  req.body.location.coordinates[1] = temp;
+  if (req.body.location) {
+    const temp = req.body.location.coordinates[0];
+    req.body.location.coordinates[0] = req.body.location.coordinates[1];
+    req.body.location.coordinates[1] = temp;
 
-  updatedUser = await User.findByIdAndUpdate(req.user.id, {
-    location: req.body.location,
-  });
+    updatedUser = await User.findByIdAndUpdate(req.user.id, {
+      location: req.body.location,
+    });
+  }
 
-  console.log(this.updateUser);
   // Yes, it's a valid ObjectId, proceed with `findById` call.
 
   res.status(200).json({
@@ -70,34 +74,24 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 exports.getUser = factory.getOne(User);
+
 exports.getAllUsers = factory.getAll(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
 
-exports.addProductSeller = catchAsync(async (req, res, next) => {
-  setUser(res);
-  if (!req.body.seller) req.body.seller = req.user.id;
-  const seller = await User.findById(req.user.id);
-  if (seller.productSold)
-    await User.findByIdAndUpdate(req.user.id, {
-      productSold: seller.productSold + 1,
-    });
-  else
-    await User.findByIdAndUpdate(req.user.id, {
-      productSold: 1,
-    });
-
-  next();
-});
 exports.addToCart = catchAsync(async (req, res, next) => {
   try {
-    console.log("1");
     setUser(res);
     const buyer = await User.findById(req.user.id);
     let cart,
       cartQty,
       flag = 0,
       index;
+    if (!buyer.cart) {
+      buyer.cart = [];
+      buyer.cartQty = [];
+    }
+
     buyer.cart.every((el, i) => {
       if (el == req.params.id) {
         flag = 1;
@@ -106,7 +100,6 @@ exports.addToCart = catchAsync(async (req, res, next) => {
       }
       return true;
     });
-    console.log("2");
     if (flag == 0) {
       cart = [...buyer.cart, req.params.id];
       cartQty = [...buyer.cartQty, req.params.qty];
@@ -120,7 +113,6 @@ exports.addToCart = catchAsync(async (req, res, next) => {
       cart,
       cartQty,
     });
-    console.log("3");
     res.status(200).json({
       status: "success",
       data: {
@@ -178,7 +170,6 @@ exports.rmCart = catchAsync(async (req, res, next) => {
     },
   });
 });
-exports.addProduct = factory.createOne(Product);
 
 // /tours-within/:distance/center/:latlng
 // /tours-within/233/center/13.058029017820031, 80.27323196844695
