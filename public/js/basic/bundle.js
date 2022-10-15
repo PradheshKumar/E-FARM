@@ -5873,11 +5873,12 @@ var renderWeather = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: "GET",
-              url: "http://api.weatherapi.com/v1/forecast.json?key=2fa85d9eb3ec44fb87f45808221410&q=".concat(weatherCont.dataset.city, "&days=7&alerts=yes")
+              url: "http://api.weatherapi.com/v1/forecast.json?key=2fa85d9eb3ec44fb87f45808221410&q=bengaluru&days=7&alerts=yes"
             });
 
           case 3:
             res = _context.sent;
+            console.log(res.data);
             weatherData.forEach(function (el) {
               if (res.data.forecast.forecastday[0].day.condition.text == el.day) imgUrl = "./../images/weather/".concat(el.icon, ".png");
             });
@@ -5891,20 +5892,20 @@ var renderWeather = /*#__PURE__*/function () {
                 });
               }
             });
-            _context.next = 12;
+            _context.next = 13;
             break;
 
-          case 9:
-            _context.prev = 9;
+          case 10:
+            _context.prev = 10;
             _context.t0 = _context["catch"](0);
             console.log("ERRRRORR", _context.t0); // showAlert("error", err.response.data.message);
 
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 9]]);
+    }, _callee, null, [[0, 10]]);
   }));
 
   return function renderWeather() {
@@ -6639,7 +6640,6 @@ var trans = /*#__PURE__*/function () {
                         res.data.data.data.forEach(function (el) {
                           searchData.push(el.name.toLowerCase());
                         });
-                        console.log(searchData, transTxt);
                         if (transTxt.includes("order")) window.location.href = "/myOrders";else if (transTxt.includes("product")) window.location.href = "/seller_products";else if (transTxt.includes("demand")) window.location.href = "/demand";else if (transTxt.includes("weather")) window.location.href = "/weather";else if (transTxt.includes("detail") || transTxt.includes("description")) window.location.href = "/editAccount";else if (data1 == "टमाटर") window.location.href = "/search/tomato";else {
                           available = searchData.map(function (el) {
                             console.log(el, transTxt);
@@ -6654,7 +6654,7 @@ var trans = /*#__PURE__*/function () {
                           }
                         }
 
-                      case 10:
+                      case 9:
                       case "end":
                         return _context.stop();
                     }
@@ -7672,7 +7672,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49312" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57543" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -70,7 +70,6 @@ block content
                   img.img-fluid(src=`./../img/${product.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'")
                 
                       
-                    a.cart(href=`/product/${product.id}`) Add to Cart
                 .why-text
                   a(href=`/product/${product.id}` )
                     h4= product.name
@@ -83,8 +82,7 @@ block content
                     p.sale Sale
                   img.img-fluid(src=`./../img/${product.images[0]}` alt='Image' onError="this.src = './../img/default.jpg'") 
             
-                      
-                    a.cart(href=`/product/${product.id}`) Add to Cart
+                  
                 .why-text
                   a(href=`/product/${product.id}` )
                     h4= product.name

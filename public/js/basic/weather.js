@@ -295,8 +295,9 @@ export const renderWeather=async()=>{
  try {
       const res = await axios({
         method: "GET",
-        url: `http://api.weatherapi.com/v1/forecast.json?key=2fa85d9eb3ec44fb87f45808221410&q=${weatherCont.dataset.city}&days=7&alerts=yes`,
+        url: `http://api.weatherapi.com/v1/forecast.json?key=2fa85d9eb3ec44fb87f45808221410&q=bengaluru&days=7&alerts=yes`,
       });
+	  console.log(res.data		)
       let imgUrl ;
       weatherData.forEach((el)=>{if(res.data.forecast.forecastday[0].day.condition.text==el.day) imgUrl=`./../images/weather/${el.icon}.png`})
 	  

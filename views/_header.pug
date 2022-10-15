@@ -33,6 +33,8 @@ doctype html
 // End Main Top
 // Start Main Top
 header.main-header
+  if(user)
+    span.userRoleData(data-role= user.role) 
   // Start Navigation
   nav.navbar.navbar-expand-lg.navbar-light.bg-light.navbar-default.bootsnav.bgCont
     #google_element(style="margin: 20px;border-style: solid;")

@@ -56,7 +56,6 @@ let apiUrl = `https://api.mymemory.translated.net/get?q=${data1}&langpair=hi|en`
         
         res.data.data.data.forEach((el)=>{searchData.push(el.name.toLowerCase())})
 
-        console.log(searchData,transTxt);
         if(transTxt.includes("order")) window.location.href="/myOrders"
         else if(transTxt.includes("product")) window.location.href="/seller_products"
         else if(transTxt.includes("demand")) window.location.href="/demand"
